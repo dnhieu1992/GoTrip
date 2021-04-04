@@ -5,7 +5,7 @@ import Role from './role.model.js';
 const db = {}
 // set up mongoose
 db.mongoose = mongoose;
-db.user = User;
+db.User = User;
 db.Role = Role;
 db.ROLES = ["user", "admin", "moderator"];
 
