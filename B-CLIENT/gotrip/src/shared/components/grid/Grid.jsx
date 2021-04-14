@@ -12,15 +12,16 @@ const Grid = (props) => {
         return (<GridHeader headerColumns={headerColumns} />)
     }
 
+    const isShowPagination = parseInt(props.total, 0) > 0;
     return (
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            {/* <div class="card-header">
                                 <h3 class="card-title">DataTable with minimal features & hover style</h3>
-                            </div>
+                            </div> */}
                             <div class="card-body">
                                 <div className="row">
                                     <div class="col-sm-12">
@@ -30,14 +31,19 @@ const Grid = (props) => {
                                         </table>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-5">
-                                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
-                                    </div >
-                                    <div class="col-sm-12 col-md-7 d-flex justify-content-end">
-                                        <GridPagination />
+                                {isShowPagination && (
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-5">
+                                            <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+
+                                                Showing {(props.currentPage - 1) * props.pageSize + 1} to {props.currentPage * props.pageSize} of {props.total} entries
+                                        </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-7 d-flex justify-content-end">
+                                            <GridPagination {...props} />
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -55,10 +55,10 @@ const MainSidebar = () => {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="./index3.html" className="nav-link">
-                                        <i className="fa fa-circle nav-icon"></i>
-                                        <p>Dashboard v3</p>
-                                    </a>
+                                    <i className="fa fa-circle nav-icon"></i>
+                                    <Link to='/admin/city'>
+                                        City
+                                    </Link>
                                 </li>
                             </ul>
                         </li>

@@ -17,7 +17,7 @@ const AdminPage = () => {
                 <BrowserRouter>
                     <div>
                         <Route path="/admin/country" component={CountryContainer} />
-                        <Route path="/city" component={CityContainer} />
+                        <Route path="/admin/city" component={CityContainer} />
                     </div>
                 </BrowserRouter>
             </div>
