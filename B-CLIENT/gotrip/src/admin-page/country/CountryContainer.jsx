@@ -60,7 +60,7 @@ const CountryContainer = () => {
     const onSaveCountry = () => {
         data.push(country);
         setData(data);
-        onClose();
+        onClose()
     }
 
     const onSaveFormChange = (country) => {
@@ -75,7 +75,9 @@ const CountryContainer = () => {
                 onClose={onClose}
                 onSave={onSaveCountry}>
                 <CountryForm country={country}
-                    onSaveFormChange={onSaveFormChange} />
+                    onSaveFormChange={onSaveFormChange}
+                    onClose={onClose}
+                    onSaveCountry={onSaveCountry} />
             </Modal>
         )
     }

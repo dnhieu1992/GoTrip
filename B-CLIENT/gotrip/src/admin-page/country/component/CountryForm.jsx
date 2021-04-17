@@ -1,6 +1,8 @@
 const CountryForm = ({
     country,
-    onSaveFormChange
+    onSaveFormChange,
+    onClose,
+    onSaveCountry
 }) => {
     const { id, name, code, status } = country;
 
@@ -22,7 +24,7 @@ const CountryForm = ({
                 </div>
                 <div className="form-group">
                     <label for="exampleInputPassword1">Code</label>
-                    <input type="text" name="code" className="form-control" id="code" placeholder="Code" value={code} onChange={onHandlePropertyChange}/>
+                    <input type="text" name="code" className="form-control" id="code" placeholder="Code" value={code} onChange={onHandlePropertyChange} />
                 </div>
                 <div className="form-group">
                     <label for="exampleInputPassword1">Status</label>
@@ -31,6 +33,12 @@ const CountryForm = ({
                         <option value="Actived">Actived</option>
                         <option value="Disabled">Disabled</option>
                     </select>
+                </div>
+                <div className="form-group">
+                    <div className="col-sm-12 d-flex justify-content-end">
+                        <button type="button" className="btn btn-danger mr-5" onClick={onClose}>Close</button>
+                        <button type="button" className="btn btn-info" onClick={()=>onSaveCountry(country)}>Submit</button>
+                    </div>
                 </div>
             </div>
         </form>
