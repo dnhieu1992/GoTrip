@@ -1,6 +1,7 @@
+import CityList from './component/CityList';
 const CityContainer = () => {
     return (
-        <div></div>
+        <CityList />
     )
 }
 
