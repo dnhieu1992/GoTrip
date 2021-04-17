@@ -1,4 +1,9 @@
-const CountrySearch = ({ searchParam, onHandleSearchChange, onHandleSearch, onHandleResetForm }) => {
+const CountrySearch = ({
+    searchParam,
+    onHandleSearchChange,
+    onHandleSearch,
+    onHandleResetForm
+}) => {
 
     const { countryName, countryCode, status } = searchParam;
 
@@ -7,7 +12,6 @@ const CountrySearch = ({ searchParam, onHandleSearchChange, onHandleSearch, onHa
     };
 
     const onSearch = (searchParam) => {
-        console.log("searchParam:", searchParam)
         onHandleSearch(searchParam);
     };
 

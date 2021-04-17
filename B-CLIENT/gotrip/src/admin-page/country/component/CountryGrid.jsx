@@ -5,7 +5,8 @@ const CountryGrid = ({
     data,
     options,
     totalItems,
-    onHandlePageChange
+    onHandlePageChange,
+    addNewForm
 }) => {
     const onEdit = () => {
 
@@ -38,14 +39,17 @@ const CountryGrid = ({
             onDelete: onDelete
         }
     ];
-    
+
 
     return (
         <div className="card card-info">
             <div className="card-body">
                 <div className="row mb-2">
-                    <div className="col-sm-12">
+                    <div className="col-sm-8">
                         <h4>Countries: {totalItems}</h4>
+                    </div>
+                    <div className="col-sm-4 d-flex justify-content-end">
+                        <button type="button" className="btn btn-info" onClick={addNewForm}>Add New</button>
                     </div>
                 </div>
                 <Grid data={data}

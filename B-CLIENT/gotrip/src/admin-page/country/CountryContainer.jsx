@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '../../shared/components/forms/Modal';
 import CountryGrid from './component/CountryGrid';
 import CountrySearch from './component/CountrySearch';
+import CountryForm from './component/CountryForm';
 
 const CountryContainer = () => {
 
@@ -14,10 +15,12 @@ const CountryContainer = () => {
         { id: 6, code: 'AL', name: 'ALBANIA', status: "Actived" },
         { id: 7, code: 'AD', name: 'ANDORRA', status: "Actived" }
     ];
+
     const [data, setData] = useState(mockDatas.slice(0, 5));
     const [searchParam, setSearchParam] = useState({});
     const [options, setOptions] = useState({ currentPage: 1 });
     const [isShow, setIsShow] = useState(false);
+    const [country, setCountry] = useState({});
 
     const onHandleSearchChange = (param) => {
         setSearchParam(param);
@@ -46,10 +49,37 @@ const CountryContainer = () => {
         const result = mockDatas.slice((options.currentPage - 1) * options.pageSize, options.currentPage * options.pageSize);
         setData(result);
     }
-    const modalRender = () => {
 
+    const addNewForm = () => {
+        setIsShow(true);
     }
-    
+    const onClose = () => {
+        setIsShow(false);
+        setCountry({});
+    }
+    const onSaveCountry = () => {
+        data.push(country);
+        setData(data);
+        onClose();
+    }
+
+    const onSaveFormChange = (country) => {
+        console.log("Country: ", country)
+        setCountry(country);
+    }
+
+    const modalRender = () => {
+        return (
+            <Modal classNames={'modal-lg'}
+                title="Add New Country"
+                onClose={onClose}
+                onSave={onSaveCountry}>
+                <CountryForm country={country}
+                    onSaveFormChange={onSaveFormChange} />
+            </Modal>
+        )
+    }
+
     return (
         <>
             {isShow && modalRender()}
@@ -66,7 +96,8 @@ const CountryContainer = () => {
                     <CountryGrid data={data}
                         options={options}
                         totalItems={mockDatas.length}
-                        onHandlePageChange={onHandlePageChange} />
+                        onHandlePageChange={onHandlePageChange}
+                        addNewForm={addNewForm} />
                 </div>
             </div>
         </>
