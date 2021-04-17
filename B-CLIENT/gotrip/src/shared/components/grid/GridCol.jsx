@@ -1,6 +1,6 @@
-const GridCol = ({ value, isHidden }) => {
+const GridCol = ({ value, className }) => {
     return (
-        <td>
+        <td className={className}>
             {value}
         </td>
     )
