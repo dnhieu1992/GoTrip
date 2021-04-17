@@ -6,6 +6,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import CountryContainer from './country/CountryContainer';
 import CityContainer from './city/CityContainer';
 import Grid from '../shared/components/grid/Grid';
+import TypesOfAccommodationContainer from './types-of-accommodation/TypesOfAccommodationContainer';
 
 const AdminPage = () => {
     return (
@@ -18,6 +19,7 @@ const AdminPage = () => {
                     <div>
                         <Route path="/admin/country" component={CountryContainer} />
                         <Route path="/admin/city" component={CityContainer} />
+                        <Route path="/admin/types-of-accommodation" component={TypesOfAccommodationContainer} />
                     </div>
                 </BrowserRouter>
             </div>

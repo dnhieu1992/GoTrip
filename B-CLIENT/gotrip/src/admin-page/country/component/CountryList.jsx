@@ -1,7 +1,7 @@
 import Grid from '../../../shared/components/grid/Grid'
 import { useState } from 'react';
 
-const CountryList = () => {
+ const CountryList = () => {
     const mockDatas = [
         { id: 1, code: 'US', name: 'United States', status: "Actived" },
         { id: 2, code: 'SG', name: 'Singapore', status: "Actived" },

@@ -1,6 +1,8 @@
+import TypesOfAccommodation from './component/TypesOfAccommodation';
+
 const TypesOfAccommodationContainer = () => {
     return (
-        <div></div>
+        <TypesOfAccommodation/>
     )
 }
 

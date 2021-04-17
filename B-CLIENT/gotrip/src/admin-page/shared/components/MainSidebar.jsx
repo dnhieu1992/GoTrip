@@ -60,6 +60,12 @@ const MainSidebar = () => {
                                         City
                                     </Link>
                                 </li>
+                                <li className="nav-item">
+                                    <i className="fa fa-circle nav-icon"></i>
+                                    <Link to='/admin/types-of-accommodation'>
+                                        Types-of-accommodation
+                                    </Link>
+                                </li>
                             </ul>
                         </li>
                         <li className="nav-item">
