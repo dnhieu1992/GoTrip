@@ -1,16 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import '../node_modules/font-awesome/css/font-awesome.min.css'
+import '../node_modules/font-awesome/css/font-awesome.min.css';
 import './index.scss';
 import './adminlte.css';
 import './shared/sass/login/login.scss';
 import App from './App';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

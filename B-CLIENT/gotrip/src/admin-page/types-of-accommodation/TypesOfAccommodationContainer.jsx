@@ -1,9 +1,7 @@
 import TypesOfAccommodation from './component/TypesOfAccommodation';
 
 const TypesOfAccommodationContainer = () => {
-    return (
-        <TypesOfAccommodation/>
-    )
-}
+  return <TypesOfAccommodation />;
+};
 
 export default TypesOfAccommodationContainer;

@@ -1,7 +1,7 @@
 const ContentWrapper = () => {
-    return (
-        <div className="content-wrapper">
-            {/* <div className="content-header">
+  return (
+    <div className="content-wrapper">
+      {/* <div className="content-header">
                 <div className="container-fluid">
                     <div className="row mb-2">
                         <div className="col-sm-6">
@@ -543,9 +543,8 @@ const ContentWrapper = () => {
 
                 </div>
             </section> */}
-
-        </div>
-    )
-}
+    </div>
+  );
+};
 
 export default ContentWrapper;
