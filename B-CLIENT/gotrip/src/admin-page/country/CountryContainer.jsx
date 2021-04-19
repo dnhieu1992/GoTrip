@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Modal from '../../shared/components/forms/Modal';
 import CountryGrid from './component/CountryGrid';
 import CountrySearch from './component/CountrySearch';
 import CountryForm from './component/CountryForm';
 
 const CountryContainer = () => {
-  let a = '10';
-  const mockDatas = [
+  const mockDatasRaw = [
     { id: 1, code: 'US', name: 'United States', status: 'Actived' },
     { id: 2, code: 'SG', name: 'Singapore', status: 'Actived' },
     { id: 3, code: 'GB', name: 'United Kingdom', status: 'Actived' },
@@ -16,11 +15,21 @@ const CountryContainer = () => {
     { id: 7, code: 'AD', name: 'ANDORRA', status: 'Actived' },
   ];
 
-  const [data, setData] = useState(mockDatas.slice(0, 5));
+  const [mockDatas, setMockDatas] = useState(mockDatasRaw);
+  const [data, setData] = useState([]);
   const [searchParam, setSearchParam] = useState({});
-  const [options, setOptions] = useState({ currentPage: 1 });
+  const [options, setOptions] = useState({ currentPage: 1, pageSize: 5 });
   const [isShow, setIsShow] = useState(false);
   const [country, setCountry] = useState({});
+  const didMountRef = useRef(false);
+  const isUpdating = useRef(false);
+
+  useEffect(() => {
+    if (!didMountRef.current) {
+      onHandleSearch({});
+      didMountRef.current = true;
+    }
+  });
 
   const onHandleSearchChange = (param) => {
     setSearchParam(param);
@@ -46,6 +55,7 @@ const CountryContainer = () => {
   };
 
   const onHandlePageChange = (pageNumber) => {
+    console.log(mockDatas);
     const result = mockDatas.slice(
       (pageNumber - 1) * options.pageSize,
       pageNumber * options.pageSize
@@ -69,23 +79,47 @@ const CountryContainer = () => {
   const onClose = () => {
     setIsShow(false);
     setCountry({});
+    isUpdating.current = false;
   };
   const onSaveCountry = () => {
-    data.push(country);
-    setData(data);
+    if (isUpdating.current === true) {
+      const countryNew = mockDatas.find(x => x.id === country.id);
+      countryNew.code = country.code;
+      countryNew.name = country.name;
+      countryNew.status = country.status;
+
+      isUpdating.current = false;
+    } else {
+      mockDatas.push(country);
+      setMockDatas(mockDatas);
+      console.log(mockDatas);
+    }
+    onHandleSearch(searchParam);
     onClose();
   };
 
   const onSaveFormChange = (country) => {
-    console.log('Country: ', country);
     setCountry(country);
   };
 
   const onEdit = (country) => {
     setCountry(country);
     setIsShow(true);
+    isUpdating.current = true;
   };
-  const onDelete = (id) => {};
+  const onDelete = (id) => {
+    alert(id)
+    const index = mockDatas.findIndex(item => item.id === id);
+    // const array = [2, 5, 9];
+
+    // console.log(array);
+
+    // const index = array.indexOf(5);
+    // if (index > -1) {
+    //   array.splice(index, 1);
+    // }
+
+  };
 
   const modalRender = () => {
     return (
@@ -100,6 +134,7 @@ const CountryContainer = () => {
           onSaveFormChange={onSaveFormChange}
           onClose={onClose}
           onSaveCountry={onSaveCountry}
+          isUpdating={isUpdating.current}
         />
       </Modal>
     );

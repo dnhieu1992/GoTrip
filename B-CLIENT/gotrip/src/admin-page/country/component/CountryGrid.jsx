@@ -55,7 +55,7 @@ const CountryGrid = ({
           currentPage={options.currentPage}
           pageSize={options.pageSize}
           total={totalItems}
-          onHandlePageChange={onHandlePageChange}
+          onPageNumberChange={onHandlePageChange}
         />
       </div>
     </div>

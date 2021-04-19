@@ -1,4 +1,10 @@
-const CountryForm = ({ country, onSaveFormChange, onClose, onSaveCountry }) => {
+const CountryForm = ({
+  country,
+  isUpdating,
+  onSaveFormChange,
+  onClose,
+  onSaveCountry
+}) => {
   const { id, name, code, status } = country;
 
   const onHandlePropertyChange = (e) => {
@@ -18,6 +24,7 @@ const CountryForm = ({ country, onSaveFormChange, onClose, onSaveCountry }) => {
             placeholder="Id"
             value={id}
             onChange={onHandlePropertyChange}
+            disabled={isUpdating}
           />
         </div>
         <div className="form-group">
