@@ -1,6 +1,5 @@
 const CityForm = ({
   city,
-  isUpdating,
   onSaveFormChange,
   onClose,
   onSaveCity
@@ -8,7 +7,8 @@ const CityForm = ({
   const { id, name, country, status } = city;
 
   const onHandlePropertyChange = (e) => {
-    onSaveFormChange({ ...city, [e.target.name]: e.target.value });
+    city[e.target.name] = e.target.value;
+    onSaveFormChange(city);
   }
 
   return (
@@ -16,7 +16,7 @@ const CityForm = ({
       <div className="card-body">
         <div className="form-group">
           <label for="exampleInputEmail1">Id</label>
-          <input type="text" name="id" className="form-control" id="id" placeholder="Id" value={id} onChange={onHandlePropertyChange} disabled={isUpdating} />
+          <input type="text" name="id" className="form-control" id="id" placeholder="Id" value={id} onChange={onHandlePropertyChange} />
         </div>
         <div className="form-group">
           <label for="exampleInputEmail1">Name</label>
@@ -25,18 +25,17 @@ const CityForm = ({
         <div className="form-group">
           <label for="exampleInputPassword1">Country</label>
           <select className="form-select form-control" aria-label="Default select example" name="country" value={country} onChange={onHandlePropertyChange}>
-            <option selected hidden>Choose the city...</option>
+            <option selected hidden>Chọn tên thành phố</option>
             <option value=""></option>
             <option value="Việt Nam">Việt Nam</option>
             <option value="United State" >United State</option>
             <option value="Trung Quốc" >Trung Quốc</option>
             <option value="Ấn Độ" >Ấn Độ</option>
           </select>
-        </div>
+        </div> 
         <div className="form-group">
           <label for="exampleInputPassword1">Status</label>
           <select class="form-control" name="status" value={status} onChange={onHandlePropertyChange} >
-            <option selected hidden>Choose a status...</option>
             <option value=""></option>
             <option value="Actived">Actived</option>
             <option value="Disabled">Disabled</option>

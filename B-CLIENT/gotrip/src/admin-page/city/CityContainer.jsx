@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import Modal from '../../shared/components/forms/Modal';
 import CityGrid from './component/CityGrid';
 import CitySearch from './component/CitySearch';
@@ -6,7 +6,7 @@ import CityForm from './component/CityForm';
 
 const CityContainer = () => {
 
-    const mockDatasRaw = [
+    const mockDatas = [
         { id: 1, name: 'Đà Lạt', country: 'Việt Nam', status: "Actived" },
         { id: 2, name: 'TP.Hồ Chí Minh', country: 'Việt Nam', status: "Actived" },
         { id: 3, name: 'New York', country: 'United State', status: "Actived" },
@@ -17,21 +17,11 @@ const CityContainer = () => {
         { id: 8, name: 'Mumbai', country: 'Ấn Độ', status: "Actived" },
     ];
 
-    const [mockDatas, setMockDatas] = useState(mockDatasRaw);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(mockDatas.slice(0, 5));
     const [searchParam, setSearchParam] = useState({});
-    const [options, setOptions] = useState({ currentPage: 1, pageSize: 5 });
+    const [options, setOptions] = useState({ currentPage: 1 });
     const [isShow, setIsShow] = useState(false);
     const [city, setCity] = useState({});
-    const didMountRef = useRef(false);
-    const isUpdating = useRef(false);
-
-    useEffect(() => {
-        if (!didMountRef.current) {
-            onHandleSearch({});
-            didMountRef.current = true;
-        }
-    });
 
     const onHandleSearchChange = (param) => {
         setSearchParam(param);
@@ -39,14 +29,16 @@ const CityContainer = () => {
 
     const onHandleSearch = ({ cityName, cityCountry, status }) => {
         const cities = mockDatas.filter(item => {
+
             if ((!cityName || (item.name.toLowerCase().indexOf(cityName.toLowerCase()) > -1))
                 && (!cityCountry || (item.country.toLowerCase().indexOf(cityCountry.toLowerCase()) > -1))
                 && (!status || (item.status.indexOf(status) > -1))) {
                 return item;
             }
+            debugger;
         });
         const result = cities.slice((options.currentPage - 1) * options.pageSize, options.currentPage * options.pageSize);
-        setData(result);
+        setData(cities);
     };
 
     const onHandlePageChange = (pageNumber) => {
@@ -67,41 +59,15 @@ const CityContainer = () => {
     const onClose = () => {
         setIsShow(false);
         setCity({});
-        isUpdating.current = false;
     }
     const onSaveCity = () => {
-        if (isUpdating.current === true) {
-            const cityNew = mockDatas.find(x => x.id == city.id);
-            cityNew.name = city.name;
-            cityNew.country = city.country;
-            cityNew.status = city.status;
-            isUpdating.current = false;
-        }
-        else {
-            mockDatas.push(city);
-            setMockDatas(mockDatas);
-        }
-        onHandleSearch(searchParam);
+        data.push(city);
+        setData(data);
         onClose();
     }
 
     const onSaveFormChange = (city) => {
         setCity(city);
-    }
-
-    const editForm = (city) => {
-        setCity(city);
-        setIsShow(true);
-        isUpdating.current = true;
-    }
-
-    const deleteForm = (id) => {
-        const index = mockDatas.findIndex(item => item.id == id);
-        if (index > -1) {
-            mockDatas.splice(index, 1);
-        }
-        setMockDatas(mockDatas);
-        onHandleSearch(searchParam);
     }
 
     const modalRender = () => {
@@ -113,8 +79,7 @@ const CityContainer = () => {
                 <CityForm city={city}
                     onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
-                    onSaveCity={onSaveCity}
-                    isUpdating={isUpdating.current} />
+                    onSaveCity={onSaveCity} />
             </Modal>
         )
     }
@@ -127,21 +92,16 @@ const CityContainer = () => {
                     <h3>City</h3>
                 </div>
                 <div className="card-body">
-                    <CitySearch
-                        searchParam={searchParam}
+                    <CitySearch searchParam={searchParam}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <CityGrid
-                        data={data}
+                    <CityGrid data={data}
                         options={options}
                         totalItems={mockDatas.length}
                         onHandlePageChange={onHandlePageChange}
-                        addNewForm={addNewForm}
-                        editForm={editForm}
-                        deleteForm={deleteForm}
-                    />
+                        addNewForm={addNewForm} />
                 </div>
             </div>
         </>
