@@ -6,14 +6,10 @@ const CityGrid = ({
   options,
   totalItems,
   onHandlePageChange,
-  addNewForm
+  addNewForm,
+  editForm,
+  deleteForm
 }) => {
-  const onEdit = () => {
-
-  }
-  const onDelete = () => {
-
-  }
   const columns = [
     {
       fieldName: 'Id',
@@ -35,8 +31,8 @@ const CityGrid = ({
     {
       fieldName: 'Action',
       type: 'action',
-      onEdit: onEdit,
-      onDelete: onDelete
+      onEdit: editForm,
+      onDelete: deleteForm
     }
   ];
 
@@ -52,12 +48,13 @@ const CityGrid = ({
             <button type="button" className="btn btn-info" onClick={addNewForm}>Add New</button>
           </div>
         </div>
-        <Grid data={data}
+        <Grid
+          data={data}
           columns={columns}
           currentPage={options.currentPage}
           pageSize={options.pageSize}
           total={totalItems}
-          onHandlePageChange={onHandlePageChange}
+          onPageNumberChange={onHandlePageChange}
         />
       </div>
     </div>

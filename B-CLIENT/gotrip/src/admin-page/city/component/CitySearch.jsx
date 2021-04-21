@@ -44,7 +44,7 @@ const CitySearch = ({
                                 <div className="col-sm-10">
                                     <select class="form-control" value={cityCountry} id="cityCountry"
                                         name="cityCountry" onChange={onHandleFieldChange}>
-                                        <option selected hidden>Chọn tên thành phố</option>
+                                        <option selected hidden>Choose the city...</option>
                                         <option value=""></option>
                                         <option value="Việt Nam">Việt Nam</option>
                                         <option value="United State" >United State</option>
@@ -61,7 +61,7 @@ const CitySearch = ({
                                 <label for="inputPassword3" className="col-sm-2 col-form-label">Status</label>
                                 <div className="col-sm-10">
                                     <select class="form-control" value={status} name="status" onChange={onHandleFieldChange}>
-                                        <option selected hidden>Chọn trạng thái</option>
+                                        <option selected hidden>Choose a status...</option>
                                         <option value=""></option>
                                         <option value="Actived">Actived</option>
                                         <option value="Disabled">Disabled</option>
