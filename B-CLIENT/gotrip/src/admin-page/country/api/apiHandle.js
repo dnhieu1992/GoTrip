@@ -1,0 +1,56 @@
+const getCountries = async (params) => {
+    try {
+        const url = new URL("http://localhost:5035/api/country/search");
+        Object.keys(params).forEach(key => url.searchParams.append(encodeURIComponent(key), encodeURIComponent(params[key])))
+
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(res.status);
+        }
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+const createNewCountry = async (country) => {
+    try {
+        await fetch("http://localhost:5035/api/country/create", {
+            method: "POST",
+            body: JSON.stringify(country),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        });
+    } catch {
+        console.log(error);
+    }
+}
+
+const updateCountry = async (country) => {
+    try {
+        await fetch("http://localhost:5035/api/country/update", {
+            method: "PUT",
+            body: JSON.stringify(country),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        });
+    } catch {
+        console.log(error);
+    }
+}
+const deleteCountry = async (id) => {
+    try {
+        await fetch(`http://localhost:5035/api/country/delete?id=${id}`, {
+            method: "DELETE",
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        });
+    } catch {
+        console.log(error);
+    }
+}
+
+export {
+    getCountries,
+    createNewCountry,
+    updateCountry,
+    deleteCountry
+}
