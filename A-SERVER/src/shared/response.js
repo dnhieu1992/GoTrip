@@ -31,6 +31,10 @@ function badRequestResponse(res, errorMsg) {
     if (!res) return;
     return res.status(400).json({ success: false, error: errorMsg });
 }
+function notFoundResponse(res, errorMsg) {
+    if (!res) return;
+    return res.status(404).json({ success: false, error: errorMsg });
+}
 
 
 export {
@@ -38,5 +42,6 @@ export {
     errorResponse,
     unauthorizedResponse,
     duplicatedResponse,
-    badRequestResponse
+    badRequestResponse,
+    notFoundResponse
 }
