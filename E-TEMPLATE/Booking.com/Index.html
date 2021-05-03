@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Booking.com | Trang chính thức | Khách sạn và chỗ nghỉ tốt nhất</title>
+  <link rel="icon" href="img/booking-icon.png" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header class="build-header">
+    <nav class="container build-header-bar">
+      <div class="build-header-main">
+        <h3>Booking<span class="logo-color">.com</span></h3>
+      </div>
+      <div class="build-header-group justify-content-md-end">
+        <div class="build-group-item build-bottom">
+          <button class="btn btn-size"><span class="btn-text">VND</span></button>
+        </div>
+        <div class="build-group-item build-bottom">
+          <img src="img/vietnam.png" class="btn btn-img" />
+        </div>
+        <div class="build-group-item build-bottom">
+          <div class="btn btn-img">
+            <span class="iconify" data-icon="bi:question-circle" data-inline="false" data-width="28px"
+              data-height="28px" style="color:#fff"></span>
+          </div>
+        </div>
+        <input type="button" class="btn btn-outline-light btn-text-link btn-hover" value="Đăng chỗ nghỉ của Quý vị">
+        <input type="button" class="btn btn-outline-light btn-text-link btn-backgrd" value="Đăng ký">
+        <input type="button" class="btn btn-outline-light btn-text-link btn-backgrd" value="Đăng nhập">
+      </div>
+    </nav>
+    <nav class="container navbar navbar-expand-lg build-header-bar">
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#"><span class="iconify" style="vertical-align: text-top;" data-icon="fluent:bed-24-regular" data-inline="false" data-width="20px" data-height="20px"></span>  Lưu trú</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span class="iconify" style="vertical-align: text-top;" data-icon="clarity:airplane-line" data-inline="false" data-width="20px" data-height="20px"></span>  Chuyến bay</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span class="iconify" style="vertical-align: text-top;" data-icon="fluent:earth-20-regular" data-inline="false" data-width="20px" data-height="20px"></span>  Chuyến bay + Khách sạn</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span class="iconify" style="vertical-align: text-top;" data-icon="bx:bxs-car" data-inline="false" data-width="20px" data-height="20px"></span>  Thuê xe</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span class="iconify" style="vertical-align: text-top;" data-icon="ic:twotone-attractions" data-inline="false" data-width="20px" data-height="20px"></span>  Địa điểm tham quan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span class="iconify" style="vertical-align: text-top;" data-icon="cil:taxi" data-inline="false" data-width="20px" data-height="20px"></span>  Taxi sân bay</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <section class="search-event" id="search-event">
+    <div class="container justify-content-sm-center search-content">
+      <h4 class="h4">Tìm kiếm ưu đãi khách sạn, chỗ nghỉ dạng nhà ở và nhiều hơn nữa...</h4>
+      <span class="span-text">Từ những khu nghỉ dưỡng thanh bình đến những căn hộ hạng sang hiện đại</span>
+      <form>
+        <div class="form-group mt-4">
+          <div class="row container">
+            <input id="icon_input" class="form-control col-xs-5 col-sm-5 col-md-5" placeholder="Bạn muốn đến đâu?" />
+            <button id="calendar_icon" class="form-control col-xs-3 col-sm-3 col-md-3 btn">
+              <p>Nhận phòng &#8722; Trả phòng</p>
+            </button>
+            <button id="user_icon" class="form-control col-xs-3 col-sm-3 col-md-3 btn"><span>2 người lớn
+              </span><span>&#183; 0 trẻ em </span><span>&#183; 1 phòng</span>
+            </button>
+            <input id="submit_input" type="submit" class="form-control col-xs-1 col-sm-1 col-md-1 btn btn-primary"
+              value="Tìm" />
+          </div>
+          <div class="form-check mt-3 pl-0">
+            <label class="toggle" for="toggle">
+              <input type="checkbox" id="toggle">
+              <div class="slider"></div>
+            </label>
+            <label class="form-check-label pl-1" for="toggle">Tôi đi công tác</label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="bodyconstraint-inner" id="bodyconstraint-inner">
+
+    <div class="find-place container mt-5">
+      <h4 class="h5 mb-3 font-weight-bold">Tìm theo loại chỗ nghỉ</h4>
+      <div id="find-place-carousel" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active row">
+            <div class="col-xs-3 col-sm-3 col-md-3 rounded pb-2 pr-2">
+              <div class="image mb-3">
+                <img src="/img/khach_san.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Khách sạn</h6>
+              <span class="span-text">772,828 khách sạn</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 rounded pb-2 pr-2">
+              <div class="image mb-3">
+                <img src="/img/can_ho.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Căn hộ</h6>
+              <span class="span-text">721,574 căn hộ</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 rounded pb-2 pr-2">
+              <div class="image mb-3">
+                <img src="/img/resort.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Resort</h6>
+              <span class="span-text">17,705 resort</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 rounded pb-2 pr-2">
+              <div class="image mb-3">
+                <img src="/img/biet_thu.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Biệt thự</h6>
+              <span class="span-text">372,345 biệt thự</span>
+            </div>
+          </div>
+          <div class="carousel-item row">
+            <div class="col-xs-3 col-sm-3 col-md-3 rounded pb-2 pr-2">
+              <div class="image mb-3">
+                <img src="/img/khach_san.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Khách sạn</h6>
+              <span class="span-text">772,828 khách sạn</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 rounded pb-2 pr-2">
+              <div class="image mb-3">
+                <img src="/img/can_ho.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Căn hộ</h6>
+              <span class="span-text">721,574 căn hộ</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 rounded pb-2 pr-2">
+              <div class="image mb-3">
+                <img src="/img/resort.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Resort</h6>
+              <span class="span-text">17,705 resort</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 rounded pb-2 pr-2">
+              <div class="image mb-3">
+                <img src="/img/biet_thu.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Biệt thự</h6>
+              <span class="span-text">372,345 biệt thự</span>
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#find-place-carousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#find-place-carousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="discover-vietnamese container mt-5">
+      <h4 class="h5 mb-0 font-weight-bold">Khám phá Việt Nam</h4>
+      <span class="span-text">Các điểm đến phổ biến này có nhiều điều chờ đón bạn</span>
+      <div id="discover-vietnamese-carousel" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active row mt-3">
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2 rounded">
+              <div class="image mb-3">
+                <img src="/img/vung_tau.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Vũng tàu</h6>
+              <span class="span-text">1,821 chỗ nghỉ</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2 rounded">
+              <div class="image mb-3">
+                <img src="/img/da_lat.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Đà Lạt</h6>
+              <span class="span-text">2,146 chỗ nghỉ</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2 rounded">
+              <div class="image mb-3">
+                <img src="/img/da_nang.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Đà Nẵng</h6>
+              <span class="span-text">2,508 chỗ nghỉ</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2 rounded">
+              <div class="image mb-3">
+                <img src="/img/phu_quoc.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Phú Quốc</h6>
+              <span class="span-text">672 chỗ nghỉ</span>
+            </div>
+          </div>
+          <div class="carousel-item row mt-3">
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2 rounded">
+              <div class="image mb-3">
+                <img src="/img/vung_tau.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Vũng tàu</h6>
+              <span class="span-text">1,821 chỗ nghỉ</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2 rounded">
+              <div class="image mb-3">
+                <img src="/img/da_lat.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Đà Lạt</h6>
+              <span class="span-text">2,146 chỗ nghỉ</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2 rounded">
+              <div class="image mb-3">
+                <img src="/img/da_nang.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Đà Nẵng</h6>
+              <span class="span-text">2,508 chỗ nghỉ</span>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2 rounded">
+              <div class="image mb-3">
+                <img src="/img/phu_quoc.png" class="img-fluid rounded" />
+              </div>
+              <h6 class="h6 font-weight-bold mb-0">Phú Quốc</h6>
+              <span class="span-text">672 chỗ nghỉ</span>
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#discover-vietnamese-carousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#discover-vietnamese-carousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="big-city container">
+      <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 p-xs-2 p-sm-2 p-lg-2 rounded">
+          <div class="da-Nang city-postcard">
+            <div class="postcard__overlay">
+              <h2 class="m-0"><a href="" class="city-name">Đà Nẵng <img src="img/vietnam.png" /></a></h2>
+              <span>2,509 chỗ ở</span>
+            </div>
+            <div class="postcard-avg-price d-block">
+              <span class="postcard-avg-price-copy">Giá trung bình</span>
+              <span class="postcard-avg-price-value">VND 993.627</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 p-xs-2 p-sm-2 p-lg-2 rounded">
+          <div class="sa-Pa city-postcard">
+            <div class="postcard__overlay">
+              <h2 class="m-0"><a href="" class="city-name">Sa Pa <img src="img/vietnam.png" /></a></h2>
+              <span>443 chỗ ở</span>
+            </div>
+            <div class="postcard-avg-price d-block">
+              <span class="postcard-avg-price-copy">Giá trung bình</span>
+              <span class="postcard-avg-price-value">VND 991.522</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 p-xs-2 p-sm-2 p-lg-2 rounded">
+          <div class="ha-Noi city-postcard">
+            <div class="postcard__overlay">
+              <h2 class="m-0"><a href="" class="city-name">Hà Nội <img src="img/vietnam.png" /></a></h2>
+              <span>3,801 chỗ ở</span>
+            </div>
+            <div class="postcard-avg-price">
+              <span class="postcard-avg-price-copy">Giá trung bình</span>
+              <span class="postcard-avg-price-value">VND 1.076.118</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 p-xs-2 p-sm-2 p-lg-2 rounded">
+          <div class="nha-Trang city-postcard">
+            <div class="postcard__overlay">
+              <h2 class="m-0"><a href="" class="city-name">Nha Trang <img src="img/vietnam.png" /></a></h2>
+              <span>1,658 chỗ ở</span>
+            </div>
+            <div class="postcard-avg-price">
+              <span class="postcard-avg-price-copy">Giá trung bình</span>
+              <span class="postcard-avg-price-value">VND 1.089.660</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 p-xs-2 p-sm-2 p-lg-2 rounded">
+          <div class="tp-ho-chi-minh city-postcard">
+            <div class="postcard__overlay">
+              <h2 class="m-0"><a href="" class="city-name">TP.Hồ Chí Minh <img src="img/vietnam.png" /></a></h2>
+              <span>5,605 chỗ ở</span>
+            </div>
+            <div class="postcard-avg-price">
+              <span class="postcard-avg-price-copy">Giá trung bình</span>
+              <span class="postcard-avg-price-value">VND 902.306</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="favorite-house container mt-4 pb-4">
+      <h4 class="h5 mb-3 font-weight-bold">Nhà ở mà khách yêu thích</h4>
+      <div id="favorite-house-carousel" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active row mt-3">
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="image mb-2">
+                <img src="/img/anh1.png" class="img-fluid rounded" />
+              </div>
+              <span class="span-text__hover">Godó Luxury Apartment Paseo de Gracia</span>
+              <h5 class="h5 span-text">Barcelona</h5>
+              <h6 class="h6 font-weight-bold mb-2">Giá từ VND 65.570.358</h6>
+              <div class="d-flex">
+                <div class="review-score__badge mr-2">8,5</div>
+                <div class="review-score__title">Rất tốt</div>
+                <div class="review-score__text">&#183; 7 đánh giá</div>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="image mb-2">
+                <img src="/img/anh2.png" class="img-fluid rounded" />
+              </div>
+              <span class="span-text__hover">Casa Portuguesa Prata</span>
+              <h5 class="h5 span-text">Lisboa</h5>
+              <h6 class="h6 font-weight-bold mb-2">Giá từ VND 3.330.558</h6>
+              <div class="d-flex">
+                <div class="review-score__badge mr-2">8,7</div>
+                <div class="review-score__title">Tuyệt vời</div>
+                <div class="review-score__text">&#183; 87 đánh giá</div>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="image mb-2">
+                <img src="/img/anh3.png" class="img-fluid rounded" />
+              </div>
+              <span class="span-text__hover">Lake View Apartment Amsterdam</span>
+              <h5 class="h5 span-text">Amsterdam</h5>
+              <h6 class="h6 font-weight-bold mb-2">Giá từ VND 14.612.823</h6>
+              <div class="d-flex">
+                <div class="review-score__badge mr-2">9,4</div>
+                <div class="review-score__title">Tuyệt hảo</div>
+                <div class="review-score__text">&#183; 58 đánh giá</div>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="image mb-2">
+                <img src="/img/anh4.png" class="img-fluid rounded" />
+              </div>
+              <span class="span-text__hover">47 Argentina Apartment</span>
+              <h5 class="h5 span-text">Roma</h5>
+              <h6 class="h6 font-weight-bolder mb-2">Giá từ VND 17.707.466</h6>
+              <div class="d-flex">
+                <div class="review-score__badge mr-2">9,8</div>
+                <div class="review-score__title">Xuất sắc</div>
+                <div class="review-score__text">&#183; 29 đánh giá</div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item row mt-3">
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="image mb-2">
+                <img src="/img/anh1.png" class="img-fluid rounded" />
+              </div>
+              <span class="span-text__hover">Godó Luxury Apartment Paseo de Gracia</span>
+              <h5 class="h5 span-text">Barcelona</h5>
+              <h6 class="h6 font-weight-bold mb-2">Giá từ VND 65.570.358</h6>
+              <div class="d-flex">
+                <div class="review-score__badge mr-2">8,5</div>
+                <div class="review-score__title">Rất tốt</div>
+                <div class="review-score__text">&#183; 7 đánh giá</div>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="image mb-2">
+                <img src="/img/anh2.png" class="img-fluid rounded" />
+              </div>
+              <span class="span-text__hover">Casa Portuguesa Prata</span>
+              <h5 class="h5 span-text">Lisboa</h5>
+              <h6 class="h6 font-weight-bold mb-2">Giá từ VND 3.330.558</h6>
+              <div class="d-flex">
+                <div class="review-score__badge mr-2">8,7</div>
+                <div class="review-score__title">Tuyệt vời</div>
+                <div class="review-score__text">&#183; 87 đánh giá</div>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="image mb-2">
+                <img src="/img/anh3.png" class="img-fluid rounded" />
+              </div>
+              <span class="span-text__hover">Lake View Apartment Amsterdam</span>
+              <h5 class="h5 span-text">Amsterdam</h5>
+              <h6 class="h6 font-weight-bold mb-2">Giá từ VND 14.612.823</h6>
+              <div class="d-flex">
+                <div class="review-score__badge mr-2">9,4</div>
+                <div class="review-score__title">Tuyệt hảo</div>
+                <div class="review-score__text">&#183; 58 đánh giá</div>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="image mb-2">
+                <img src="/img/anh4.png" class="img-fluid rounded" />
+              </div>
+              <span class="span-text__hover">47 Argentina Apartment</span>
+              <h5 class="h5 span-text">Roma</h5>
+              <h6 class="h6 font-weight-bolder mb-2">Giá từ VND 17.707.466</h6>
+              <div class="d-flex">
+                <div class="review-score__badge mr-2">9,8</div>
+                <div class="review-score__title">Xuất sắc</div>
+                <div class="review-score__text">&#183; 29 đánh giá</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#favorite-house-carousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#favorite-house-carousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="famous-landscape container mt-5">
+      <div id="famous-landscape-carousel" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active row mt-3">
+            <div class="col-xs-3 col-sm-3 col-md-3  pb-2 pr-2">
+              <div class="card__image-container">
+                <img src="img/cat-ba.png" class="img-fluid rounded">
+                <div class="card__header">
+                  <h3 class="h3 card__title">Đảo Cát Bà</h3>
+                  <p class="card__subtitle">Việt Nam</p>
+                </div>
+              </div>
+              <div class="card__link pt-2">
+                <p>
+                  <a href="">19 biệt thự, căn hộ và nhà nghỉ dưỡng</a><span>,</span>
+                  <a href="">12 chỗ nghỉ nhà dân</a><span>,</span>
+                  <a href="">11 nhà trọ</a><span>,</span>
+                  <a href="">8 nhà nghỉ giữa thiên nhiên</a><span>,</span>
+                  <a href="">8 nhà nghỉ thôn dã</a>
+                </p>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="card__image-container">
+                <img src="img/hoi-an.png" class="img-fluid rounded">
+                <div class="card__header">
+                  <h3 class="h3 card__title">Hội An</h3>
+                  <p class="card__subtitle">Việt Nam</p>
+                </div>
+              </div>
+              <div class="card__link pt-2">
+                <p>
+                  <a href="">513 biệt thự, căn hộ và nhà nghỉ dưỡng</a><span>,</span>
+                  <a href="">252 chỗ nghỉ nhà dân</a><span>,</span>
+                  <a href="">204 nhà nghỉ mát</a><span>,</span>
+                  <a href="">204 biệt thự</a><span>,</span>
+                  <a href="">199 nhà nghỉ thôn dã</a>
+                </p>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="card__image-container ">
+                <img src="img/da_lat.png" class="img-fluid rounded">
+                <div class="card__header">
+                  <h3 class="h3 card__title">Đà Lạt</h3>
+                  <p class="card__subtitle">Việt Nam</p>
+                </div>
+              </div>
+              <div class="card__link pt-2">
+                <p>
+                  <a href="">540 biệt thự, căn hộ và nhà nghỉ dưỡng</a><span>,</span>
+                  <a href="">264 chỗ nghỉ nhà dân</a><span>,</span>
+                  <a href="">146 căn hộ</a><span>,</span>
+                  <a href="">139 nhà nghỉ B&B</a><span>,</span>
+                  <a href="">103 nhà khách</a>
+                </p>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="card__image-container">
+                <img src="img/hue.png" class="img-fluid rounded">
+                <div class="card__header">
+                  <h3 class="h3 card__title">Huế</h3>
+                  <p class="card__subtitle">Việt Nam</p>
+                </div>
+              </div>
+              <div class="card__link pt-2">
+                <p>
+                  <a href="">109 biệt thự, căn hộ và nhà nghỉ dưỡng</a><span>,</span>
+                  <a href="">71 chỗ nghỉ nhà dân</a><span>,</span>
+                  <a href="">44 nhà nghỉ B&B</a><span>,</span>
+                  <a href="">19 nhà khách</a><span>,</span>
+                  <a href="">16 nhà trọ</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item row mt-3">
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="card__image-container">
+                <img src="img/cat-ba.png" class="img-fluid rounded">
+                <div class="card__header">
+                  <h3 class="h3 card__title">Đảo Cát Bà</h3>
+                  <p class="card__subtitle">Việt Nam</p>
+                </div>
+              </div>
+              <div class="card__link pt-2">
+                <p>
+                  <a href="">19 biệt thự, căn hộ và nhà nghỉ dưỡng</a><span>,</span>
+                  <a href="">12 chỗ nghỉ nhà dân</a><span>,</span>
+                  <a href="">11 nhà trọ</a><span>,</span>
+                  <a href="">8 nhà nghỉ giữa thiên nhiên</a><span>,</span>
+                  <a href="">8 nhà nghỉ thôn dã</a>
+                </p>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="card__image-container">
+                <img src="img/hoi-an.png" class="img-fluid rounded">
+                <div class="card__header">
+                  <h3 class="h3 card__title">Hội An</h3>
+                  <p class="card__subtitle">Việt Nam</p>
+                </div>
+              </div>
+              <div class="card__link pt-2">
+                <p>
+                  <a href="">513 biệt thự, căn hộ và nhà nghỉ dưỡng</a><span>,</span>
+                  <a href="">252 chỗ nghỉ nhà dân</a><span>,</span>
+                  <a href="">204 nhà nghỉ mát</a><span>,</span>
+                  <a href="">204 biệt thự</a><span>,</span>
+                  <a href="">199 nhà nghỉ thôn dã</a>
+                </p>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="card__image-container ">
+                <img src="img/da_lat.png" class="img-fluid rounded">
+                <div class="card__header">
+                  <h3 class="h3 card__title">Đà Lạt</h3>
+                  <p class="card__subtitle">Việt Nam</p>
+                </div>
+              </div>
+              <div class="card__link pt-2">
+                <p>
+                  <a href="">540 biệt thự, căn hộ và nhà nghỉ dưỡng</a><span>,</span>
+                  <a href="">264 chỗ nghỉ nhà dân</a><span>,</span>
+                  <a href="">146 căn hộ</a><span>,</span>
+                  <a href="">139 nhà nghỉ B&B</a><span>,</span>
+                  <a href="">103 nhà khách</a>
+                </p>
+              </div>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 pb-2 pr-2">
+              <div class="card__image-container">
+                <img src="img/hue.png" class="img-fluid rounded">
+                <div class="card__header">
+                  <h3 class="h3 card__title">Huế</h3>
+                  <p class="card__subtitle">Việt Nam</p>
+                </div>
+              </div>
+              <div class="card__link pt-2">
+                <p>
+                  <a href="">109 biệt thự, căn hộ và nhà nghỉ dưỡng</a><span>,</span>
+                  <a href="">71 chỗ nghỉ nhà dân</a><span>,</span>
+                  <a href="">44 nhà nghỉ B&B</a><span>,</span>
+                  <a href="">19 nhà khách</a><span>,</span>
+                  <a href="">16 nhà trọ</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#famous-landscape-carousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#famous-landscape-carousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="favorite-place container">
+      <h4 class="h5 mb-4 font-weight-bold">Các điểm đến được chúng tôi ưa thích</h4>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+            aria-selected="true">Khu vực</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+            aria-selected="false">Thành phố</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+            aria-selected="false">Địa điểm được quan tâm</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <ul class="ia__body clearfix">
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thành phố Đà Nẵng</a>
+                  <span class="ia__hotelnum">2,511 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Gia Lai</a>
+                  <span class="ia__hotelnum">86 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thanh Hóa</a>
+                  <span class="ia__hotelnum">256 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Vịnh Hạ Long</a>
+                  <span class="ia__hotelnum">1,368 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Hà Tĩnh</a>
+                  <span class="ia__hotelnum">37 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bình Thuận</a>
+                  <span class="ia__hotelnum">599 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Hà Nội</a>
+                  <span class="ia__hotelnum">3,888 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bạc Liêu</a>
+                  <span class="ia__hotelnum">23 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Cà Mau</a>
+                  <span class="ia__hotelnum">48 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Vĩnh Long</a>
+                  <span class="ia__hotelnum">42 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bình Dương</a>
+                  <span class="ia__hotelnum">78 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Đắc Lắc</a>
+                  <span class="ia__hotelnum">123 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Phú Yên</a>
+                  <span class="ia__hotelnum">212 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Quảng Bình</a>
+                  <span class="ia__hotelnum">267 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Ninh Thuận</a>
+                  <span class="ia__hotelnum">145 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Trà Vinh</a>
+                  <span class="ia__hotelnum">17 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Cần Thơ</a>
+                  <span class="ia__hotelnum">352 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Khu vực TP.Hồ Chí Minh</a>
+                  <span class="ia__hotelnum">5,635 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thừa Thiên - Huế</a>
+                  <span class="ia__hotelnum">519 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <ul class="ia__body clearfix">
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thành phố Đà Nẵng</a>
+                  <span class="ia__hotelnum">2,511 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Gia Lai</a>
+                  <span class="ia__hotelnum">86 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thanh Hóa</a>
+                  <span class="ia__hotelnum">256 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Vịnh Hạ Long</a>
+                  <span class="ia__hotelnum">1,368 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Hà Tĩnh</a>
+                  <span class="ia__hotelnum">37 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bình Thuận</a>
+                  <span class="ia__hotelnum">599 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Hà Nội</a>
+                  <span class="ia__hotelnum">3,888 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bạc Liêu</a>
+                  <span class="ia__hotelnum">23 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Cà Mau</a>
+                  <span class="ia__hotelnum">48 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Vĩnh Long</a>
+                  <span class="ia__hotelnum">42 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bình Dương</a>
+                  <span class="ia__hotelnum">78 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Đắc Lắc</a>
+                  <span class="ia__hotelnum">123 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Phú Yên</a>
+                  <span class="ia__hotelnum">212 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Quảng Bình</a>
+                  <span class="ia__hotelnum">267 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Ninh Thuận</a>
+                  <span class="ia__hotelnum">145 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Trà Vinh</a>
+                  <span class="ia__hotelnum">17 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Cần Thơ</a>
+                  <span class="ia__hotelnum">352 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Khu vực TP.Hồ Chí Minh</a>
+                  <span class="ia__hotelnum">5,635 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thừa Thiên - Huế</a>
+                  <span class="ia__hotelnum">519 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thừa Thiên - Huế</a>
+                  <span class="ia__hotelnum">519 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thành phố Đà Nẵng</a>
+                  <span class="ia__hotelnum">2,511 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Gia Lai</a>
+                  <span class="ia__hotelnum">86 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thanh Hóa</a>
+                  <span class="ia__hotelnum">256 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Vịnh Hạ Long</a>
+                  <span class="ia__hotelnum">1,368 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Hà Tĩnh</a>
+                  <span class="ia__hotelnum">37 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bình Thuận</a>
+                  <span class="ia__hotelnum">599 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Hà Nội</a>
+                  <span class="ia__hotelnum">3,888 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bạc Liêu</a>
+                  <span class="ia__hotelnum">23 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Cà Mau</a>
+                  <span class="ia__hotelnum">48 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Vĩnh Long</a>
+                  <span class="ia__hotelnum">42 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bình Dương</a>
+                  <span class="ia__hotelnum">78 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Đắc Lắc</a>
+                  <span class="ia__hotelnum">123 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Phú Yên</a>
+                  <span class="ia__hotelnum">212 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Quảng Bình</a>
+                  <span class="ia__hotelnum">267 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Ninh Thuận</a>
+                  <span class="ia__hotelnum">145 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Trà Vinh</a>
+                  <span class="ia__hotelnum">17 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Cần Thơ</a>
+                  <span class="ia__hotelnum">352 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Khu vực TP.Hồ Chí Minh</a>
+                  <span class="ia__hotelnum">5,635 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thừa Thiên - Huế</a>
+                  <span class="ia__hotelnum">519 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+          <ul class="ia__body clearfix">
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thành phố Đà Nẵng</a>
+                  <span class="ia__hotelnum">2,511 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Gia Lai</a>
+                  <span class="ia__hotelnum">86 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thanh Hóa</a>
+                  <span class="ia__hotelnum">256 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Vịnh Hạ Long</a>
+                  <span class="ia__hotelnum">1,368 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Hà Tĩnh</a>
+                  <span class="ia__hotelnum">37 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bình Thuận</a>
+                  <span class="ia__hotelnum">599 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Hà Nội</a>
+                  <span class="ia__hotelnum">3,888 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bạc Liêu</a>
+                  <span class="ia__hotelnum">23 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Cà Mau</a>
+                  <span class="ia__hotelnum">48 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Vĩnh Long</a>
+                  <span class="ia__hotelnum">42 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Bình Dương</a>
+                  <span class="ia__hotelnum">78 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Đắc Lắc</a>
+                  <span class="ia__hotelnum">123 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Phú Yên</a>
+                  <span class="ia__hotelnum">212 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Quảng Bình</a>
+                  <span class="ia__hotelnum">267 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Ninh Thuận</a>
+                  <span class="ia__hotelnum">145 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+            <li class="ia__section">
+              <ul class="ia__section-container clearfix">
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Trà Vinh</a>
+                  <span class="ia__hotelnum">17 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Cần Thơ</a>
+                  <span class="ia__hotelnum">352 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Khu vực TP.Hồ Chí Minh</a>
+                  <span class="ia__hotelnum">5,635 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thừa Thiên - Huế</a>
+                  <span class="ia__hotelnum">519 chỗ nghỉ</span>
+                </li>
+                <li class="ia__section__item float-left">
+                  <a class="ia__link" href="">Thừa Thiên - Huế</a>
+                  <span class="ia__hotelnum">519 chỗ nghỉ</span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="discover container mt-5">
+      <h4 class="h4 mb-4 font-weight-bold">Khám phá</h4>
+      <div class="row mt-3">
+        <div class="col-xs-3 col-sm-3 col-md-3 p-xs-2 p-sm-2 p-lg-2">
+          <div class="card-country-container"
+            style="background: url(https://cf.bstatic.com/images/city/360x240/689/689587.jpg) no-repeat center; background-size: cover;">
+            <div class="card-country__header">
+              <p class="card-country__text">
+                Tận hưởng thư giãn, nhà hàng và mua sắm trong chuyến đi kế tiếp đến Mỹ của bạn!
+              </p>
+            </div>
+          </div>
+          <p class="text-center mt-2 text-info">Mỹ</p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 p-xs-2 p-sm-2 p-lg-2">
+          <div class="card-country-container"
+            style="background: url(https://cf.bstatic.com/images/city/360x240/613/613105.jpg) no-repeat center; background-size: cover;">
+            <div class="card-country__header">
+              <p class="card-country__text">
+                Tận hưởng phố cổ, phong cảnh và ẩm thực trong chuyến đi kế tiếp đến Ý của bạn!
+              </p>
+            </div>
+          </div>
+          <p class="text-center mt-2 text-info">Ý</p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 p-xs-2 p-sm-2 p-lg-2">
+          <div class="card-country-container"
+            style="background: url(https://cf.bstatic.com/images/city/360x240/613/613088.jpg) no-repeat center; background-size: cover;">
+            <div class="card-country__header">
+              <p class="card-country__text">
+                Lần sau đến Pháp bạn nhất định phải làm những việc này: sự tĩnh lặng, phong cảnh và phố cổ!
+              </p>
+            </div>
+          </div>
+          <p class="text-center mt-2 text-info">Pháp</p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 p-xs-2 p-sm-2 p-lg-2">
+          <div class="card-country-container"
+            style="background: url(https://cf.bstatic.com/images/city/360x240/971/971353.jpg) no-repeat center; background-size: cover;">
+            <div class="card-country__header">
+              <p class="card-country__text">
+                Nếu sự tĩnh lặng, phố cổ và ẩm thực là sở thích của bạn, thì hãy đừng bỏ qua Tây Ban Nha!
+              </p>
+            </div>
+          </div>
+          <p class="text-center mt-2 text-info">Tây Ban Nha</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="email-address">
+    <div class="email-address__body container">
+      <h4 class="h4 text-center font-weight-normal">Tiết kiệm thời gian và tiền bạc!</h4>
+      <p class="text-center">Hãy đăng ký và chúng tôi sẽ gửi những ưu đãi tốt nhất cho bạn</p>
+      <form action="" method="POST" role="form">
+        <div class="form-group">
+          <div class="justify-content-center row input-group-lg mb-1">
+            <input type="email" class="form-control col-xs-4 col-sm-4 col-md-4 mr-1" id=""
+              placeholder="Địa chỉ e-mail của bạn">
+            <button type="submit" class="btn btn-primary col-xs-2 col-sm-2 col-md-2">Đăng ký</button>
+          </div>
+          <input type="checkbox" class="input-checkbox" /><span class="checkbox-text"> Gửi cho tôi đường dẫn để tải ứng
+            dụng Booking.com MIỄN PHÍ!</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer-wrapper">
+
+    <div class="footer_top">
+      <div class="footer_top-partners container">
+        <p class="text-center"><a href="" class="footer_top-bottom">Đăng chỗ nghỉ của Quý vị</a></p>
+      </div>
+      <hr class="solid">
+      <div class="footer_top-inner container">
+        <ul class="footer_top-links-list clearfix">
+          <li class="footer_top-link">
+            <a href="">Phiên bản di động</a>
+          </li>
+          <li class="footer_top-link">
+            <a href="">Tài khoản của bạn</a>
+          </li>
+          <li class="footer_top-link">
+            <a href="">Thay đổi đặt phòng của bạn trực tuyến</a>
+          </li>
+          <li class="footer_top-link">
+            <a href="">Liên hệ dịch vụ khách hàng</a>
+          </li>
+          <li class="footer_top-link">
+            <a href="">Trở thành đối tác phấn phối</a>
+          </li>
+          <li class="footer_top-link">
+            <a href="">Booking.com dành cho Doanh Nghiệp</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer_bottom clearfix">
+      <div class="footer_links">
+        <div class="footer_bottom-links-column container">
+          <ul class="footer_bottom-links-list">
+            <li class="footer_bottom-links">
+              <a href="">Các quốc gia</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Khu vực</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Thành phố</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Quận</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Sân bay</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Khách sạn</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Địa điểm được quan tâm</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer_bottom-links-column container">
+          <ul class="footer_bottom-links-list">
+            <li class="footer_bottom-links">
+              <a href="">Nhà</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Căn hộ</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Resort</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Biệt thự</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Nhà trọ</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Nhà nghỉ B&B</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Nhà khách</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer_bottom-links-column container">
+          <ul class="footer_bottom-links-list">
+            <li class="footer_bottom-links">
+              <a href="">Những chỗ nghỉ độc đáo</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Tất cả các điểm đến</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Đánh giá của khách</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Các bài viết</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Ưu đãi theo mùa và dịp lễ</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer_bottom-links-column container">
+          <ul class="footer_bottom-links-list">
+            <li class="footer_bottom-links">
+              <a href="">Cho thuê xe hơi</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Tìm chuyến bay</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Đặt nhà hàng</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Booking.com dành cho Đại Lý Du Lịch</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer_bottom-links-column container">
+          <ul class="footer_bottom-links-list">
+            <li class="footer_bottom-links">
+              <a href="">Các câu hỏi thường gặp về virus corona (COVID-19)</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Về Booking.com</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Liên hệ Dịch vụ Khách hàng</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Trợ giúp đối tác</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Careers</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Du lịch bền vững</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Truyền thống</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Trung tâm thông tin bảo mật</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Quan hệ cổ đông</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Điều khoản và điều kiện</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Tranh chấp đối tác</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Thông báo về Bảo mật & Cookie</a>
+            </li>
+            <li class="footer_bottom-links">
+              <a href="">Liên hệ công ty</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="local-info container mt-5">
+      <p class="text-center"><a href="">Đăng nhập vào trang Extranet</a></p>
+      <p class="copyright-text"> Bản quyền &copy; 1996–2021 Booking.com<sup>&trade;</sup>. Bảo lưu mọi quyền.</p>
+    </div>
+
+    <div class="footer-logos container mt-3">
+      <p class="text-center">Booking.com là một phần của Booking Holdings Inc., tập đoàn đứng đầu thế giới về du lịch
+        trực tuyến và các dịch vụ liên quan.</p>
+      <div class="justify-content-center d-flex">
+        <div class="mr-5">
+          <img src="img/logo1.png" />
+        </div>
+        <div class="mr-5">
+          <img src="img/logo2.png" />
+        </div>
+        <div class="mr-5">
+          <img src="img/logo3.png" />
+        </div>
+        <div class="mr-5">
+          <img src="img/logo4.png" />
+        </div>
+        <div class="mr-5">
+          <img src="img/logo5.png" />
+        </div>
+        <div>
+          <img src="img/logo6.png" />
+        </div>
+      </div>
+    </div>
+
+  </footer>
+  <!-- Jquery -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- Popper -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- Iconify -->
+  <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+</body>
+
+</html>
