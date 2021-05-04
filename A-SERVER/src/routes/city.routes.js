@@ -63,6 +63,32 @@ const router = express.Router();
  *         description: Some server error
  */
 router.post('/create', createCity);
+
+/**
+ * @swagger
+ * /api/city/update:
+ *  put:
+ *    summary: Update the city by the id
+ *    tags: [Cities]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/City'
+ *    responses:
+ *      200:
+ *        description: The city was updated
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              items: {}
+ *      404:
+ *        description: The city was not found
+ *      500:
+ *        description: Some error happened
+ */
 router.put('/update', updateCity);
 /**
  * @swagger
@@ -100,7 +126,52 @@ router.put('/update', updateCity);
  *                 $ref: '#/components/schemas/City'
  */
 router.get('/search', search);
-router.get('/getById', getById);
-router.delete('/delete', deleteCity);
+
+/**
+ * @swagger
+ * /api/city/{id}:
+ *   get:
+ *     summary: Get the city by id
+ *     tags: [Cities]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The city id
+ *     responses:
+ *       200:
+ *         description: The city description by id
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/City'
+ *       404:
+ *         description: The city was not found
+ */
+router.get('/:id', getById);
+
+/**
+ * @swagger
+ * /api/city/delete/{id}:
+ *   delete:
+ *     summary: Remove the city by id
+ *     tags: [Cities]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The city id
+ * 
+ *     responses:
+ *       200:
+ *         description: The city was deleted
+ *       404:
+ *         description: The city was not found
+ */
+router.delete('/delete/:id', deleteCity);
 
 export default router;

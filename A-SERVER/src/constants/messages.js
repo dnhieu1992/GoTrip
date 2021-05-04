@@ -3,6 +3,7 @@ export const ERROR_MSG = {
     AUTH_INVALID: 'Failed to authenticate token.',
     USER_EXISTS: 'The user exists.',
     COUNTRY_EXISTS: 'The country exists.',
+    ITEM_EXISTS: 'The item exists.',
 }
 
 export const SUCCESS_MSG = {

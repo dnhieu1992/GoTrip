@@ -8,12 +8,7 @@ const propertySchema = new mongoose.Schema({
     },
     description: String,
     icon: String,
-    status: String,
-    PropertyCategory: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'PropertyCategory',
-        require: true
-    }
+    status: String
 });
 
 export default mongoose.model('Property', propertySchema);

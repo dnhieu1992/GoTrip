@@ -1,25 +1,36 @@
 import mongoose from 'mongoose';
 import db from '../models/index.js';
+import { ERROR_MSG } from '../constants/messages.js';
 import {
     duplicatedResponse,
     errorResponse,
     successResponse,
-    badRequestResponse
+    badRequestResponse,
+    notFoundResponse
 } from '../shared/response.js';
-import { ERROR_MSG } from '../constants/messages.js';
+import { cleanObject } from '../shared/ultils.js';
 
 function createPropertyType(req, res) {
-    if (!req.body.name) {
+    const {
+        name,
+        description,
+        propertyId,
+        status = "Disabled"
+    } = req.body;
+
+    if (!name || !propertyId) {
         return badRequestResponse(res, '');
     }
 
-    db.PropertyType.findOne({ name: req.body.name }).then((propertyType) => {
-        if (propertyType) return duplicatedResponse(res, ERROR_MSG.PropertyType_EXISTS);
+    db.PropertyType.findOne({ name: name }).then((propertyType) => {
+        if (propertyType) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
 
         const newPropertyType = new db.PropertyType({
             _id: mongoose.Types.ObjectId(),
-            name: req.body.name,
-            status: req.body.status || "Disabled",
+            name,
+            description,
+            property: propertyId,
+            status: status
         });
 
         newPropertyType.save().then((result) => {
@@ -27,29 +38,40 @@ function createPropertyType(req, res) {
         }).catch((error) => {
             return errorResponse(res, error);
         })
-
     })
 }
 
 function search(req, res) {
-    const queries = {};
-    if (req.params.name) {
-        queries['name'] = req.params.name;
-    }
-    if (req.params.status) {
-        queries['status'] = req.params.status;
-    }
+    const queries = cleanObject(req.query);
 
-    db.PropertyType.find(queries).then(propertyTypes => {
-        return successResponse(res, propertyTypes);
-    }).catch((error) => {
-        return errorResponse(res, error);
-    })
+    db.PropertyType.find(queries)
+        .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
+        .limit(parseInt(pageSize))
+        .exec((err, propertyTypes) => {
+            if (err) {
+                return errorResponse(res, err);
+            }
+            db.propertyType.countDocuments(queries).exec((count_error, count) => {
+                if (err) {
+                    return errorResponse(res, count_error);
+                }
+                return successResponse(res, {
+                    total: count,
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    propertyTypes: propertyTypes
+                });
+            });
+        });
 }
 
 function getById(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return notFoundResponse(res, "The Property type not found");
     }
 
     db.PropertyType.findOne({ _id: req.params.id }).then(propertyType => {
@@ -60,17 +82,27 @@ function getById(req, res) {
 }
 
 function updatePropertyType(req, res) {
-    if (!req.body.id) {
+    const {
+        _id,
+        name,
+        description,
+        propertyId,
+        status
+    } = req.body;
+
+    if (!_id) {
         return badRequestResponse(res, '');
     }
 
     const propertyTypeUpdate = {
-        name: req.body.name,
-        status: req.body.status
+        name,
+        status,
+        propertyId,
+        description
     };
 
-    db.PropertyType.findOneAndUpdate({ _id: id }, propertyTypeUpdate).then(() => {
-        return successResponse(res);
+    db.Property.findOneAndUpdate({ _id: _id }, propertyTypeUpdate).then((result) => {
+        return successResponse(res, result);
     }).catch((error) => {
         return errorResponse(res, error);
     })
@@ -80,7 +112,15 @@ function deletePropertyType(req, res) {
         return badRequestResponse(res, '');
     }
 
-    db.PropertyType.findByIdAndRemove({ _id: req.params.id });
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return notFoundResponse(res, "The Property type not found");
+    }
+
+    db.PropertyType.findByIdAndRemove({ _id: req.params.id }).then((result) => {
+        return successResponse(res, result);
+    }).catch((error) => {
+        return errorResponse(res, error);
+    });
 }
 
 export {

@@ -1,181 +1,176 @@
 import express from 'express';
 import {
-    createCountry,
-    updateCountry,
+    createProperty,
     search,
     getById,
-    deleteCountry
-} from '../controllers/country.controller.js';
+    updateProperty,
+    deleteProperty
+} from '../controllers/property.controller.js';
 
 const router = express.Router();
 /**
  * @swagger
  * components:
  *   schemas:
- *     Country:
+ *     Property:
  *       type: object
  *       required:
  *         - name
- *         - code
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the country
+ *           description: The auto-generated id of the property
  *         name:
  *           type: string
- *           description: The country name
- *         code:
+ *           description: The property name
+ *         description:
  *           type: string
- *           description: The country code
+ *           description: The property code
  *         status: 
  *           type: string
- *           description: The country status,
- *       example:
- *         id: objectId
- *         name: Viet Nam
- *         code: VN,
- *         status: Actived
+ *           description: The property status,
  */
 
 /**
  * @swagger
  * tags:
- *   name: Countries
- *   description: The Countries managing API
+ *   name: Properties
+ *   description: The Properties managing API
  */
 
 /**
  * @swagger
- * /api/country/create:
+ * /api/property/create:
  *   post:
- *     summary: Create a new country
- *     tags: [Countries]
+ *     summary: Create a new property
+ *     tags: [Properties]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Country'
+ *             $ref: '#/components/schemas/Property'
  *     responses:
  *       200:
- *         description: The country was successfully created
+ *         description: The property was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Country'
+ *               $ref: '#/components/schemas/Property'
  *       500:
  *         description: Some server error
  */
-router.post('/create', createCountry);
+router.post('/create', createProperty);
 
 /**
  * @swagger
- * /api/country/update:
+ * /api/property/update:
  *  put:
- *    summary: Update the country by the id
- *    tags: [Countries]
+ *    summary: Update the property by the id
+ *    tags: [Properties]
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Country'
+ *            $ref: '#/components/schemas/Property'
  *    responses:
  *      200:
- *        description: The country was updated
+ *        description: The property was updated
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/Country'
+ *              type: object
+ *              items: {}
  *      404:
- *        description: The country was not found
+ *        description: The property was not found
  *      500:
  *        description: Some error happened
  */
-router.put('/update', updateCountry);
+router.put('/update', updateProperty);
 
 /**
  * @swagger
- * /api/country/search:
+ * /api/property/search:
  *   get:
- *     summary: Returns the list of all the country
- *     tags: [Countries]
+ *     summary: Returns the list of all the property
+ *     tags: [Properties]
  *     parameters:
  *       - in: query
  *         name: name
  *         schema:
  *           type: string
  *         required: false
- *         description: The country name.
+ *         description: The property name.
  *       - in: query
- *         name: code
+ *         name: description
  *         schema:
  *           type: String
  *         required: false
- *         description: The country code.
+ *         description: The property description.
  *       - in: query
  *         name: status
  *         schema:
  *           type: String
  *         required: false
- *         description: The city status
+ *         description: The property status
  *     responses:
  *       200:
- *         description: The list of the country
+ *         description: The list of the property
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Country'
+ *                 $ref: '#/components/schemas/Property'
  */
 router.get('/search', search);
 
 /**
  * @swagger
- * /api/country/{id}:
+ * /api/property/{id}:
  *   get:
- *     summary: Get the country by id
- *     tags: [Countries]
+ *     summary: Get the property by id
+ *     tags: [Properties]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The country id
+ *         description: The property id
  *     responses:
  *       200:
- *         description: The country description by id
+ *         description: The property description by id
  *         contens:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Country'
+ *               $ref: '#/components/schemas/Property'
  *       404:
- *         description: The country was not found
+ *         description: The property was not found
  */
 router.get('/:id', getById);
 
 /**
  * @swagger
- * /api/country/delete/{id}:
+ * /api/property/delete/{id}:
  *   delete:
- *     summary: Remove the country by id
- *     tags: [Countries]
+ *     summary: Remove the property by id
+ *     tags: [Properties]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The country id
+ *         description: The property id
  * 
  *     responses:
  *       200:
- *         description: The country was deleted
+ *         description: The property was deleted
  *       404:
- *         description: The country was not found
+ *         description: The property was not found
  */
-router.delete('/delete/:id', deleteCountry);
+router.delete('/delete/:id', deleteProperty);
 
 export default router;
