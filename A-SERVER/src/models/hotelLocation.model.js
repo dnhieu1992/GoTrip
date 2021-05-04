@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 const propertyLocationSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     address: String,
-    property: {
+    hotel: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Property'
+        ref: 'Hotel'
     },
     country: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,7 +16,7 @@ const propertyLocationSchema = new mongoose.Schema({
         ref: 'City'
     },
     images: [],
-    description: String.apply,
+    description: String,
     
 });
 

@@ -7,19 +7,27 @@ import {
     badRequestResponse
 } from '../shared/response.js';
 import { ERROR_MSG } from '../constants/messages.js';
+import { cleanObject } from '../shared/ultils.js';
 
 function createCity(req, res) {
-    if (!req.body.name) {
+    const {
+        name,
+        countryId,
+        status = "Disabled"
+    } = req.body;
+
+    if (!name || !countryId) {
         return badRequestResponse(res, '');
     }
 
-    db.City.findOne({ name: req.body.name }).then((city) => {
+    db.City.findOne({ name: name, country_id: countryId }).then((city) => {
         if (city) return duplicatedResponse(res, ERROR_MSG.COUNTRY_EXISTS);
 
         const newCity = new db.City({
             _id: mongoose.Types.ObjectId(),
-            name: req.body.name,
-            status: req.body.name || "Disabled",
+            name: name,
+            country: countryId,
+            status: status,
         });
 
         newCity.save().then((result) => {
@@ -32,19 +40,14 @@ function createCity(req, res) {
 }
 
 function search(req, res) {
-    const queries = {};
-    if (req.params.name) {
-        queries['name'] = req.params.name;
-    }
-    if (req.params.status) {
-        queries['status'] = req.params.status;
-    }
+    const queries = cleanObject(req.query);
 
-    db.City.find(queries).then(cities => {
-        return successResponse(res, cities);
-    }).catch((error) => {
-        return errorResponse(res, error);
-    })
+    db.City.find(queries)
+        .populate('country')
+        .exec(function (err, cities) {
+            if (err) return errorResponse(res, err);
+            return successResponse(res, cities);
+        });
 }
 
 function getById(req, res) {

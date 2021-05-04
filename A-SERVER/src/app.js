@@ -7,12 +7,12 @@ import logger from 'morgan';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import countryRoutes from './routes/country.routes.js';
+import cityRoutes from './routes/city.routes.js';
 import DB_CONFIG from './config/db.config.js';
 import appConfig from './config/app.config.js';
 
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from './swagger.json';
 
 // set up express app
 const app = express();
@@ -62,21 +62,12 @@ const specs = swaggerJsDoc(options);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-// app.use(
-//   '/api-docs',
-//   swaggerUi.serve,
-//   swaggerUi.setup(swaggerDocument, {
-//     explorer: true,
-//   })
-// );
-
 app.listen(appConfig.PORT, (request, respond) => {
     console.log(`Our server is live on ${appConfig.PORT}. Yay!`);
 });
-
-
 
 // set up route
 app.use('/api/', authRoutes);
 app.use('/api/user/', userRoutes);
 app.use('/api/country/', countryRoutes);
+app.use('/api/city/', cityRoutes);
