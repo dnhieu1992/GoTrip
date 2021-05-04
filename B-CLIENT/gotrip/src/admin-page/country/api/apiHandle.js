@@ -11,7 +11,7 @@ const getCountries = async (params) => {
         const data = await res.json();
         return data;
     } catch (error) {
-        console.log(error);
+        console.log(error);    
     }
 }
 const createNewCountry = async (country) => {
