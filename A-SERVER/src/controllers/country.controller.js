@@ -8,6 +8,7 @@ import {
     badRequestResponse,
     notFoundResponse
 } from '../shared/response.js';
+import { searchQuery, cleanObject } from '../shared/ultils.js';
 
 function createCountry(req, res) {
     const {
@@ -39,21 +40,14 @@ function createCountry(req, res) {
 }
 
 function search(req, res) {
+    const queryObject = cleanObject(req.query);
+
+    const query = searchQuery(queryObject);
+
     const {
-        code,
-        name,
-        status,
-        pageSize,
-        pageNumber
-    } = req.query;
-
-    const query = { code, name, status };
-
-    Object.keys(query).forEach(key => {
-        if (query[key] === undefined || query[key] === null || (typeof (query[key]) === "String" && query[key] === '')) {
-            delete query[key];
-        }
-    });
+        pageNumber,
+        pageSize
+    } = queryObject;
 
     db.Country.find(query)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
@@ -110,6 +104,7 @@ function updateCountry(req, res) {
         return errorResponse(res, error);
     })
 }
+
 function deleteCountry(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');

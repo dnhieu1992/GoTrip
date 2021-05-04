@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import countryRoutes from './routes/country.routes.js';
 import cityRoutes from './routes/city.routes.js';
+import propertyRoutes from './routes/property.routes.js';
 import DB_CONFIG from './config/db.config.js';
 import appConfig from './config/app.config.js';
 
@@ -71,3 +72,4 @@ app.use('/api/', authRoutes);
 app.use('/api/user/', userRoutes);
 app.use('/api/country/', countryRoutes);
 app.use('/api/city/', cityRoutes);
+app.use('/api/property/', propertyRoutes);

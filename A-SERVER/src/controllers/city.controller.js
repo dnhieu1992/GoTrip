@@ -7,7 +7,7 @@ import {
     badRequestResponse
 } from '../shared/response.js';
 import { ERROR_MSG } from '../constants/messages.js';
-import { cleanObject } from '../shared/ultils.js';
+import { cleanObject, searchQuery } from '../shared/ultils.js';
 
 function createCity(req, res) {
     const {
@@ -40,13 +40,37 @@ function createCity(req, res) {
 }
 
 function search(req, res) {
-    const queries = cleanObject(req.query);
+    const queryObject = cleanObject(req.query);
 
-    db.City.find(queries)
+    const query = searchQuery(queryObject);
+    if (queryObject.countryId) {
+        query["country"] = mongoose.Types.ObjectId(queryObject.countryId);
+    }
+    delete query['countryId'];
+    const {
+        pageNumber,
+        pageSize
+    } = queryObject;
+
+    db.City.find(query)
+        .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
+        .limit(parseInt(pageSize))
         .populate('country')
-        .exec(function (err, cities) {
-            if (err) return errorResponse(res, err);
-            return successResponse(res, cities);
+        .exec((err, cities) => {
+            if (err) {
+                return errorResponse(res, err);
+            }
+            db.City.countDocuments(query).exec((count_error, count) => {
+                if (err) {
+                    return errorResponse(res, count_error);
+                }
+                return successResponse(res, {
+                    total: count,
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    cities: cities
+                });
+            });
         });
 }
 
@@ -55,35 +79,51 @@ function getById(req, res) {
         return badRequestResponse(res, '');
     }
 
-    db.City.findOne({ _id: req.params.id }).then(city => {
-        return successResponse(res, city);
-    }).catch((error) => {
-        return errorResponse(res, error);
-    })
+    db.City.findOne({ _id: req.params.id })
+        .populate('country')
+        .then(city => {
+            return successResponse(res, city);
+        }).catch((error) => {
+            return errorResponse(res, error);
+        })
 }
 
 function updateCity(req, res) {
-    if (!req.body.id) {
+    const {
+        id,
+        name,
+        countryId,
+        status = "Disabled"
+    } = req.body;
+
+    if (!id) {
         return badRequestResponse(res, '');
     }
 
     const cityUpdate = {
-        name: req.body.name,
-        status: req.body.status
+        name: name,
+        country: countryId,
+        status: status
     };
 
-    db.City.findOneAndUpdate({ _id: req.body.id }, cityUpdate).then(() => {
-        return successResponse(res);
-    }).catch((error) => {
-        return errorResponse(res, error);
-    })
+    db.City.findOneAndUpdate({ _id: id }, { $set: cityUpdate }, {}, function (err, city) {
+        // now you can send the error or updated file to client
+        if (err)
+            return errorResponse(res, error);
+
+        return successResponse(res, "Update success");
+    });
 }
 function deleteCity(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
     }
 
-    db.City.findByIdAndRemove({ _id: req.params.id });
+    db.City.findByIdAndRemove({ _id: req.params.id }).then(() => {
+        return successResponse(res, "Delete success");
+    }).catch(err => {
+        return errorResponse(res, err);;
+    });
 }
 
 export {
