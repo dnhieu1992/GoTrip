@@ -2,13 +2,13 @@ const TypesOfAccommodationForm = ({
     typesOfAccommodation,
     onSaveFormChange,
     onClose,
-    onSaveTypesOfAccommodation
+    onSaveTypesOfAccommodation,
+    isUpdating
 }) => {
     const {id,name,amount,status} = typesOfAccommodation;
 
     const onHandlePropertyChange = (e) => {
-        typesOfAccommodation[e.target.name]= e.target.value;
-        onSaveFormChange(typesOfAccommodation);
+        onSaveFormChange({ ...typesOfAccommodation, [e.target.name]: e.target.value});
     }
 
     return (
@@ -16,7 +16,15 @@ const TypesOfAccommodationForm = ({
             <div className="card-body">
                 <div className="form-group">
                     <label for = "exampleInputEmail1">Id</label>
-                    <input type="text" name = "id" className="form-control" id = "id" placeholder = "Id" value = {id} onChange = {onHandlePropertyChange} />
+                    <input type="text" 
+                        name = "id" 
+                        className="form-control" 
+                        id = "id" 
+                        placeholder = "Id" 
+                        value = {id} 
+                        onChange = {onHandlePropertyChange}
+                        disabled = {isUpdating} 
+                        />
                 </div>
                 <div className="form-group">
                     <label for="exampleInputEmail1">Name</label>

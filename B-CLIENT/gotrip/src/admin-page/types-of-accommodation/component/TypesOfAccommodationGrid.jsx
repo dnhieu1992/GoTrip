@@ -6,14 +6,10 @@ const TypesOfAccommodationGrid = ({
     options,
     totalItems,
     onHandlePageChange,
-    addNewForm
+    addNewForm,
+    onEdit,
+    onDelete
 }) =>{
-    const onEdit = () => {
-
-    }
-    const onDelete = () => {
-
-    }
     const columns = [
         {
             fieldName: 'Id',
@@ -56,7 +52,7 @@ const TypesOfAccommodationGrid = ({
                     currentPage = {options.currentPage}
                     pageSize = {options.pageSize}
                     total = {totalItems}
-                    onHandlePageChange = {onHandlePageChange}/>
+                    onPageNumberChange = {onHandlePageChange}/>
             </div>
         </div>
     )
