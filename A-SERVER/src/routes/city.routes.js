@@ -70,6 +70,25 @@ router.put('/update', updateCity);
  *   get:
  *     summary: Returns the list of all the city
  *     tags: [Cities]
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The city name.
+ *       - in: query
+ *         name: countryId
+ *         schema:
+ *           type: String
+ *         required: false
+ *         description: The country id.
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: String
+ *         required: false
+ *         description: The status of city
  *     responses:
  *       200:
  *         description: The list of the city

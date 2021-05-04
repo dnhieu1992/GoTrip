@@ -1,7 +1,7 @@
 const getCountries = async (params) => {
     try {
-        const url = new URL("http://localhost:5035/api/country/search");
-        Object.keys(params).forEach(key => url.searchParams.append(encodeURIComponent(key), encodeURIComponent(params[key])))
+        const url = new URL("http://localhost:5000/api/country/search");
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
         const res = await fetch(url);
 
@@ -16,7 +16,7 @@ const getCountries = async (params) => {
 }
 const createNewCountry = async (country) => {
     try {
-        await fetch("http://localhost:5035/api/country/create", {
+        await fetch("http://localhost:5000/api/country/create", {
             method: "POST",
             body: JSON.stringify(country),
             headers: { "Content-type": "application/json; charset=UTF-8" }
@@ -28,7 +28,7 @@ const createNewCountry = async (country) => {
 
 const updateCountry = async (country) => {
     try {
-        await fetch("http://localhost:5035/api/country/update", {
+        await fetch("http://localhost:5000/api/country/update", {
             method: "PUT",
             body: JSON.stringify(country),
             headers: { "Content-type": "application/json; charset=UTF-8" }
@@ -39,7 +39,7 @@ const updateCountry = async (country) => {
 }
 const deleteCountry = async (id) => {
     try {
-        await fetch(`http://localhost:5035/api/country/delete?id=${id}`, {
+        await fetch(`http://localhost:5000/api/country/delete/${id}`, {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });

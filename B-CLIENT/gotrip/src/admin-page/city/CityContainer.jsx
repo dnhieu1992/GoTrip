@@ -95,7 +95,7 @@ const CityContainer = () => {
         isUpdating.current = true;
     }
 
-    const deleteForm = (id) => {
+    const deleteForm = ({ id }) => {
         const index = mockDatas.findIndex(item => item.id == id);
         if (index > -1) {
             mockDatas.splice(index, 1);
