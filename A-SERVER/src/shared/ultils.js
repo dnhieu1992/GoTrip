@@ -11,7 +11,9 @@ function searchQuery(object) {
     const result = {};
 
     Object.keys(object).forEach(key => {
-        result[key] = { $regex: new RegExp("^" + object[key].toLowerCase(), "i") };
+        if(key !=="pageNumber" && key !=="pageSize"){
+            result[key] = { $regex: new RegExp("^" + object[key].toLowerCase(), "i") };
+        }
     });
 
     return result;
