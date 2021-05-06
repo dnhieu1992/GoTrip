@@ -40,7 +40,15 @@ const CityContainer = () => {
             }
         });
         getCities(params).then(({ total, cities }) => {
-            setData(cities);
+            const city = [];
+            for (let i = 0; i < cities.length; i++) {
+                const name = cities[i].name;
+                const status = cities[i].status;
+                const id = cities[i]._id;
+                const countryId = cities[i].country._id;
+                city.push({name,status,id,countryId});
+            }
+            setData(city);
             setTotal(total);
         }).catch(error => {
             console.log(error);
@@ -70,7 +78,7 @@ const CityContainer = () => {
         setCity({});
     };
     const onSaveCity = (city) => {
-        if (city._id) {
+        if (city.id) {
             updateCity(city).then(() => {
                 onHandleSearch(searchParam);
                 onClose();
@@ -97,8 +105,8 @@ const CityContainer = () => {
         setIsShow(true);
     }
 
-    const onDelete = ({ _id }) => {
-        deleteCity(_id).then(()=>{
+    const onDelete = ({ id }) => {
+        deleteCity(id).then(()=>{
             onHandleSearch(searchParam);
         }).catch
     }
