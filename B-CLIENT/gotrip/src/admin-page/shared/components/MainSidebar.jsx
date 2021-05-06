@@ -79,8 +79,8 @@ const MainSidebar = () => {
                                 </li>
                                 <li className="nav-item">
                                     <i className="fa fa-circle nav-icon"></i>
-                                    <Link to="/admin/types-of-accommodation">
-                                        Types-of-accommodation
+                                    <Link to="/admin/property">
+                                        Property
                                     </Link>
                                 </li>
                             </ul>

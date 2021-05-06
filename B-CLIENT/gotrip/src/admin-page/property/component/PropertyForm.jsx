@@ -1,38 +1,25 @@
-const TypesOfAccommodationForm = ({
-    typesOfAccommodation,
+const PropertyForm = ({
+    property,
     onSaveFormChange,
     onClose,
-    onSaveTypesOfAccommodation,
-    isUpdating
+    onSaveProperty
 }) => {
-    const {id,name,amount,status} = typesOfAccommodation;
+    const {name,description,status} = property;
 
     const onHandlePropertyChange = (e) => {
-        onSaveFormChange({ ...typesOfAccommodation, [e.target.name]: e.target.value});
+        onSaveFormChange({ ...property, [e.target.name]: e.target.value});
     }
 
     return (
         <form id="addNew">
             <div className="card-body">
                 <div className="form-group">
-                    <label for = "exampleInputEmail1">Id</label>
-                    <input type="text" 
-                        name = "id" 
-                        className="form-control" 
-                        id = "id" 
-                        placeholder = "Id" 
-                        value = {id} 
-                        onChange = {onHandlePropertyChange}
-                        disabled = {isUpdating} 
-                        />
-                </div>
-                <div className="form-group">
                     <label for="exampleInputEmail1">Name</label>
                     <input type="text" name="name" className="form-control" id="name" placeholder="Name" value={name} onChange={onHandlePropertyChange} />
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputEmail1">Amount</label>
-                    <input type="text" name="amount" className="form-control" id="amount" placeholder="Amount" value={amount} onChange={onHandlePropertyChange} />
+                    <label for="exampleInputEmail1">Description</label>
+                    <input type="text" name="description" className="form-control" id="description" placeholder="Description" value={description} onChange={onHandlePropertyChange} />
                 </div>
                 <div className="form-group">
                     <label for="exampleInputPassword1">Status</label>
@@ -45,11 +32,11 @@ const TypesOfAccommodationForm = ({
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
                         <button type="button" className="btn btn-danger mr-5" onClick={onClose}>Close</button>
-                        <button type="button" className="btn btn-info" onClick={()=>onSaveTypesOfAccommodation(typesOfAccommodation)}>Submit</button>
+                        <button type="button" className="btn btn-info" onClick={()=>onSaveProperty(property)}>Submit</button>
                     </div>
                 </div>
             </div>
         </form>
     )
 }
-export default TypesOfAccommodationForm;
+export default PropertyForm;
