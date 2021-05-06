@@ -1,11 +1,11 @@
-const typesOfAccommodationSearch = ({
+const propertySearch = ({
     searchParam,
     onHandleSearchChange,
     onHandleSearch,
     onHandleResetForm
 }) => {
 
-    const { typesOfAccommodationName, status} = searchParam;
+    const { propertyName, status} = searchParam;
 
     const onHandleFieldChange = (e) => {
         onHandleSearchChange({ ...searchParam, [e.target.name]: e.target.value});
@@ -31,9 +31,9 @@ const typesOfAccommodationSearch = ({
                                     <input type="text"
                                         className = "form-control"
                                         id="name"
-                                        name = "typesOfAccommodationName"
+                                        name = "propertyName"
                                         placeholder = "Name"
-                                        value = {typesOfAccommodationName}
+                                        value = {propertyName}
                                         onChange = {onHandleFieldChange}
                                     />
                                 </div>
@@ -63,4 +63,4 @@ const typesOfAccommodationSearch = ({
         </div>
     )
 }
-export default typesOfAccommodationSearch;
+export default propertySearch;

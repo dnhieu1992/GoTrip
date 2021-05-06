@@ -5,8 +5,7 @@ import Footer from './shared/components/Footer';
 
 import CountryContainer from './country/CountryContainer';
 import CityContainer from './city/CityContainer';
-import TypesOfAccommodationContainer from './types-of-accommodation/TypesOfAccommodationContainer';
-
+import PropertyContainer from './property/PropertyContainer'
 const AdminPage = () => {
   return (
     <div className="wrapper">
@@ -16,9 +15,7 @@ const AdminPage = () => {
       <div className="content-wrapper">
         <Route path="/admin/country" component={CountryContainer} />
         <Route path="/admin/city" component={CityContainer} />
-        <Route
-          path="/admin/types-of-accommodation"
-          component={TypesOfAccommodationContainer}
+        <Route path="/admin/property" component={PropertyContainer}
         />
       </div>
       <Footer />
