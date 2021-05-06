@@ -1,11 +1,10 @@
 const CityForm = ({
   city,
-  isUpdating,
   onSaveFormChange,
   onClose,
   onSaveCity
 }) => {
-  const { id, name, country, status } = city;
+  const { name, countryId, status } = city;
 
   const onHandlePropertyChange = (e) => {
     onSaveFormChange({ ...city, [e.target.name]: e.target.value });
@@ -15,23 +14,20 @@ const CityForm = ({
     <form id="addNew">
       <div className="card-body">
         <div className="form-group">
-          <label for="exampleInputEmail1">Id</label>
-          <input type="text" name="id" className="form-control" id="id" placeholder="Id" value={id} onChange={onHandlePropertyChange} disabled={isUpdating} />
-        </div>
-        <div className="form-group">
           <label for="exampleInputEmail1">Name</label>
           <input type="text" name="name" className="form-control" id="name" placeholder="Name" value={name} onChange={onHandlePropertyChange} />
         </div>
         <div className="form-group">
-          <label for="exampleInputPassword1">Country</label>
-          <select className="form-select form-control" aria-label="Default select example" name="country" value={country} onChange={onHandlePropertyChange}>
+          <label for="exampleInputPassword1">CountryID</label>
+          <input type="text" name="countryId" className="form-control" id="countryId" placeholder="CountryID" value={countryId} onChange={onHandlePropertyChange} />
+          {/* <select className="form-select form-control" aria-label="Default select example" name="country" value={countryID} onChange={onHandlePropertyChange}>
             <option selected hidden>Choose the city...</option>
             <option value=""></option>
             <option value="Việt Nam">Việt Nam</option>
             <option value="United State" >United State</option>
             <option value="Trung Quốc" >Trung Quốc</option>
             <option value="Ấn Độ" >Ấn Độ</option>
-          </select>
+          </select> */}
         </div>
         <div className="form-group">
           <label for="exampleInputPassword1">Status</label>
@@ -50,7 +46,7 @@ const CityForm = ({
         </div>
       </div>
     </form>
-  )
-}
+  );
+};
 
 export default CityForm;

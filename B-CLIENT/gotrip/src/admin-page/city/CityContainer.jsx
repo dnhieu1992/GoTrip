@@ -3,28 +3,16 @@ import Modal from '../../shared/components/forms/Modal';
 import CityGrid from './component/CityGrid';
 import CitySearch from './component/CitySearch';
 import CityForm from './component/CityForm';
+import { getCities, updateCity, createNewCity, deleteCity } from './api/apiHandle.js';
 
 const CityContainer = () => {
-
-    const mockDatasRaw = [
-        { id: 1, name: 'Đà Lạt', country: 'Việt Nam', status: "Actived" },
-        { id: 2, name: 'TP.Hồ Chí Minh', country: 'Việt Nam', status: "Actived" },
-        { id: 3, name: 'New York', country: 'United State', status: "Actived" },
-        { id: 4, name: 'Los Angeles', country: 'United State', status: "Actived" },
-        { id: 5, name: 'Thượng Hải', country: 'Trung Quốc', status: "Actived" },
-        { id: 6, name: 'Bắc Kinh', country: 'Trung Quốc', status: "Actived" },
-        { id: 7, name: 'Delhi', country: 'Ấn Độ', status: "Actived" },
-        { id: 8, name: 'Mumbai', country: 'Ấn Độ', status: "Actived" },
-    ];
-
-    const [mockDatas, setMockDatas] = useState(mockDatasRaw);
+    const [total, setTotal] = useState(0);
     const [data, setData] = useState([]);
     const [searchParam, setSearchParam] = useState({});
-    const [options, setOptions] = useState({ currentPage: 1, pageSize: 5 });
+    const [options, setOptions] = useState({ currentPage: 1, pageSize: 10 });
     const [isShow, setIsShow] = useState(false);
     const [city, setCity] = useState({});
     const didMountRef = useRef(false);
-    const isUpdating = useRef(false);
 
     useEffect(() => {
         if (!didMountRef.current) {
@@ -35,86 +23,104 @@ const CityContainer = () => {
 
     const onHandleSearchChange = (param) => {
         setSearchParam(param);
-    }
+    };
 
-    const onHandleSearch = ({ cityName, cityCountry, status }) => {
-        const cities = mockDatas.filter(item => {
-            if ((!cityName || (item.name.toLowerCase().indexOf(cityName.toLowerCase()) > -1))
-                && (!cityCountry || (item.country.toLowerCase().indexOf(cityCountry.toLowerCase()) > -1))
-                && (!status || (item.status.indexOf(status) > -1))) {
-                return item;
+    const onHandleSearch = ({ cityName, countryName, status }, options = {}) => {
+        const params = {
+            name: cityName,
+            country: countryName,
+            status: status,
+            pageNumber: options.pageNumber || 1,
+            pageSize: options.pageSize || 10
+        }
+
+        Object.keys(params).forEach(key => {
+            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "string" && params[key] === '')) {
+                delete params[key];
             }
         });
-        const result = cities.slice((options.currentPage - 1) * options.pageSize, options.currentPage * options.pageSize);
-        setData(result);
+        getCities(params).then(({ total, cities }) => {
+            const data = [];
+            cities.forEach(city => {
+                let countryName = city.country.name;
+                data.push({ ...city, id: city._id, countryName: countryName });
+            });
+            setData(data);
+            setTotal(total);
+        }).catch(error => {
+            console.log(error);
+        });
     };
 
     const onHandlePageChange = (pageNumber) => {
-        const result = mockDatas.slice((pageNumber - 1) * options.pageSize, pageNumber * options.pageSize);
-        setData(result);
+        onHandleSearch(searchParam, { pageSize: options.pageSize, pageNumber });
         setOptions({ ...options, currentPage: pageNumber });
-    }
+    };
+
+    const onHandlePageSizeChange = (pageSize) => {
+        onHandleSearch(searchParam, { pageSize: pageSize, pageNumber: 1 });
+        setOptions({ pageSize, currentPage: 1 });
+    };
 
     const onHandleResetForm = () => {
         setSearchParam({});
-        const result = mockDatas.slice((options.currentPage - 1) * options.pageSize, options.currentPage * options.pageSize);
-        setData(result);
-    }
+        onHandleSearch({}, { pageSize: options.pageSize, pageNumber: 1 })
+    };
 
-    const addNewForm = () => {
+    const onAddNew = () => {
         setIsShow(true);
-    }
+    };
     const onClose = () => {
         setIsShow(false);
         setCity({});
-        isUpdating.current = false;
-    }
-    const onSaveCity = () => {
-        if (isUpdating.current === true) {
-            const cityNew = mockDatas.find(x => x.id == city.id);
-            cityNew.name = city.name;
-            cityNew.country = city.country;
-            cityNew.status = city.status;
-            isUpdating.current = false;
+    };
+
+    const onSaveCity = (city) => {
+        if (city.id) {
+            updateCity(city).then(() => {
+                onHandleSearch(searchParam);
+                onClose();
+            }).catch(error => {
+                console.log(error);
+            });
         }
         else {
-            mockDatas.push(city);
-            setMockDatas(mockDatas);
+            createNewCity(city).then(() => {
+                onHandleSearch(searchParam);
+                onClose();
+            }).catch(error => {
+                console.log(error);
+            });
         }
-        onHandleSearch(searchParam);
-        onClose();
-    }
+    };
 
     const onSaveFormChange = (city) => {
         setCity(city);
     }
 
-    const editForm = (city) => {
+    const onEdit = (city) => {
         setCity(city);
         setIsShow(true);
-        isUpdating.current = true;
     }
 
-    const deleteForm = ({ id }) => {
-        const index = mockDatas.findIndex(item => item.id == id);
-        if (index > -1) {
-            mockDatas.splice(index, 1);
-        }
-        setMockDatas(mockDatas);
-        onHandleSearch(searchParam);
+    const onDelete = ({ _id }) => {
+        deleteCity(_id).then(() => {
+            onHandleSearch(searchParam);
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
-                title="Add New City"
+                title={city.id ? 'Edit City' : 'Add New City'}
                 onClose={onClose}
                 onSave={onSaveCity}>
                 <CityForm city={city}
                     onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
-                    onSaveCity={onSaveCity}
-                    isUpdating={isUpdating.current} />
+                    onSaveCity={onSaveCity} />
             </Modal>
         )
     }
@@ -136,11 +142,12 @@ const CityContainer = () => {
                     <CityGrid
                         data={data}
                         options={options}
-                        totalItems={mockDatas.length}
+                        totalItems={total}
                         onHandlePageChange={onHandlePageChange}
-                        addNewForm={addNewForm}
-                        editForm={editForm}
-                        deleteForm={deleteForm}
+                        onHandlePageSizeChange={onHandlePageSizeChange}
+                        onAddNew={onAddNew}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
                     />
                 </div>
             </div>
