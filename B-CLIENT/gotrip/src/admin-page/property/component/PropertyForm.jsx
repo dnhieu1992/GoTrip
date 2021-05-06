@@ -4,10 +4,10 @@ const PropertyForm = ({
     onClose,
     onSaveProperty
 }) => {
-    const {name,description,status} = property;
+    const { name, description, status } = property;
 
     const onHandlePropertyChange = (e) => {
-        onSaveFormChange({ ...property, [e.target.name]: e.target.value});
+        onSaveFormChange({ ...property, [e.target.name]: e.target.value });
     }
 
     return (
@@ -19,7 +19,7 @@ const PropertyForm = ({
                 </div>
                 <div className="form-group">
                     <label for="exampleInputEmail1">Description</label>
-                    <input type="text" name="description" className="form-control" id="description" placeholder="Description" value={description} onChange={onHandlePropertyChange} />
+                    <textarea type="text" name="description" className="form-control" id="description" placeholder="Description" value={description} onChange={onHandlePropertyChange} />
                 </div>
                 <div className="form-group">
                     <label for="exampleInputPassword1">Status</label>
@@ -32,7 +32,7 @@ const PropertyForm = ({
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
                         <button type="button" className="btn btn-danger mr-5" onClick={onClose}>Close</button>
-                        <button type="button" className="btn btn-info" onClick={()=>onSaveProperty(property)}>Submit</button>
+                        <button type="button" className="btn btn-info" onClick={() => onSaveProperty(property)}>Submit</button>
                     </div>
                 </div>
             </div>

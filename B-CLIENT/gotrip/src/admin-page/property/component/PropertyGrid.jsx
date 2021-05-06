@@ -10,7 +10,7 @@ const PropertyGrid = ({
     addNewForm,
     onEdit,
     onDelete
-}) =>{
+}) => {
     const columns = [
         {
             fieldName: 'Id',
@@ -45,17 +45,17 @@ const PropertyGrid = ({
                         <h4>Property: {totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
-                        <button type = "button" className = "btn btn-info" onClick = {addNewForm}>Add New</button>
+                        <button type="button" className="btn btn-info" onClick={addNewForm}>Add New</button>
                     </div>
                 </div>
-                <Grid data = {data}
-                    columns = {columns}
-                    currentPage = {options.currentPage}
-                    pageSize = {options.pageSize}
-                    total = {totalItems}
-                    onPageNumberChange = {onHandlePageChange}
+                <Grid data={data}
+                    columns={columns}
+                    currentPage={options.currentPage}
+                    pageSize={options.pageSize}
+                    total={totalItems}
+                    onPageNumberChange={onHandlePageChange}
                     onHandlePageSizeChange={onHandlePageSizeChange}
-                    />
+                />
             </div>
         </div>
     )
@@ -65,6 +65,7 @@ PropertyGrid.propTypes = {
     data: PropTypes.array,
     totalItems: PropTypes.number
 };
+
 PropertyGrid.defaultProps = {
     data: [],
     totalItems: 0

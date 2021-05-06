@@ -3,7 +3,12 @@ import Modal from '../../shared/components/forms/Modal';
 import CountryGrid from './component/CountryGrid';
 import CountrySearch from './component/CountrySearch';
 import CountryForm from './component/CountryForm';
-import { getCountries, updateCountry, createNewCountry, deleteCountry } from './api/apiHandle.js';
+import { 
+    getCountries, 
+    updateCountry, 
+    createNewCountry, 
+    deleteCountry 
+} from './api/apiHandle.js';
 
 const CountryContainer = () => {
     const [total, setTotal] = useState(0);
