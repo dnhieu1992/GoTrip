@@ -119,7 +119,31 @@ router.put('/update', updateCountry);
  *         schema:
  *           type: String
  *         required: false
- *         description: The city status
+ *         description: The country status
+ *       - in: query
+ *         name: pageNumber
+ *         schema:
+ *           type: Number
+ *         required: false
+ *         description: The Page Number
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: Number
+ *         required: false
+ *         description: The Page Size
+ *       - in: query
+ *         name: sortDirection
+ *         schema:
+ *           type: String
+ *         required: false
+ *         description: The Sort Direction(asc/desc)
+ *       - in: query
+ *         name: sortField
+ *         schema:
+ *           type: String
+ *         required: false
+ *         description: The Sort Field
  *     responses:
  *       200:
  *         description: The list of the country

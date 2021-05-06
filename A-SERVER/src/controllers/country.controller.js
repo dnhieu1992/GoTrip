@@ -56,10 +56,16 @@ function search(req, res) {
 
     const {
         pageNumber,
-        pageSize
+        pageSize,
+        sortDirection,
+        sortField = "name"
     } = queryObject;
 
+    const sortObject = {};
+    sortObject[sortField] = sortDirection === 'asc' ? 1 : -1;
+
     db.Country.find(query)
+        .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
         .exec((err, countries) => {
