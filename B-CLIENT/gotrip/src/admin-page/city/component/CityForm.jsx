@@ -18,7 +18,7 @@ const CityForm = ({
           <input type="text" name="name" className="form-control" id="name" placeholder="Name" value={name} onChange={onHandlePropertyChange} />
         </div>
         <div className="form-group">
-          <label for="exampleInputPassword1">Country</label>
+          <label for="exampleInputPassword1">CountryID</label>
           <input type="text" name="countryId" className="form-control" id="countryId" placeholder="CountryID" value={countryId} onChange={onHandlePropertyChange} />
           {/* <select className="form-select form-control" aria-label="Default select example" name="country" value={countryID} onChange={onHandlePropertyChange}>
             <option selected hidden>Choose the city...</option>

@@ -25,30 +25,27 @@ const CityContainer = () => {
         setSearchParam(param);
     };
 
-    const onHandleSearch = ({ cityName, cityCountryId, status }, options = {}) => {
+    const onHandleSearch = ({ cityName, countryName, status }, options = {}) => {
         const params = {
             name: cityName,
-            countryId: cityCountryId,
+            country: countryName,
             status: status,
             pageNumber: options.pageNumber || 1,
             pageSize: options.pageSize || 10
         }
 
         Object.keys(params).forEach(key => {
-            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "String" && params[key] === '')) {
+            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "string" && params[key] === '')) {
                 delete params[key];
             }
         });
         getCities(params).then(({ total, cities }) => {
-            const city = [];
-            for (let i = 0; i < cities.length; i++) {
-                const name = cities[i].name;
-                const status = cities[i].status;
-                const id = cities[i]._id;
-                const countryId = cities[i].country._id;
-                city.push({name,status,id,countryId});
-            }
-            setData(city);
+            const data = [];
+            cities.forEach(city => {
+                let countryName = city.country.name;
+                data.push({ ...city, id: city._id, countryName: countryName });
+            });
+            setData(data);
             setTotal(total);
         }).catch(error => {
             console.log(error);
@@ -77,6 +74,7 @@ const CityContainer = () => {
         setIsShow(false);
         setCity({});
     };
+
     const onSaveCity = (city) => {
         if (city.id) {
             updateCity(city).then(() => {
@@ -105,10 +103,12 @@ const CityContainer = () => {
         setIsShow(true);
     }
 
-    const onDelete = ({ id }) => {
-        deleteCity(id).then(()=>{
+    const onDelete = ({ _id }) => {
+        deleteCity(_id).then(() => {
             onHandleSearch(searchParam);
-        }).catch
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     const modalRender = () => {

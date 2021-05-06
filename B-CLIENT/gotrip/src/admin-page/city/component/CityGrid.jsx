@@ -22,8 +22,8 @@ const CityGrid = ({
       dataField: 'name'
     },
     {
-      fieldName: 'CountryID',
-      dataField: 'countryId'
+      fieldName: 'Country',
+      dataField: 'countryName'
     },
     {
       fieldName: 'Status',
