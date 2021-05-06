@@ -5,9 +5,9 @@ const CountrySearch = ({
     onHandleResetForm,
 }) => {
     const {
-        countryName,
-        countryCode,
-        status
+        countryName = "",
+        countryCode = "",
+        status = ""
     } = searchParam;
 
     const onHandleFieldChange = (e) => {

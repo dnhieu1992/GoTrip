@@ -48,9 +48,27 @@ const deleteCity = async (id) => {
     }
 }
 
+const getCountries = async () => {
+    try {
+        const url = new URL("http://localhost:5000/api/country/getAll");
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(res.status);
+        }
+
+        const data = await res.json();
+
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export {
     getCities,
     createNewCity,
     updateCity,
-    deleteCity
+    deleteCity,
+    getCountries
 }

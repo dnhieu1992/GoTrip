@@ -1,9 +1,10 @@
 import express from 'express';
 import {
-    createCountry,
-    updateCountry,
+    getAll,
     search,
     getById,
+    createCountry,
+    updateCountry,
     deleteCountry
 } from '../controllers/country.controller.js';
 
@@ -130,6 +131,24 @@ router.put('/update', updateCountry);
  *                 $ref: '#/components/schemas/Country'
  */
 router.get('/search', search);
+
+/**
+ * @swagger
+ * /api/country/getAll:
+ *   get:
+ *     summary: Returns the list of all the country
+ *     tags: [Countries]
+ *     responses:
+ *       200:
+ *         description: The list of the country
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Country'
+ */
+ router.get('/getAll', getAll);
 
 /**
  * @swagger

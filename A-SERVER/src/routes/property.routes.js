@@ -1,8 +1,9 @@
 import express from 'express';
 import {
-    createProperty,
+    getAll,
     search,
     getById,
+    createProperty,
     updateProperty,
     deleteProperty
 } from '../controllers/property.controller.js';
@@ -88,6 +89,24 @@ router.post('/create', createProperty);
  *        description: Some error happened
  */
 router.put('/update', updateProperty);
+
+/**
+ * @swagger
+ * /api/property/getAll:
+ *   get:
+ *     summary: Returns the list of all the Properties
+ *     tags: [Properties]
+ *     responses:
+ *       200:
+ *         description: The list of the properties
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Property'
+ */
+ router.get('/getAll', getAll);
 
 /**
  * @swagger

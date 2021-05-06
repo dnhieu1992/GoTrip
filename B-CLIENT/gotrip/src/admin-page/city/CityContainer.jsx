@@ -3,11 +3,18 @@ import Modal from '../../shared/components/forms/Modal';
 import CityGrid from './component/CityGrid';
 import CitySearch from './component/CitySearch';
 import CityForm from './component/CityForm';
-import { getCities, updateCity, createNewCity, deleteCity } from './api/apiHandle.js';
+import {
+    getCities,
+    updateCity,
+    createNewCity,
+    deleteCity,
+    getCountries
+} from './api/apiHandle.js';
 
 const CityContainer = () => {
     const [total, setTotal] = useState(0);
     const [data, setData] = useState([]);
+    const [countries, setCountries] = useState([]);
     const [searchParam, setSearchParam] = useState({});
     const [options, setOptions] = useState({ currentPage: 1, pageSize: 10 });
     const [isShow, setIsShow] = useState(false);
@@ -16,35 +23,53 @@ const CityContainer = () => {
 
     useEffect(() => {
         if (!didMountRef.current) {
+            getAllCountries();
             onHandleSearch({});
             didMountRef.current = true;
         }
     });
 
+    const getAllCountries = () => {
+        getCountries().then((countries) => {
+            setCountries(countries);
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
     const onHandleSearchChange = (param) => {
         setSearchParam(param);
     };
 
-    const onHandleSearch = ({ cityName, countryName, status }, options = {}) => {
+    const onHandleSearch = ({ cityName, countryId, status }, options = {}) => {
         const params = {
             name: cityName,
-            country: countryName,
+            countryId: countryId,
             status: status,
             pageNumber: options.pageNumber || 1,
             pageSize: options.pageSize || 10
         }
 
         Object.keys(params).forEach(key => {
-            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "string" && params[key] === '')) {
+            if (!params[key] || (typeof (params[key]) === "string" && params[key] === '')) {
                 delete params[key];
             }
         });
+
         getCities(params).then(({ total, cities }) => {
             const data = [];
+
             cities.forEach(city => {
-                let countryName = city.country.name;
-                data.push({ ...city, id: city._id, countryName: countryName });
+                let { _id, name } = city.country;
+
+                data.push({
+                    ...city,
+                    id: city._id,
+                    countryId: _id,
+                    countryName: name
+                });
             });
+
             setData(data);
             setTotal(total);
         }).catch(error => {
@@ -118,6 +143,7 @@ const CityContainer = () => {
                 onClose={onClose}
                 onSave={onSaveCity}>
                 <CityForm city={city}
+                    countries={countries}
                     onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSaveCity={onSaveCity} />
@@ -135,6 +161,7 @@ const CityContainer = () => {
                 <div className="card-body">
                     <CitySearch
                         searchParam={searchParam}
+                        countries={countries}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}

@@ -4,16 +4,18 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import logger from 'morgan';
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+
+import DB_CONFIG from './config/db.config.js';
+import appConfig from './config/app.config.js';
+
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import countryRoutes from './routes/country.routes.js';
 import cityRoutes from './routes/city.routes.js';
 import propertyRoutes from './routes/property.routes.js';
-import DB_CONFIG from './config/db.config.js';
-import appConfig from './config/app.config.js';
-
-import swaggerJsDoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
+import propertyTypeRoutes from './routes/propertyType.routes.js';
 
 // set up express app
 const app = express();
@@ -73,3 +75,4 @@ app.use('/api/user/', userRoutes);
 app.use('/api/country/', countryRoutes);
 app.use('/api/city/', cityRoutes);
 app.use('/api/property/', propertyRoutes);
+app.use('/api/propertyType/', propertyTypeRoutes);

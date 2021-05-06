@@ -39,6 +39,16 @@ function createCountry(req, res) {
     })
 }
 
+function getAll(req, res) {
+    db.Country.find({ status: "Actived" })
+        .exec((err, countries) => {
+            if (err) {
+                return errorResponse(res, err);
+            }
+            return successResponse(res, countries);
+        });
+}
+
 function search(req, res) {
     const queryObject = cleanObject(req.query);
 
@@ -122,9 +132,11 @@ function deleteCountry(req, res) {
 }
 
 export {
-    createCountry,
+    getAll,
     search,
     getById,
+    createCountry,
     updateCountry,
-    deleteCountry
+    deleteCountry,
+
 }

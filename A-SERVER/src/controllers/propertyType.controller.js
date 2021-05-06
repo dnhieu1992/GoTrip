@@ -8,7 +8,7 @@ import {
     badRequestResponse,
     notFoundResponse
 } from '../shared/response.js';
-import { cleanObject } from '../shared/ultils.js';
+import { cleanObject, searchQuery } from '../shared/ultils.js';
 
 function createPropertyType(req, res) {
     const {
@@ -42,16 +42,29 @@ function createPropertyType(req, res) {
 }
 
 function search(req, res) {
-    const queries = cleanObject(req.query);
+    const queryObject = cleanObject(req.query);
 
-    db.PropertyType.find(queries)
+    const query = searchQuery(queryObject);
+    if (queryObject.propertyId) {
+        query["property"] = mongoose.Types.ObjectId(queryObject.propertyId);
+    }
+
+    delete query['propertyId'];
+
+    const {
+        pageNumber,
+        pageSize
+    } = queryObject;
+
+    db.PropertyType.find(query)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
-        .exec((err, propertyTypes) => {
+        .populate('property')
+        .exec((err, propertyTyes) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            db.propertyType.countDocuments(queries).exec((count_error, count) => {
+            db.City.countDocuments(query).exec((count_error, count) => {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
@@ -59,7 +72,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    propertyTypes: propertyTypes
+                    propertyTyes: propertyTyes
                 });
             });
         });
@@ -83,14 +96,14 @@ function getById(req, res) {
 
 function updatePropertyType(req, res) {
     const {
-        _id,
+        id,
         name,
         description,
         propertyId,
         status
     } = req.body;
 
-    if (!_id) {
+    if (!id) {
         return badRequestResponse(res, '');
     }
 
@@ -101,8 +114,8 @@ function updatePropertyType(req, res) {
         description
     };
 
-    db.Property.findOneAndUpdate({ _id: _id }, propertyTypeUpdate).then((result) => {
-        return successResponse(res, result);
+    db.PropertyType.findOneAndUpdate({ _id: id }, propertyTypeUpdate).then((result) => {
+        return successResponse(res, "Update success.");
     }).catch((error) => {
         return errorResponse(res, error);
     })
@@ -124,9 +137,9 @@ function deletePropertyType(req, res) {
 }
 
 export {
-    createPropertyType,
     search,
     getById,
+    createPropertyType,
     updatePropertyType,
     deletePropertyType
 }

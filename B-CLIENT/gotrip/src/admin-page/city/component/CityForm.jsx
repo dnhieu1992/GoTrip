@@ -1,10 +1,15 @@
 const CityForm = ({
   city,
+  countries,
   onSaveFormChange,
   onClose,
   onSaveCity
 }) => {
-  const { name, countryId, status } = city;
+  const {
+    name,
+    countryId,
+    status
+  } = city;
 
   const onHandlePropertyChange = (e) => {
     onSaveFormChange({ ...city, [e.target.name]: e.target.value });
@@ -18,16 +23,16 @@ const CityForm = ({
           <input type="text" name="name" className="form-control" id="name" placeholder="Name" value={name} onChange={onHandlePropertyChange} />
         </div>
         <div className="form-group">
-          <label for="exampleInputPassword1">CountryID</label>
-          <input type="text" name="countryId" className="form-control" id="countryId" placeholder="CountryID" value={countryId} onChange={onHandlePropertyChange} />
-          {/* <select className="form-select form-control" aria-label="Default select example" name="country" value={countryID} onChange={onHandlePropertyChange}>
-            <option selected hidden>Choose the city...</option>
+          <label for="exampleInputPassword1">Country</label>
+          <select className="form-select form-control" aria-label="Default select example" name="countryId" value={countryId} onChange={onHandlePropertyChange}>
+            <option selected hidden>Choose the country...</option>
             <option value=""></option>
-            <option value="Việt Nam">Việt Nam</option>
-            <option value="United State" >United State</option>
-            <option value="Trung Quốc" >Trung Quốc</option>
-            <option value="Ấn Độ" >Ấn Độ</option>
-          </select> */}
+            {countries.map(country => {
+              return (
+                <option value={country._id}>{country.name}</option>
+              )
+            })}
+          </select>
         </div>
         <div className="form-group">
           <label for="exampleInputPassword1">Status</label>

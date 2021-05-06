@@ -1,11 +1,15 @@
 const CitySearch = ({
     searchParam,
+    countries,
     onHandleSearchChange,
     onHandleSearch,
     onHandleResetForm
 }) => {
-
-    const { cityName, cityCountry, status } = searchParam;
+    const {
+        cityName = "",
+        countryId = "",
+        status = ""
+    } = searchParam;
 
     const onHandleFieldChange = (e) => {
         onHandleSearchChange({ ...searchParam, [e.target.name]: e.target.value });
@@ -42,14 +46,18 @@ const CitySearch = ({
                             <div className="form-group row">
                                 <label for="inputPassword3" className="col-sm-2 col-form-label">Country</label>
                                 <div className="col-sm-10">
-                                    <select class="form-control" value={cityCountry} id="cityCountry"
-                                        name="cityCountry" onChange={onHandleFieldChange}>
-                                        <option selected hidden>Choose the city...</option>
-                                        <option value=""></option>
-                                        <option value="Việt Nam">Việt Nam</option>
-                                        <option value="United State" >United State</option>
-                                        <option value="Trung Quốc" >Trung Quốc</option>
-                                        <option value="Ấn Độ" >Ấn Độ</option>
+                                    <select class="form-control"
+                                        id="countryId"
+                                        name="countryId"
+                                        value={countryId}
+                                        onChange={onHandleFieldChange}
+                                    >
+                                        <option value="">Choose the country...</option>
+                                        {countries.map(country => {
+                                            return (
+                                                <option value={country._id}>{country.name}</option>
+                                            )
+                                        })}
                                     </select>
                                 </div>
                             </div>

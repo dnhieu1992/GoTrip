@@ -39,35 +39,19 @@ function createProperty(req, res) {
     })
 }
 
+function getAll(req, res) {
+    db.Property.find({ status: "Actived" })
+        .exec((err, properties) => {
+            if (err) {
+                return errorResponse(res, err);
+            }
+            return successResponse(res, properties);
+        });
+}
+
 function search(req, res) {
     const queryObject = cleanObject(req.query);
     const query = searchQuery(queryObject)
-    // const defaultDatas = [
-    //     {
-    //         name: "Apartment",
-    //         description: "Furnished and self-catering accommodation, where guests rent the entire place.",
-    //         status: "Actived"
-    //     },
-    //     {
-    //         name: "Homes",
-    //         description: "Properties like apartments, holiday homes, villas, etc.",
-    //         status: "Actived"
-    //     },
-    //     {
-    //         name: "Hotel, B&Bs, and more",
-    //         description: "Properties like hotels, B&Bs, guest houses, hostels, aparthotels, etc.",
-    //         status: "Actived"
-    //     },
-    //     {
-    //         name: "Alternative places",
-    //         description: "Properties like boats, campsites, luxury tents, etc.",
-    //         status: "Actived"
-    //     }
-    // ];
-
-    // defaultDatas.forEach(item => {
-    //     initData(item);
-    // });
 
     const {
         pageNumber,
@@ -151,27 +135,11 @@ function deleteProperty(req, res) {
     });
 }
 
-function initData(property) {
-    db.Property.findOne({ name: property.name }).then((property) => {
-        if (!property) {
-            const newProperty = new db.Property({
-                _id: mongoose.Types.ObjectId(),
-                ...property
-            });
-
-            newProperty.save().then((result) => {
-                console.log(result);
-            }).catch((error) => {
-                console.log(error);
-            })
-        }
-    })
-}
-
 export {
-    createProperty,
+    getAll,
     search,
     getById,
+    createProperty,
     updateProperty,
     deleteProperty
 }
