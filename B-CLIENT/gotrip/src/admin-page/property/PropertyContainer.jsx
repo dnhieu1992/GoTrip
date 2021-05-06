@@ -3,7 +3,12 @@ import Modal from '../../shared/components/forms/Modal';
 import PropertyGrid from './component/PropertyGrid';
 import PropertySearch from './component/PropertySearch';
 import PropertyForm from './component/PropertyForm';
-import { getProperties, updateProperty, createNewProperty, deleteProperty } from './api/apiHandle.js';
+import { 
+    getProperties, 
+    updateProperty, 
+    createNewProperty, 
+    deleteProperty 
+} from './api/apiHandle.js';
 
 const PropertyContainer = () => {
     const [total, setTotal] = useState(0);
