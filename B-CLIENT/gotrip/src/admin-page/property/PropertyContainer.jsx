@@ -39,7 +39,7 @@ const PropertyContainer = () => {
         }
 
         Object.keys(params).forEach(key => {
-            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "Strings" && params[key] === '')) {
+            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "string" && params[key] === '')) {
                 delete params[key];
             }
         });
@@ -77,10 +77,9 @@ const PropertyContainer = () => {
         setProperty({});
     }
 
-    const updateRequest = { ...property, id: property._id }
-
     const onSaveProperty = (property) => {
         if (property._id) {
+            const updateRequest = { ...property, id: property._id }
             updateProperty(updateRequest).then(() => {
                 onHandleSearch(searchParam);
                 onClose();

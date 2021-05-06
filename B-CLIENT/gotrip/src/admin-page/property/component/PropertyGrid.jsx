@@ -61,6 +61,7 @@ const PropertyGrid = ({
     )
 }
 export default PropertyGrid;
+
 PropertyGrid.propTypes = {
     data: PropTypes.array,
     totalItems: PropTypes.number
