@@ -54,38 +54,25 @@ const MainSidebar = () => {
                         role="menu"
                         data-accordion="false"
                     >
-                        <li className="nav-item menu-open">
-                            <a href="#" className="nav-link active">
-                                <i className="nav-icon fa fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard
-                                    <i className="right fa fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <a href="./index.html" className="nav-link active">
-                                        <i className="fa fa-circle nav-icon"></i>
-                                        <p>Dashboard v1</p>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <i className="fa fa-circle nav-icon"></i>
-                                    <Link to="/admin/country">Country</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <i className="fa fa-circle nav-icon"></i>
-                                    <Link to="/admin/city">City</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <i className="fa fa-circle nav-icon"></i>
-                                    <Link to="/admin/property">
-                                        Property
-                                    </Link>
-                                </li>
-                            </ul>
+                        <li className="nav-item">
+                            <Link to="/admin/country" className="nav-link ">
+                                <i className="nav-icon fa fa-globe"></i>
+                                    Country
+                            </Link>
                         </li>
                         <li className="nav-item">
+                            <Link to="/admin/city" className="nav-link ">
+                                <i className="nav-icon fa fa-building"></i>
+                                City
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to="/admin/property" className="nav-link">
+                                <i className="nav-icon fa fa-home"></i>
+                                Property
+                            </Link>
+                        </li>
+                        {/* <li className="nav-item">
                             <a href="pages/widgets.html" className="nav-link">
                                 <i className="nav-icon fa fa-th"></i>
                                 <p>
@@ -202,7 +189,7 @@ const MainSidebar = () => {
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                             <a href="#" className="nav-link">
                                 <i className="nav-icon fa fa-tree"></i>
@@ -326,7 +313,7 @@ const MainSidebar = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li className="nav-header">EXAMPLES</li>
+                        {/* <li className="nav-header">EXAMPLES</li>
                         <li className="nav-item">
                             <a href="pages/calendar.html" className="nav-link">
                                 <i className="nav-icon fa fa-calendar-alt"></i>
@@ -730,7 +717,7 @@ const MainSidebar = () => {
                                 <i className="nav-icon fa fa-circle text-info"></i>
                                 <p>Informational</p>
                             </a>
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
             </div>
