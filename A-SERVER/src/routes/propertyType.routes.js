@@ -118,6 +118,34 @@ router.put('/update', updatePropertyType);
  *           type: String
  *         required: false
  *         description: The status of Property Type
+ *       - in: query
+ *         name: pageNumber
+ *         schema:
+ *           type: Number
+ *         required: false
+ *         default: 1
+ *         description: The Page Number
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: Number
+ *         required: false
+ *         default: 50
+ *         description: The Page Size
+ *       - in: query
+ *         name: sortDirection
+ *         schema:
+ *           type: String
+ *         required: false
+ *         default: asc
+ *         description: The Sort Direction(asc/desc)
+ *       - in: query
+ *         name: sortField
+ *         schema:
+ *           type: String
+ *         required: false
+ *         default: name
+ *         description: The Sort Field
  *     responses:
  *       200:
  *         description: The list of the Property Types

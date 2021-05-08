@@ -9,6 +9,7 @@ import {
     notFoundResponse
 } from '../shared/response.js';
 import { cleanObject, searchQuery } from '../shared/ultils.js';
+import { SORT_DIRECTION } from '../constants/constants.js';
 
 function createProperty(req, res) {
     const {
@@ -55,10 +56,16 @@ function search(req, res) {
 
     const {
         pageNumber,
-        pageSize
+        pageSize,
+        sortDirection,
+        sortField = "name"
     } = queryObject;
 
+    const sortObject = {};
+    sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
+
     db.Property.find(query)
+        .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
         .exec((err, properties) => {

@@ -8,6 +8,7 @@ import {
 } from '../shared/response.js';
 import { ERROR_MSG } from '../constants/messages.js';
 import { cleanObject, searchQuery } from '../shared/ultils.js';
+import { SORT_DIRECTION } from '../constants/constants.js';
 
 function createCity(req, res) {
     const {
@@ -43,16 +44,25 @@ function search(req, res) {
     const queryObject = cleanObject(req.query);
 
     const query = searchQuery(queryObject);
+
     if (queryObject.countryId) {
         query["country"] = mongoose.Types.ObjectId(queryObject.countryId);
     }
+
     delete query['countryId'];
+
     const {
         pageNumber,
-        pageSize
+        pageSize,
+        sortDirection,
+        sortField = "name"
     } = queryObject;
 
+    const sortObject = {};
+    sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
+
     db.City.find(query)
+        .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
         .populate('country')

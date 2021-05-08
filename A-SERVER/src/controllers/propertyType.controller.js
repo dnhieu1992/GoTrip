@@ -9,6 +9,7 @@ import {
     notFoundResponse
 } from '../shared/response.js';
 import { cleanObject, searchQuery } from '../shared/ultils.js';
+import { SORT_DIRECTION } from '../constants/constants.js';
 
 function createPropertyType(req, res) {
     const {
@@ -45,6 +46,7 @@ function search(req, res) {
     const queryObject = cleanObject(req.query);
 
     const query = searchQuery(queryObject);
+
     if (queryObject.propertyId) {
         query["property"] = mongoose.Types.ObjectId(queryObject.propertyId);
     }
@@ -53,18 +55,24 @@ function search(req, res) {
 
     const {
         pageNumber,
-        pageSize
+        pageSize,
+        sortDirection,
+        sortField = "name"
     } = queryObject;
 
+    const sortObject = {};
+    sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
+
     db.PropertyType.find(query)
+        .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
         .populate('property')
-        .exec((err, propertyTyes) => {
+        .exec((err, propertyTypes) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            db.City.countDocuments(query).exec((count_error, count) => {
+            db.PropertyType.countDocuments(query).exec((count_error, count) => {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
@@ -72,7 +80,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    propertyTyes: propertyTyes
+                    propertyTypes: propertyTypes
                 });
             });
         });

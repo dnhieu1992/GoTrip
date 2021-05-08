@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import db from '../models/index.js';
-import { ERROR_MSG } from '../constants/messages.js';
+import { searchQuery, cleanObject } from '../shared/ultils.js';
 import {
     duplicatedResponse,
     errorResponse,
@@ -8,7 +8,8 @@ import {
     badRequestResponse,
     notFoundResponse
 } from '../shared/response.js';
-import { searchQuery, cleanObject } from '../shared/ultils.js';
+import { ERROR_MSG } from '../constants/messages.js';
+import { SORT_DIRECTION } from '../constants/constants.js';
 
 function createCountry(req, res) {
     const {
@@ -62,7 +63,7 @@ function search(req, res) {
     } = queryObject;
 
     const sortObject = {};
-    sortObject[sortField] = sortDirection === 'asc' ? 1 : -1;
+    sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
 
     db.Country.find(query)
         .sort(sortObject)
