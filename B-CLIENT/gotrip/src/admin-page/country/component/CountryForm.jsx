@@ -33,7 +33,7 @@ const CountryForm = ({
         <form id="addNew">
             <div className="card-body">
                 <div className="form-group">
-                    <label for="exampleInputEmail1">Name</label>
+                    <label>Name</label>
                     <input
                         type="text"
                         name="name"
@@ -51,7 +51,7 @@ const CountryForm = ({
 
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputPassword1">Code</label>
+                    <label>Code</label>
                     <input
                         type="text"
                         name="code"
@@ -68,7 +68,7 @@ const CountryForm = ({
                     )}
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputPassword1">Status</label>
+                    <label>Status</label>
                     <select
                         className={classNames("form-control", { "is-invalid": countryStatusErrorMsg })}
                         name="status"

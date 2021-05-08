@@ -5,7 +5,9 @@ import '../node_modules/font-awesome/css/font-awesome.min.css';
 import './index.scss';
 import './adminlte.css';
 import './shared/sass/login/login.scss';
+import 'react-toastify/dist/ReactToastify.css';
 import App from './App';
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

@@ -14,12 +14,13 @@ const GridPagination = ({
       pageNumbers.push(i);
     }
 
-    const renderPaginations = pageNumbers.map((pageNumber) => {
+    const renderPaginations = pageNumbers.map((pageNumber, index) => {
       let className = classNames('paginate_button page-item ', {
         active: pageNumber === currentPage,
       });
       return (
         <li
+          key={`${index}_${pageNumber}`}
           className={className}
           onClick={() => onPageNumberChange(pageNumber)}
         >
