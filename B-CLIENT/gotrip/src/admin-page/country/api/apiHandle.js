@@ -1,6 +1,10 @@
+import { cleanObject } from '../../shared/ultils/ultils';
+
 const getCountries = async (params) => {
     try {
         const url = new URL("http://localhost:5000/api/country/search");
+
+        params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
         const res = await fetch(url);
@@ -8,10 +12,9 @@ const getCountries = async (params) => {
         if (!res.ok) {
             throw new Error(res.status);
         }
-        const data = await res.json();
-        return data;
+        return await res.json();
     } catch (error) {
-        console.log(error);    
+        console.log(error);
     }
 }
 const createNewCountry = async (country) => {

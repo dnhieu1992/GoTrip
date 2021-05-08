@@ -5,11 +5,11 @@ const CountryGrid = ({
     data,
     options,
     totalItems,
+    showModal,
+    onDelete,
     onHandlePageChange,
     onHandlePageSizeChange,
-    onAddNew,
-    onEdit,
-    onDelete,
+    onHandleSortChange
 }) => {
     const columns = [
         {
@@ -20,10 +20,12 @@ const CountryGrid = ({
         {
             fieldName: 'Code',
             dataField: 'code',
+            isSort: true,
         },
         {
             fieldName: 'Name',
             dataField: 'name',
+            isSort: true,
         },
         {
             fieldName: 'Status',
@@ -32,10 +34,17 @@ const CountryGrid = ({
         {
             fieldName: 'Action',
             type: 'action',
-            onEdit: onEdit,
+            onEdit: showModal,
             onDelete: onDelete,
         },
     ];
+
+    const {
+        currentPage,
+        pageSize,
+        sortField,
+        sortDirection
+    } = options
 
     return (
         <div className="card card-info">
@@ -45,30 +54,43 @@ const CountryGrid = ({
                         <h4>Countries: {totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
-                        <button type="button" className="btn btn-info" onClick={onAddNew}>
+                        <button type="button" className="btn btn-info" onClick={showModal}>
                             Add New
-            </button>
+                    </button>
                     </div>
                 </div>
                 <Grid
+                    total={totalItems}
                     data={data}
                     columns={columns}
-                    currentPage={options.currentPage}
-                    pageSize={options.pageSize}
-                    total={totalItems}
+                    currentPage={currentPage}
+                    pageSize={pageSize}
+                    sortField={sortField}
+                    sortDirection={sortDirection}
                     onPageNumberChange={onHandlePageChange}
                     onPageSizeChange={onHandlePageSizeChange}
+                    onSortFieldChange={onHandleSortChange}
                 />
             </div>
         </div>
     );
 };
+
 export default CountryGrid;
+
 CountryGrid.propTypes = {
     data: PropTypes.array,
     totalItems: PropTypes.number,
+    options: PropTypes.object,
+    showModal: PropTypes.func,
+    onDelete: PropTypes.func,
+    onHandlePageChange: PropTypes.func,
+    onHandlePageSizeChange: PropTypes.func,
+    onHandleSortChange: PropTypes.func
 };
+
 CountryGrid.defaultProps = {
     data: [],
     totalItems: 0,
+    options: {}
 };
