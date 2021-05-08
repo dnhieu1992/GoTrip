@@ -24,7 +24,7 @@ const createNewCountry = async (country) => {
             body: JSON.stringify(country),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
-    } catch {
+    } catch(error) {
         console.log(error);
     }
 }

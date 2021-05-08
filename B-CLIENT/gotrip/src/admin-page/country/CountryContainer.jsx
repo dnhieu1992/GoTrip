@@ -17,6 +17,8 @@ const CountryContainer = () => {
     const [options, setOptions] = useState({ currentPage: 1, pageSize: 10 });
     const [isShow, setIsShow] = useState(false);
     const [country, setCountry] = useState({});
+    const [isValid, setIsValid] = useState(false)
+    const [errorMessage, setErrorMessage] = useState({})
     const didMountRef = useRef(false);
 
     useEffect(() => {
@@ -105,6 +107,8 @@ const CountryContainer = () => {
 
     const onClose = () => {
         setIsShow(false);
+        setIsValid(true);
+        setErrorMessage({})
         setCountry({});
     };
 
@@ -128,7 +132,34 @@ const CountryContainer = () => {
 
     const onSaveFormChange = (country) => {
         setCountry(country);
+        onHandleValidationForm(country);
     };
+
+    const onHandleValidationForm = (country) => {
+        let isValid = true;
+        let errorMessage = {};
+
+        if (!country.name && country.name !== undefined) {
+            const countryNameErrorMsg = "The country name is required.";
+            errorMessage = { ...errorMessage, countryNameErrorMsg }
+            isValid = false;
+        }
+
+        if (!country.code && country.code !== undefined) {
+            const countryCodeErrorMsg = "The country code is required.";
+            errorMessage = { ...errorMessage, countryCodeErrorMsg }
+            isValid = false;
+        }
+
+        if (!country.status && country.status !== undefined) {
+            const countryStatusErrorMsg = "The country status is required.";
+            errorMessage = { ...errorMessage, countryStatusErrorMsg }
+            isValid = false;
+        }
+
+        setIsValid(isValid);
+        setErrorMessage(errorMessage)
+    }
 
     const onDelete = ({ _id }) => {
         deleteCountry(_id).then(() => {
@@ -144,13 +175,14 @@ const CountryContainer = () => {
                 classNames={'modal-lg'}
                 title={country.id ? 'Edit Country' : 'Add New Country'}
                 onClose={onClose}
-                onSave={onSaveCountry}
             >
                 <CountryForm
                     country={country}
                     onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSaveCountry={onSaveCountry}
+                    isValid={isValid}
+                    errorMessage={errorMessage}
                 />
             </Modal>
         );

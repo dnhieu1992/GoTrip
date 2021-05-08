@@ -1,5 +1,9 @@
+import classNames from 'classnames';
+
 const CountryForm = ({
     country,
+    isValid,
+    errorMessage,
     onSaveFormChange,
     onClose,
     onSaveCountry
@@ -9,6 +13,12 @@ const CountryForm = ({
         code,
         status
     } = country;
+
+    const {
+        countryNameErrorMsg,
+        countryCodeErrorMsg,
+        countryStatusErrorMsg
+    } = errorMessage
 
     const onHandlePropertyChange = (e) => {
         if (e?.target) {
@@ -27,29 +37,40 @@ const CountryForm = ({
                     <input
                         type="text"
                         name="name"
-                        className="form-control"
+                        className={classNames("form-control", { "is-invalid": countryNameErrorMsg })}
                         id="name"
                         placeholder="Name"
                         value={name}
                         onChange={onHandlePropertyChange}
                     />
+                    {countryNameErrorMsg && (
+                        <div className="invalid-feedback">
+                            {countryNameErrorMsg}
+                        </div>
+                    )}
+
                 </div>
                 <div className="form-group">
                     <label for="exampleInputPassword1">Code</label>
                     <input
                         type="text"
                         name="code"
-                        className="form-control"
+                        className={classNames("form-control", { "is-invalid": countryCodeErrorMsg })}
                         id="code"
                         placeholder="Code"
                         value={code}
                         onChange={onHandlePropertyChange}
                     />
+                    {countryCodeErrorMsg && (
+                        <div className="invalid-feedback">
+                            {countryCodeErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
                     <label for="exampleInputPassword1">Status</label>
                     <select
-                        class="form-control"
+                        className={classNames("form-control", { "is-invalid": countryStatusErrorMsg })}
                         name="status"
                         value={status}
                         onChange={onHandlePropertyChange}
@@ -58,6 +79,11 @@ const CountryForm = ({
                         <option value="Actived">Actived</option>
                         <option value="Disabled">Disabled</option>
                     </select>
+                    {countryStatusErrorMsg && (
+                        <div className="invalid-feedback">
+                            {countryStatusErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
@@ -71,6 +97,7 @@ const CountryForm = ({
                         <button
                             type="button"
                             className="btn btn-info"
+                            disabled={!isValid}
                             onClick={() => onSaveCountry(country)}
                         >
                             Submit

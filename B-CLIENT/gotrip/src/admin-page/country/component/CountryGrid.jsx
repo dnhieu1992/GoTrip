@@ -54,7 +54,7 @@ const CountryGrid = ({
                         <h4>Countries: {totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
-                        <button type="button" className="btn btn-info" onClick={showModal}>
+                        <button type="button" className="btn btn-info" onClick={() => showModal({})}>
                             Add New
                     </button>
                     </div>
