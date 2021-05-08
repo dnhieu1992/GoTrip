@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import logo from '../../../upload/images/AdminLTELogo.png';
 import user from '../../../upload/images/user2.jpg';
 
-const MainSidebar = () => {
+const MainSidebar = ({
+
+}) => {
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <a href="index3.html" className="brand-link">
@@ -54,44 +56,31 @@ const MainSidebar = () => {
                         role="menu"
                         data-accordion="false"
                     >
-                        <li className="nav-item menu-open">
-                            <a href="#" className="nav-link active">
-                                <i className="nav-icon fa fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard
-                                    <i className="right fa fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <a href="./index.html" className="nav-link active">
-                                        <i className="fa fa-circle nav-icon"></i>
-                                        <p>Dashboard v1</p>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <i className="fa fa-circle nav-icon"></i>
-                                    <Link to="/admin/country">Country</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <i className="fa fa-circle nav-icon"></i>
-                                    <Link to="/admin/city">City</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <i className="fa fa-circle nav-icon"></i>
-                                    <Link to="/admin/property">
-                                        Property
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <i className="fa fa-circle nav-icon"></i>
-                                    <Link to="/admin/property-type">
-                                        Property Type
-                                    </Link>
-                                </li>
-                            </ul>
+                        <li className="nav-item">
+                            <NavLink to="/admin/country" className="nav-link" activeClassName="active">
+                                <i className="nav-icon fa fa-globe"></i>
+                                    Country
+                            </NavLink>
                         </li>
                         <li className="nav-item">
+                            <NavLink to="/admin/city" className="nav-link" activeClassName="active">
+                                <i className="nav-icon fa fa-building"></i>
+                                City
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink to="/admin/property" className="nav-link" activeClassName="active">
+                                <i className="nav-icon fa fa-home"></i>
+                                Property
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink to="/admin/property-type" className="nav-link" activeClassName="active">
+                                <i className="nav-icon fa fa-home"></i>
+                                Property Type
+                            </NavLink>
+                        </li>
+                        {/* <li className="nav-item">
                             <a href="pages/widgets.html" className="nav-link">
                                 <i className="nav-icon fa fa-th"></i>
                                 <p>
@@ -208,7 +197,7 @@ const MainSidebar = () => {
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                             <a href="#" className="nav-link">
                                 <i className="nav-icon fa fa-tree"></i>
@@ -332,7 +321,7 @@ const MainSidebar = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li className="nav-header">EXAMPLES</li>
+                        {/* <li className="nav-header">EXAMPLES</li>
                         <li className="nav-item">
                             <a href="pages/calendar.html" className="nav-link">
                                 <i className="nav-icon fa fa-calendar-alt"></i>
@@ -736,7 +725,7 @@ const MainSidebar = () => {
                                 <i className="nav-icon fa fa-circle text-info"></i>
                                 <p>Informational</p>
                             </a>
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
             </div>

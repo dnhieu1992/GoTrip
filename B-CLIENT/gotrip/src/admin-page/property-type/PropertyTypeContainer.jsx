@@ -61,7 +61,7 @@ const PropertyTypeContainer = () => {
             const data = [];
             //console.log("pro",propertyTyes)
             propertyTyes.forEach(propertyType => {
-                let name=propertyType.property?propertyType.property.name:""
+                let name = propertyType.property ? propertyType.property.name : ""
                 data.push({
                     ...propertyType,
                     id: propertyType._id,
