@@ -4,10 +4,19 @@ const CountryForm = ({
     onClose,
     onSaveCountry
 }) => {
-    const { name, code, status } = country;
+    const {
+        name,
+        code,
+        status
+    } = country;
 
     const onHandlePropertyChange = (e) => {
-        onSaveFormChange({ ...country, [e.target.name]: e.target.value });
+        if (e?.target) {
+            onSaveFormChange({
+                ...country,
+                [e.target.name]: e.target.value
+            });
+        }
     };
 
     return (
@@ -58,14 +67,14 @@ const CountryForm = ({
                             onClick={onClose}
                         >
                             Close
-            </button>
+                        </button>
                         <button
                             type="button"
                             className="btn btn-info"
                             onClick={() => onSaveCountry(country)}
                         >
                             Submit
-            </button>
+                        </button>
                     </div>
                 </div>
             </div>

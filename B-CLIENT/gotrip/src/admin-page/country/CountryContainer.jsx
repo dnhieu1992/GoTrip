@@ -3,11 +3,11 @@ import Modal from '../../shared/components/forms/Modal';
 import CountryGrid from './component/CountryGrid';
 import CountrySearch from './component/CountrySearch';
 import CountryForm from './component/CountryForm';
-import { 
-    getCountries, 
-    updateCountry, 
-    createNewCountry, 
-    deleteCountry 
+import {
+    getCountries,
+    updateCountry,
+    createNewCountry,
+    deleteCountry
 } from './api/apiHandle.js';
 
 const CountryContainer = () => {
@@ -28,7 +28,6 @@ const CountryContainer = () => {
 
     const onHandleSearchChange = (param) => {
         setSearchParam(param);
-
     };
 
     const onHandleSearch = ({ countryName, countryCode, status }, options = {}) => {
@@ -37,14 +36,10 @@ const CountryContainer = () => {
             code: countryCode,
             status: status,
             pageNumber: options.pageNumber || 1,
-            pageSize: options.pageSize || 10
+            pageSize: options.pageSize || 10,
+            sortField: options.sortField,
+            sortDirection: options.sortDirection
         }
-
-        Object.keys(params).forEach(key => {
-            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "String" && params[key] === '')) {
-                delete params[key];
-            }
-        });
 
         getCountries(params).then(({ total, countries }) => {
             setData(countries);
@@ -55,21 +50,58 @@ const CountryContainer = () => {
     };
 
     const onHandlePageChange = (pageNumber) => {
-        onHandleSearch(searchParam, { pageSize: options.pageSize, pageNumber });
-        setOptions({ ...options, currentPage: pageNumber });
+        onHandleSearch(searchParam, {
+            pageSize: options.pageSize,
+            pageNumber
+        });
+
+        setOptions({
+            ...options,
+            currentPage: pageNumber
+        });
     };
 
     const onHandlePageSizeChange = (pageSize) => {
-        onHandleSearch(searchParam, { pageSize: pageSize, pageNumber: 1 });
-        setOptions({ pageSize, currentPage: 1 });
+        onHandleSearch(searchParam, {
+            pageSize: pageSize,
+            pageNumber: 1
+        });
+
+        setOptions({
+            pageSize,
+            currentPage: 1
+        });
+    };
+
+    const onHandleSortChange = (sortField, sortDirection) => {
+        onHandleSearch(searchParam, {
+            sortField,
+            sortDirection
+        });
+
+        setOptions({
+            sortField,
+            sortDirection
+        });
     };
 
     const onHandleResetForm = () => {
-        setSearchParam({});
-        onHandleSearch({}, { pageSize: options.pageSize, pageNumber: 1 })
+        onHandleSearch({}, {
+            pageSize: options.pageSize,
+            pageNumber: 1
+        });
+
+        setSearchParam({
+            countryName: '',
+            countryCode: '',
+            status: ''
+        });
     };
 
-    const onAddNew = () => setIsShow(true);
+    const showModal = (country = {}) => {
+        setCountry(country);
+        setIsShow(true);
+    }
 
     const onClose = () => {
         setIsShow(false);
@@ -96,11 +128,6 @@ const CountryContainer = () => {
 
     const onSaveFormChange = (country) => {
         setCountry(country);
-    };
-
-    const onEdit = (country) => {
-        setCountry(country);
-        setIsShow(true);
     };
 
     const onDelete = ({ _id }) => {
@@ -147,11 +174,11 @@ const CountryContainer = () => {
                         data={data}
                         options={options}
                         totalItems={total}
+                        showModal={showModal}
+                        onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
-                        onAddNew={onAddNew}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
+                        onHandleSortChange={onHandleSortChange}
                     />
                 </div>
             </div>

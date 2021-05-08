@@ -2,51 +2,60 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSortAmountUp,
-  faSortAmountDownAlt,
+    faSortAmountUp,
+    faSortAmountDownAlt,
 } from '@fortawesome/free-solid-svg-icons';
+import { SORT_DIRECTION } from '../../constants/constant';
 
-const GridHeader = ({ columns, sortField, sortDirection, onSortChange }) => {
-  const renderHeaderColumns = columns.map((column) => {
+const GridHeader = ({
+    columns,
+    sortField,
+    sortDirection,
+    onSortChange
+}) => {
+    const renderHeaderColumns = columns.map(({ isHidden, isSort, fieldName, dataField }) => {
+        return (
+            <th
+                key={fieldName}
+                className={classNames({ 'd-none': isHidden })}
+                onClick={() => onSortChange(dataField)}
+            >
+                <div className="row">
+                    <div className="col-sm-12 ">
+                        {fieldName}
+                        {isSort && (
+                            <div className="pull-right">
+                                {dataField === sortField && (
+                                    <FontAwesomeIcon
+                                        icon={
+                                            sortDirection.toLowerCase() === SORT_DIRECTION.ASC
+                                                ? faSortAmountUp
+                                                : faSortAmountDownAlt
+                                        }
+                                    />
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </th>
+        );
+    });
+
     return (
-      <th
-        className={classNames({ 'd-none': column.isHidden })}
-        key={column.fieldName}
-        onClick={() => onSortChange(column.fieldName)}
-      >
-        <div className="row">
-          <div className="col-sm-8">{column.fieldName}</div>
-
-          <div className="d-flex justify-content-end align-items-center col-sm-4">
-            {column.fieldName === sortField && (
-              <FontAwesomeIcon
-                icon={
-                  sortDirection.toLowerCase() === 'asc'
-                    ? faSortAmountUp
-                    : faSortAmountDownAlt
-                }
-              />
-            )}
-          </div>
-        </div>
-      </th>
+        <thead>
+            <tr>{renderHeaderColumns}</tr>
+        </thead>
     );
-  });
-
-  return (
-    <thead>
-      <tr>{renderHeaderColumns}</tr>
-    </thead>
-  );
 };
 export default GridHeader;
 
 GridHeader.propTypes = {
-  columns: PropTypes.array,
-  sortField: PropTypes.string,
-  sortDirection: PropTypes.string,
+    columns: PropTypes.array,
+    sortField: PropTypes.string,
+    sortDirection: PropTypes.string,
 };
 
 GridHeader.defaultProps = {
-  columns: [],
+    columns: [],
 };
