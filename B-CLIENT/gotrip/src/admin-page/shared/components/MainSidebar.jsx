@@ -83,6 +83,12 @@ const MainSidebar = () => {
                                         Property
                                     </Link>
                                 </li>
+                                <li className="nav-item">
+                                    <i className="fa fa-circle nav-icon"></i>
+                                    <Link to="/admin/property-type">
+                                        Property Type
+                                    </Link>
+                                </li>
                             </ul>
                         </li>
                         <li className="nav-item">
