@@ -9,6 +9,7 @@ const Grid = ({
     columns,
     data,
     total,
+    dataReady,
     currentPage,
     pageSize,
     pageOptions,
@@ -36,7 +37,7 @@ const Grid = ({
         if (sortingField === sortOption.sortField) {
             sortDirection = sortOption.sortDirection === ASC ? DESC : ASC;
         }
-        
+
         onSortFieldChange(sortingField, sortDirection);
         setSortOption({ sortField: sortingField, sortDirection });
     };
@@ -51,7 +52,7 @@ const Grid = ({
                             columns={columns}
                             onSortChange={onSortChange}
                         />
-                        <GridRow key="row" data={data} columns={columns} />
+                        <GridRow key="row" data={data} columns={columns} dataReady={dataReady} />
                     </table>
                 </div>
             </div>
@@ -76,6 +77,7 @@ const Grid = ({
                         </div>
                         <div className="col-sm-10 d-flex justify-content-end">
                             <GridPagination
+                                dataReady={dataReady}
                                 currentPage={currentPage}
                                 pageSize={pageSize}
                                 total={total}
@@ -96,6 +98,7 @@ Grid.propTypes = {
     pageSize: PropTypes.number,
     total: PropTypes.number,
     columns: PropTypes.array,
+    dataReady: PropTypes.bool,
     pageOptions: PropTypes.array,
     onSortFieldChange: PropTypes.func,
     onPageSizeChange: PropTypes.func,
@@ -107,6 +110,7 @@ Grid.defaultProps = {
     pageSize: 50,
     total: 0,
     columns: [],
+    dataReady: false,
     pageOptions: [10, 50, 100, 200],
     onSortFieldChange: () => { },
     onPageSizeChange: () => { },

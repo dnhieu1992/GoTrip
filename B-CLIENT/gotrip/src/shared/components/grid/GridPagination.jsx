@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const GridPagination = ({
+  dataReady,
   currentPage,
   pageSize,
   total,
@@ -31,6 +32,10 @@ const GridPagination = ({
 
     return renderPaginations;
   };
+
+  if (!dataReady) {
+    return <></>
+  }
 
   return (
     <div

@@ -2,8 +2,13 @@ import GridCol from './GridCol';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import Loader from "react-loader-spinner";
 
-const GridRow = ({ data, columns }) => {
+const GridRow = ({
+    data,
+    columns,
+    dataReady
+}) => {
     const renderColumns = (object, columns, rowIndex) => {
         return columns.map((column, index) => {
             if (column.type === 'action') {
@@ -41,7 +46,23 @@ const GridRow = ({ data, columns }) => {
         return <tr key={`Row_${index}`}>{renderColumns(item, columns, index)}</tr>;
     });
 
-    return <tbody>{renderRows}</tbody>;
+    const renderLoading = () => {
+        return (
+            <tr>
+                <td colSpan={columns.length}>
+                    <Loader className="d-flex justify-content-center" type="ThreeDots" color="#00BFFF" height={80} width={80} />
+                </td>
+            </tr>
+        )
+    }
+
+    const content = !dataReady ? renderLoading() : renderRows;
+
+    return (
+        <tbody>
+            {content}
+        </tbody>
+    )
 };
 
 export default GridRow;

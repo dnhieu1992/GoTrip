@@ -5,6 +5,7 @@ const CountryGrid = ({
     data,
     options,
     totalItems,
+    dataReady,
     showModal,
     onDelete,
     onHandlePageChange,
@@ -62,6 +63,7 @@ const CountryGrid = ({
                 <Grid
                     total={totalItems}
                     data={data}
+                    dataReady={dataReady}
                     columns={columns}
                     currentPage={currentPage}
                     pageSize={pageSize}

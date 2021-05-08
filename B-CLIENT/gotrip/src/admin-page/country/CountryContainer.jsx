@@ -19,6 +19,7 @@ const CountryContainer = () => {
     const [country, setCountry] = useState({});
     const [isValid, setIsValid] = useState(false)
     const [errorMessage, setErrorMessage] = useState({})
+    const [dataReady, setDateReady] = useState(false);
     const didMountRef = useRef(false);
 
     useEffect(() => {
@@ -43,11 +44,15 @@ const CountryContainer = () => {
             sortDirection: options.sortDirection
         }
 
+        setDateReady(false);
+
         getCountries(params).then(({ total, countries }) => {
             setData(countries);
             setTotal(total);
         }).catch(error => {
             console.log(error);
+        }).finally(() => {
+            setTimeout(() => { setDateReady(true) }, 2000);
         });
     };
 
@@ -210,6 +215,7 @@ const CountryContainer = () => {
                         data={data}
                         options={options}
                         totalItems={total}
+                        dataReady={dataReady}
                         showModal={showModal}
                         onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
