@@ -1,4 +1,5 @@
 import { Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import Navbar from './shared/components/Navbar';
 import MainSidebar from './shared/components/MainSidebar';
 import Footer from './shared/components/Footer';
@@ -11,6 +12,7 @@ const AdminPage = () => {
   return (
     <div className="wrapper">
       {/* <Preloader /> */}
+      <ToastContainer />
       <Navbar />
       <MainSidebar />
       <div className="content-wrapper">

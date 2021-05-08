@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const GridRow = ({ data, columns }) => {
-    const renderColumns = (object, columns) => {
-        return columns.map((column) => {
+    const renderColumns = (object, columns, rowIndex) => {
+        return columns.map((column, index) => {
             if (column.type === 'action') {
                 return (
-                    <td style={{ width: '100px' }}>
+                    <td key={`Action_${rowIndex}_${index}`} style={{ width: '100px' }}>
                         {column.onEdit && (
                             <FontAwesomeIcon
                                 className="mr-2"
@@ -29,6 +29,7 @@ const GridRow = ({ data, columns }) => {
             }
             return (
                 <GridCol
+                    key={`Action_${rowIndex}_${index}`}
                     className={classNames({ 'd-none': column.isHidden })}
                     value={object[column.dataField]}
                 />
@@ -37,7 +38,7 @@ const GridRow = ({ data, columns }) => {
     };
 
     const renderRows = data.map((item, index) => {
-        return <tr key={index}>{renderColumns(item, columns)}</tr>;
+        return <tr key={`Row_${index}`}>{renderColumns(item, columns, index)}</tr>;
     });
 
     return <tbody>{renderRows}</tbody>;

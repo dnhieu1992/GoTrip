@@ -44,14 +44,14 @@ const Grid = ({
     return (
         <>
             <div className="row">
-                <div class="col-sm-12">
-                    <table id="example2" class="table table-bordered table-hover">
+                <div className="col-sm-12">
+                    <table id="example2" className="table table-bordered table-hover">
                         <GridHeader
                             {...sortOption}
                             columns={columns}
                             onSortChange={onSortChange}
                         />
-                        <GridRow data={data} columns={columns} />
+                        <GridRow key="row" data={data} columns={columns} />
                     </table>
                 </div>
             </div>

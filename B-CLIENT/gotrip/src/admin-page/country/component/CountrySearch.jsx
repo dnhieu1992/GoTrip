@@ -31,7 +31,7 @@ const CountrySearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">
+                                <label className="col-sm-2 col-form-label">
                                     Name
                                 </label>
                                 <div className="col-sm-10">
@@ -49,7 +49,7 @@ const CountrySearch = ({
                         </div>
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputPassword3" className="col-sm-2 col-form-label">
+                                <label className="col-sm-2 col-form-label">
                                     Code
                                  </label>
                                 <div className="col-sm-10">
@@ -69,12 +69,12 @@ const CountrySearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputPassword3" className="col-sm-2 col-form-label">
+                                <label className="col-sm-2 col-form-label">
                                     Status
                                 </label>
                                 <div className="col-sm-10">
                                     <select
-                                        class="form-control"
+                                        className="form-control"
                                         value={status}
                                         name="status"
                                         onChange={onHandleFieldChange}

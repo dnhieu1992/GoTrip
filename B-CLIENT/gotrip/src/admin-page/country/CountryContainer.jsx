@@ -100,8 +100,12 @@ const CountryContainer = () => {
         });
     };
 
-    const showModal = (country = {}) => {
-        setCountry(country);
+    const showModal = (country) => {
+        console.log(country);
+        if (country) {
+            setCountry(country);
+            setIsValid(true);   
+        }
         setIsShow(true);
     }
 

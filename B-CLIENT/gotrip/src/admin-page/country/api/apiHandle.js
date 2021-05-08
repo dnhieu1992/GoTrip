@@ -1,4 +1,5 @@
 import { cleanObject } from '../../shared/ultils/ultils';
+import alertNotify from '../../../shared/ultils/alertNotify.js';
 
 const getCountries = async (params) => {
     try {
@@ -24,8 +25,10 @@ const createNewCountry = async (country) => {
             body: JSON.stringify(country),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
-    } catch(error) {
-        console.log(error);
+
+        alertNotify.success("Create new a country success.");
+    } catch (error) {
+        alertNotify.error(error);
     }
 }
 
@@ -36,8 +39,10 @@ const updateCountry = async (country) => {
             body: JSON.stringify(country),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
+
+        alertNotify.success("Update the country success.");
     } catch {
-        console.log(error);
+        alertNotify.error(error);
     }
 }
 const deleteCountry = async (id) => {
@@ -46,8 +51,10 @@ const deleteCountry = async (id) => {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
-    } catch {
-        console.log(error);
+
+        alertNotify.error("Delete the country success.")
+    } catch (error) {
+        alertNotify.error(error)
     }
 }
 

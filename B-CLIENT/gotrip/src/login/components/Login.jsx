@@ -73,7 +73,7 @@ const Login = ({ user }) => {
                       checked={rememberMe}
                       onChange={onHandleRememberMeChange}
                     />
-                    <label for="remember" className="ml-1">
+                    <label className="ml-1">
                       Remember Me
                     </label>
                   </div>
