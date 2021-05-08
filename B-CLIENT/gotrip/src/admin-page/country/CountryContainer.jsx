@@ -104,14 +104,14 @@ const CountryContainer = () => {
         console.log(country);
         if (country) {
             setCountry(country);
-            setIsValid(true);   
+            setIsValid(true);
         }
         setIsShow(true);
     }
 
     const onClose = () => {
         setIsShow(false);
-        setIsValid(true);
+        setIsValid(false);
         setErrorMessage({})
         setCountry({});
     };
@@ -140,7 +140,7 @@ const CountryContainer = () => {
     };
 
     const onHandleValidationForm = (country) => {
-        let isValid = true;
+        let isValid = country.name && country.code && country.status;
         let errorMessage = {};
 
         if (!country.name && country.name !== undefined) {
