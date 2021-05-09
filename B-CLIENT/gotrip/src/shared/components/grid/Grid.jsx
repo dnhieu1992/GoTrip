@@ -70,7 +70,7 @@ const Grid = ({
                                 id="pageOptions"
                                 name="pageOptions"
                                 value={pageSize}
-                                onChange={(e) => onPageSizeChange(e.target.value)}
+                                onChange={(e) => onPageSizeChange(parseInt(e.target.value))}
                             >
                                 {pageOptionsRender}
                             </select>

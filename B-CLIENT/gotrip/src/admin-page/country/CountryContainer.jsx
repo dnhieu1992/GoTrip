@@ -11,142 +11,175 @@ import {
 } from './api/apiHandle.js';
 
 const CountryContainer = () => {
-    const [total, setTotal] = useState(0);
-    const [data, setData] = useState([]);
-    const [searchParam, setSearchParam] = useState({});
-    const [options, setOptions] = useState({ currentPage: 1, pageSize: 10 });
-    const [isShow, setIsShow] = useState(false);
-    const [country, setCountry] = useState({});
-    const [isValid, setIsValid] = useState(false)
-    const [errorMessage, setErrorMessage] = useState({})
-    const [dataReady, setDateReady] = useState(false);
+    const [state, setState] = useState({});
     const didMountRef = useRef(false);
+    const fetCountriesRef = useRef(false);
+
+    const {
+        total,
+        countries,
+        options,
+        isValid,
+        country,
+        isShow,
+        dataReady,
+        searchParam,
+        errorMessage,
+    } = state;
 
     useEffect(() => {
+        console.log(state);
         if (!didMountRef.current) {
             onHandleSearch({});
             didMountRef.current = true;
         }
+
+        if (didMountRef.current && fetCountriesRef.current) {
+            fetCountries();
+        }
     });
 
-    const onHandleSearchChange = (param) => {
-        setSearchParam(param);
-    };
+    const fetCountries = () => {
+        fetCountriesRef.current = false;
 
-    const onHandleSearch = ({ countryName, countryCode, status }, options = {}) => {
-        const params = {
-            name: countryName,
-            code: countryCode,
-            status: status,
-            pageNumber: options.pageNumber || 1,
-            pageSize: options.pageSize || 10,
-            sortField: options.sortField,
-            sortDirection: options.sortDirection
+        const {
+            searchParam = {},
+            options = {}
+        } = state;
+
+        getCountries({ ...searchParam, ...options }, ({ total, countries }) => {
+            setTimeout(() => {
+                setState({
+                    ...state,
+                    total,
+                    countries,
+                    dataReady: true
+                });
+            }, 500);
+        }, () => {
+            setTimeout(() => {
+                setState({ ...state, dataReady: true });
+            }, 500);
+        });
+    }
+
+    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
+        const options = {
+            pageNumber: optionParams.pageNumber || 1,
+            pageSize: optionParams.pageSize || 50,
+            sortField: optionParams.sortField || null,
+            sortDirection: optionParams.sortDirection || null
         }
 
-        setDateReady(false);
+        fetCountriesRef.current = true;
 
-        getCountries(params).then(({ total, countries }) => {
-            setData(countries);
-            setTotal(total);
-        }).catch(error => {
-            console.log(error);
-        }).finally(() => {
-            setTimeout(() => { setDateReady(true) }, 2000);
+        setState({
+            ...state,
+            searchParam: searchParam,
+            options: options,
+            dataReady: false
+        });
+    };
+
+    const onHandleSearchChange = (param) => {
+        setState({
+            ...state,
+            searchParam: param
         });
     };
 
     const onHandlePageChange = (pageNumber) => {
-        onHandleSearch(searchParam, {
-            pageSize: options.pageSize,
-            pageNumber
-        });
+        const { searchParam, options } = state;
 
-        setOptions({
+        const optionsUpdate = {
             ...options,
-            currentPage: pageNumber
-        });
+            pageNumber
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
     };
 
     const onHandlePageSizeChange = (pageSize) => {
-        onHandleSearch(searchParam, {
-            pageSize: pageSize,
-            pageNumber: 1
-        });
+        const { searchParam, options } = state;
 
-        setOptions({
+        const optionsUpdate = {
+            ...options,
             pageSize,
-            currentPage: 1
-        });
+            pageNumber: 1
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
     };
 
     const onHandleSortChange = (sortField, sortDirection) => {
-        onHandleSearch(searchParam, {
-            sortField,
-            sortDirection
-        });
+        const { searchParam, options } = state;
 
-        setOptions({
+        const optionsUpdate = {
+            ...options,
             sortField,
             sortDirection
-        });
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
     };
 
     const onHandleResetForm = () => {
-        onHandleSearch({}, {
-            pageSize: options.pageSize,
-            pageNumber: 1
-        });
-
-        setSearchParam({
+        const searchParam = {
             countryName: '',
             countryCode: '',
             status: ''
-        });
+        };
+
+        const options = {
+            ...state.options,
+            pageNumber: 1
+        };
+
+        onHandleSearch(searchParam, options);
     };
 
-    const showModal = (country) => {
-        console.log(country);
-        if (country) {
-            setCountry(country);
-            setIsValid(true);
-        }
-        setIsShow(true);
+    const showModal = (country = {}) => {
+        setState({
+            ...state,
+            isShow: true,
+            isValid: !!country._id,
+            country: country,
+            errorMessage: {}
+        });
     }
 
-    const onClose = () => {
-        setIsShow(false);
-        setIsValid(false);
-        setErrorMessage({})
-        setCountry({});
+    const onClose = (isSearch) => {
+        fetCountriesRef.current = !!isSearch;
+
+        setState({
+            ...state,
+            isShow: false,
+            isValid: false,
+            errorMessage: {},
+            country: null,
+            dataReady: !isSearch
+        });
     };
 
     const onSaveCountry = (country) => {
         if (country._id) {
-            updateCountry(country).then(() => {
-                onHandleSearch(searchParam);
-                onClose();
-            }).catch(error => {
-                console.log(error)
-            })
+            updateCountry(country, () => {
+                onClose(true);
+            });
         } else {
-            createNewCountry(country).then(() => {
-                onHandleSearch(searchParam);
-                onClose();
-            }).catch(error => {
-                console.log(error)
-            })
+            createNewCountry(country, () => {
+                onClose(true);
+            });
         }
     };
 
     const onSaveFormChange = (country) => {
-        setCountry(country);
-        onHandleValidationForm(country);
-    };
-
-    const onHandleValidationForm = (country) => {
-        let isValid = country.name && country.code && country.status;
+        let isValid = true;
         let errorMessage = {};
+
+        if (!country.name || !country.code || !country.status) {
+            isValid = false;
+        }
 
         if (!country.name && country.name !== undefined) {
             const countryNameErrorMsg = "The country name is required.";
@@ -166,32 +199,36 @@ const CountryContainer = () => {
             isValid = false;
         }
 
-        setIsValid(isValid);
-        setErrorMessage(errorMessage)
-    }
+        setState({
+            ...state,
+            country,
+            isValid,
+            errorMessage
+        });
+    };
 
     const onDelete = ({ _id }) => {
-        deleteCountry(_id).then(() => {
-            onHandleSearch(searchParam)
-        }).catch(error => {
-            console.log(error);
-        })
+        const { searchParam, options } = state;
+
+        deleteCountry(_id, () => {
+            onHandleSearch(searchParam, options);
+        });
     };
 
     const modalRender = () => {
         return (
             <Modal
                 classNames={'modal-lg'}
-                title={country.id ? 'Edit Country' : 'Add New Country'}
+                title={country?._id ? 'Edit Country' : 'Add New Country'}
                 onClose={onClose}
             >
                 <CountryForm
                     country={country}
-                    onSaveFormChange={onSaveFormChange}
-                    onClose={onClose}
-                    onSaveCountry={onSaveCountry}
                     isValid={isValid}
                     errorMessage={errorMessage}
+                    onClose={onClose}
+                    onSaveFormChange={onSaveFormChange}
+                    onSaveCountry={onSaveCountry}
                 />
             </Modal>
         );
@@ -212,7 +249,7 @@ const CountryContainer = () => {
                         onHandleResetForm={onHandleResetForm}
                     />
                     <CountryGrid
-                        data={data}
+                        data={countries}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
