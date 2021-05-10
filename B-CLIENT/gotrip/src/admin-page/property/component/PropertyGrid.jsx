@@ -7,9 +7,10 @@ const PropertyGrid = ({
     totalItems,
     onHandlePageChange,
     onHandlePageSizeChange,
-    addNewForm,
-    onEdit,
-    onDelete
+    showModal,
+    onDelete,
+    dataReady,
+    onHandleSortChange
 }) => {
     const columns = [
         {
@@ -19,11 +20,13 @@ const PropertyGrid = ({
         },
         {
             fieldName: 'Name',
-            dataField: 'name'
+            dataField: 'name',
+            isSort: true
         },
         {
             fieldName: 'Description',
-            dataField: 'description'
+            dataField: 'description',
+            isSort: true
         },
         {
             fieldName: 'Status',
@@ -32,10 +35,17 @@ const PropertyGrid = ({
         {
             fieldName: 'Action',
             type: 'action',
-            onEdit: onEdit,
+            onEdit: showModal,
             onDelete: onDelete
         }
     ];
+
+    const {
+        currentPage,
+        pageSize,
+        sortField,
+        sortDirection
+    } = options
 
     return (
         <div className="card card-info">
@@ -45,16 +55,27 @@ const PropertyGrid = ({
                         <h4>Property: {totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
-                        <button type="button" className="btn btn-info" onClick={addNewForm}>Add New</button>
+                        <button
+                            type="button"
+                            className="btn btn-info"
+                            onClick={() => showModal()}
+                        >
+                            Add New
+                        </button>
                     </div>
                 </div>
-                <Grid data={data}
-                    columns={columns}
-                    currentPage={options.currentPage}
-                    pageSize={options.pageSize}
+                <Grid
                     total={totalItems}
+                    data={data}
+                    dataReady={dataReady}
+                    columns={columns}
+                    currentPage={currentPage}
+                    pageSize={pageSize}
+                    sortField={sortField}
+                    sortDirection={sortDirection}
                     onPageNumberChange={onHandlePageChange}
-                    onHandlePageSizeChange={onHandlePageSizeChange}
+                    onPageSizeChange={onHandlePageSizeChange}
+                    onSortFieldChange={onHandleSortChange}
                 />
             </div>
         </div>
@@ -64,10 +85,17 @@ export default PropertyGrid;
 
 PropertyGrid.propTypes = {
     data: PropTypes.array,
-    totalItems: PropTypes.number
+    totalItems: PropTypes.number,
+    options: PropTypes.object,
+    showModal: PropTypes.func,
+    onDelete: PropTypes.func,
+    onHandlePageChange: PropTypes.func,
+    onHandlePageSizeChange: PropTypes.func,
+    onHandleSortChange: PropTypes.func
 };
 
 PropertyGrid.defaultProps = {
     data: [],
-    totalItems: 0
+    totalItems: 0,
+    options: {}
 }

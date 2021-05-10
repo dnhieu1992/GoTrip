@@ -1,18 +1,25 @@
-const PropertyTypeSearch =({
+import PropTypes from 'prop-types';
+
+const PropertyTypeSearch = ({
     searchParam,
     onHandleSearchChange,
     onHandleSearch,
     onHandleResetForm,
     properties
 }) => {
-    const { 
+    const {
         propertyTypeName,
         propertyId,
         status
     } = searchParam;
 
     const onHandleFieldChange = (e) => {
-        onHandleSearchChange({ ...searchParam,[e.target.name]:e.target.value});
+        if (e?.target) {
+            onHandleSearchChange({
+                ...searchParam,
+                [e.target.name]: e.target.value
+            });
+        }
     }
 
     const onSearch = (searchParam) => {
@@ -24,20 +31,20 @@ const PropertyTypeSearch =({
             <div className="card-header">
                 <h3 className="card-title">Search</h3>
             </div>
-            <form  className="form-horizontal" autoComplete="off">
+            <form className="form-horizontal" autoComplete="off">
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
                                 <label for="inputEmail3" className="col-sm-2 col-form-label">Name</label>
                                 <div className="col-sm-10">
-                                    <input type="text" 
-                                        className="form-control" 
+                                    <input type="text"
+                                        className="form-control"
                                         id="propertyTypeName"
                                         name="propertyTypeName"
                                         placeholder="Property Type Name"
                                         value={propertyTypeName}
-                                        onChange={onHandleFieldChange} 
+                                        onChange={onHandleFieldChange}
                                     />
                                 </div>
                             </div>
@@ -46,18 +53,18 @@ const PropertyTypeSearch =({
                             <div className="form-group row">
                                 <label for="inputEmail3" className="col-sm-2 col-form-label">Property</label>
                                 <div className="col-sm-10">
-                                    <select  
-                                        className="form-control" 
+                                    <select
+                                        className="form-control"
                                         id="propertyId"
                                         name="propertyId"
                                         value={propertyId}
                                         onChange={onHandleFieldChange} >
-                                        
+
                                         <option value="">Choose the property</option>
                                         {
-                                            properties.map(property =>{
-                                                return(
-                                                    <option value= {property._id}> {property.name} </option>
+                                            properties.map(property => {
+                                                return (
+                                                    <option value={property._id}> {property.name} </option>
                                                 )
                                             })
                                         }
@@ -82,7 +89,7 @@ const PropertyTypeSearch =({
                     </div>
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
-                            <button type="button" className="btn btn-info mr-5" onClick={() => onSearch(searchParam)} >Search</button>
+                            <button type="button" className="btn btn-info mr-5" onClick={() => onHandleSearch(searchParam)} >Search</button>
                             <button type="button" className="btn btn-info" onClick={onHandleResetForm}>Reset</button>
                         </div>
                     </div>
@@ -91,4 +98,15 @@ const PropertyTypeSearch =({
         </div>
     )
 }
-export default PropertyTypeSearch
+export default PropertyTypeSearch;
+
+PropertyTypeSearch.propTypes = {
+    searchParam: PropTypes.object,
+    onHandleSearchChange: PropTypes.func.isRequired,
+    onHandleSearch: PropTypes.func.isRequired,
+    onHandleResetForm: PropTypes.func.isRequired
+}
+
+PropertyTypeSearch.defaultProps = {
+    searchParam: {}
+}

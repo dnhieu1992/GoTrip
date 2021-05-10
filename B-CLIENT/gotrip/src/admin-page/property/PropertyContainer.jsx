@@ -3,11 +3,11 @@ import Modal from '../../shared/components/forms/Modal';
 import PropertyGrid from './component/PropertyGrid';
 import PropertySearch from './component/PropertySearch';
 import PropertyForm from './component/PropertyForm';
-import { 
-    getProperties, 
-    updateProperty, 
-    createNewProperty, 
-    deleteProperty 
+import {
+    getProperties,
+    updateProperty,
+    createNewProperty,
+    deleteProperty
 } from './api/apiHandle.js';
 
 const PropertyContainer = () => {
@@ -18,6 +18,9 @@ const PropertyContainer = () => {
     const [isShow, setIsShow] = useState(false);
     const [property, setProperty] = useState({});
     const didMountRef = useRef(false);
+    const [dataReady, setDateReady] = useState(false);
+    const [isValid, setIsValid] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
 
     useEffect(() => {
         if (!didMountRef.current) {
@@ -35,45 +38,85 @@ const PropertyContainer = () => {
             name: propertyName,
             status: status,
             pageNumber: options.pageNumber || 1,
-            pageSize: options.pageSize || 10
+            pageSize: options.pageSize || 10,
+            sortField: options.sortField,
+            sortDirection: options.sortDirection
         }
 
-        Object.keys(params).forEach(key => {
-            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "string" && params[key] === '')) {
-                delete params[key];
-            }
-        });
+        setDateReady(false);
 
         getProperties(params).then(({ total, properties }) => {
             setData(properties);
             setTotal(total);
         }).catch(error => {
             console.log(error);
+        }).finally(() => {
+            setTimeout(() => { setDateReady(true) }, 2000);
         });
     }
 
     const onHandlePageChange = (pageNumber) => {
-        onHandleSearch(searchParam, { pageSize: options.pageSize, pageNumber });
-        setOptions({ ...options, currentPage: pageNumber });
+        onHandleSearch(searchParam, {
+            pageSize: options.pageSize,
+            pageNumber
+        });
+
+        setOptions({
+            ...options,
+            currentPage: pageNumber
+        });
 
     }
 
     const onHandlePageSizeChange = (pageSize) => {
-        onHandleSearch(searchParam, { pageSize: pageSize, pageNumber: 1 });
-        setOptions({ pageSize, currentPage: 1 });
+        onHandleSearch(searchParam, {
+            pageSize: pageSize,
+            pageNumber: 1
+        });
+
+        setOptions({
+            pageSize,
+            currentPage: 1
+        });
+    }
+
+    const onHandleSortChange = (sortField, sortDirection) => {
+        onHandleSearch(searchParam, {
+            sortField,
+            sortDirection
+        });
+
+        setOptions({
+            sortField,
+            sortDirection
+        });
     }
 
     const onHandleResetForm = () => {
-        setSearchParam({});
-        onHandleSearch({}, { pageSize: options.pageSize, pageNumber: 1 });
+        onHandleSearch({}, {
+            pageSize: options.pageSize,
+            pageNumber: 1
+        });
+
+        setSearchParam({
+            propertyName: '',
+            status: ''
+        });
     }
 
-    const addNewForm = () => {
+    const showModal = (property = {}) => {
+        setProperty(property);
+        if (property) {
+            setProperty(property);
+            setIsValid(true);
+        }
         setIsShow(true);
     }
 
     const onClose = () => {
         setIsShow(false);
+        setIsValid(false);
+        setErrorMessage({});
         setProperty({});
     }
 
@@ -98,11 +141,7 @@ const PropertyContainer = () => {
 
     const onSaveFormChange = (property) => {
         setProperty(property);
-    }
-
-    const onEdit = (property) => {
-        setProperty(property);
-        setIsShow(true);
+        onHandleValidationForm(property);
     }
 
     const onDelete = ({ _id }) => {
@@ -113,17 +152,45 @@ const PropertyContainer = () => {
         })
     }
 
+    const onHandleValidationForm = (property) => {
+        let isValid = property.name && property.description && property.status;
+        let errorMessage = {};
+
+        if (!property.name && property.name !== undefined) {
+            const propertyNameErrorMsg = "The property name is required.";
+            errorMessage = { ...errorMessage, propertyNameErrorMsg }
+            isValid = false;
+        }
+
+        if (!property.description && property.description !== undefined) {
+            const propertyDescriptionErrorMsg = "The property description is required.";
+            errorMessage = { ...errorMessage, propertyDescriptionErrorMsg }
+            isValid = false;
+        }
+
+        if (!property.status && property.status !== undefined) {
+            const propertyStatusErrorMsg = "The property Status is required.";
+            errorMessage = { ...errorMessage, propertyStatusErrorMsg }
+            isValid = false;
+        }
+
+        setIsValid(isValid);
+        setErrorMessage(errorMessage);
+    }
+
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
                 title={property.id ? 'Edit Property' : 'Add New Property'}
                 onClose={onClose}
-                onSave={onSaveProperty}>
+            >
                 <PropertyForm
                     property={property}
                     onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSaveProperty={onSaveProperty}
+                    isValid={isValid}
+                    errorMessage={errorMessage}
                 />
 
             </Modal>
@@ -147,11 +214,12 @@ const PropertyContainer = () => {
                         data={data}
                         options={options}
                         totalItems={total}
+                        dataReady={dataReady}
+                        showModal={showModal}
+                        onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
-                        addNewForm={addNewForm}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
+                        onHandleSortChange={onHandleSortChange}
                     />
                 </div>
             </div>

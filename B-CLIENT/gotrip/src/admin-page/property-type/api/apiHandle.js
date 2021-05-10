@@ -1,14 +1,18 @@
+import alertNotify from "../../../shared/ultils/alertNotify";
+import { cleanObject } from "../../shared/ultils/ultils";
+
 const getPropertyTypes = async (params) => {
     try {
         const url = new URL("http://localhost:5000/api/propertyType/search");
+
+        params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
         const res = await fetch(url);
         if (!res.ok) {
             throw new Error(res.status);
         }
-        const data = await res.json();
-        console.log("data",data)
-        return data;
+        return await res.json();
     } catch (error) {
         console.log(error);
     }
@@ -21,6 +25,8 @@ const createPropertyType = async (propertyType) => {
             body: JSON.stringify(propertyType),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
+
+        alertNotify.success("create property type success");
     } catch {
         console.log(error);
     }
@@ -33,6 +39,8 @@ const updatePropertyType = async (propertyType) => {
             body: JSON.stringify(propertyType),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
+
+        alertNotify.success("Update property type sucess");
     } catch {
         console.log(error);
     }
@@ -44,6 +52,8 @@ const deletePropertyType = async (id) => {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
+
+        alertNotify.error("Delete property type success");
     } catch {
         console.log(error);
     }
@@ -53,7 +63,7 @@ const getProperties = async () => {
     try {
         const url = new URL("http:localhost:5000/api/property/getAll");
         const res = await fetch(url);
-        if(!res.ok) {
+        if (!res.ok) {
             throw new Error(res.status);
         }
 

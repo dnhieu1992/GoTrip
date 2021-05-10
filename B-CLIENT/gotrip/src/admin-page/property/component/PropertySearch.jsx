@@ -1,22 +1,21 @@
-const propertySearch = ({
+import PropTypes from 'prop-types';
+
+const PropertySearch = ({
     searchParam,
     onHandleSearchChange,
     onHandleSearch,
     onHandleResetForm
 }) => {
 
-    const {
-        propertyName = "",
-        status = ""
-    } = searchParam;
+    const { propertyName, status } = searchParam;
 
     const onHandleFieldChange = (e) => {
-        onHandleSearchChange({ ...searchParam, [e.target.name]: e.target.value });
-
-    };
-
-    const onSearch = (searchParam) => {
-        onHandleSearch(searchParam);
+        if (e?.target) {
+            onHandleSearchChange({
+                ...searchParam,
+                [e.target.name]: e.target.value
+            });
+        }
     }
 
     return (
@@ -57,7 +56,7 @@ const propertySearch = ({
                     </div>
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
-                            <button type="button" className="btn btn-info mr-5" onClick={() => onSearch(searchParam)} >Search</button>
+                            <button type="button" className="btn btn-info mr-5" onClick={() => onHandleSearch(searchParam)} >Search</button>
                             <button type="button" className="btn btn-info" onClick={onHandleResetForm}>Reset</button>
                         </div>
                     </div>
@@ -66,4 +65,15 @@ const propertySearch = ({
         </div>
     )
 }
-export default propertySearch;
+export default PropertySearch;
+
+PropertySearch.propTypes = {
+    searchParam: PropTypes.object,
+    onHandleSearchChange: PropTypes.func.isRequired,
+    onHandleSearch: PropTypes.func.isRequired,
+    onHandleResetForm: PropTypes.func.isRequired,
+}
+
+PropertySearch.defaultProps = {
+    searchParam: {},
+}
