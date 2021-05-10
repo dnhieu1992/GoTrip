@@ -11,7 +11,7 @@ const Modal = ({
             className="modal"
             style={{ display: 'block' }}
             id="exampleModal"
-            tabindex="-1"
+            tabIndex="-1"
             aria-labelledby="exampleModalLabel"
             aria-hidden="true"
         >

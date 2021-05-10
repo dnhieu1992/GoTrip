@@ -1,7 +1,7 @@
 import { cleanObject } from '../../shared/ultils/ultils';
 import alertNotify from '../../../shared/ultils/alertNotify.js';
 
-const getCountries = async (params) => {
+const getCountries = async (params, onSuccess, onError) => {
     try {
         const url = new URL("http://localhost:5000/api/country/search");
 
@@ -13,26 +13,42 @@ const getCountries = async (params) => {
         if (!res.ok) {
             throw new Error(res.status);
         }
-        return await res.json();
+
+        const data = await res.json();
+        if (onSuccess) {
+            return onSuccess(data);
+        }
     } catch (error) {
-        console.log(error);
+        alertNotify.error(error);
+        if (onError) {
+            return onError();
+        }
     }
 }
-const createNewCountry = async (country) => {
+
+const createNewCountry = async (country, onSuccess, onError) => {
     try {
-        await fetch("http://localhost:5000/api/country/create", {
+        const res = await fetch("http://localhost:5000/api/country/create", {
             method: "POST",
             body: JSON.stringify(country),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
+        if (!res.ok && res.status === 409) {
+            throw "The item exists.";
+        }
+
         alertNotify.success("Create new a country success.");
+
+        if (onSuccess) {
+            return onSuccess();
+        }
     } catch (error) {
         alertNotify.error(error);
     }
 }
 
-const updateCountry = async (country) => {
+const updateCountry = async (country, onSuccess, onError) => {
     try {
         await fetch("http://localhost:5000/api/country/update", {
             method: "PUT",
@@ -41,18 +57,26 @@ const updateCountry = async (country) => {
         });
 
         alertNotify.success("Update the country success.");
-    } catch {
+
+        if (onSuccess) {
+            return onSuccess();
+        }
+    } catch (error){
         alertNotify.error(error);
     }
 }
-const deleteCountry = async (id) => {
+const deleteCountry = async (id, onSuccess, onError) => {
     try {
         await fetch(`http://localhost:5000/api/country/delete/${id}`, {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
-        alertNotify.error("Delete the country success.")
+        alertNotify.error("Delete the country success.");
+
+        if (onSuccess) {
+            return onSuccess();
+        }
     } catch (error) {
         alertNotify.error(error)
     }

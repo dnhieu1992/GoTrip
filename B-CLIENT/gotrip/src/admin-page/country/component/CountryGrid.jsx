@@ -41,7 +41,7 @@ const CountryGrid = ({
     ];
 
     const {
-        currentPage,
+        pageNumber,
         pageSize,
         sortField,
         sortDirection
@@ -65,7 +65,7 @@ const CountryGrid = ({
                     data={data}
                     dataReady={dataReady}
                     columns={columns}
-                    currentPage={currentPage}
+                    currentPage={pageNumber}
                     pageSize={pageSize}
                     sortField={sortField}
                     sortDirection={sortDirection}
