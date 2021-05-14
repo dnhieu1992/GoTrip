@@ -5,38 +5,48 @@ const CityGrid = ({
   data,
   options,
   totalItems,
+  dataReady,
+  showModal,
+  onDelete,
   onHandlePageChange,
   onHandlePageSizeChange,
-  onAddNew,
-  onEdit,
-  onDelete
+  onHandleSortChange
+  
 }) => {
   const columns = [
     {
       fieldName: 'Id',
       dataField: 'id',
-      isHidden: true
+      isHidden: true,
     },
     {
       fieldName: 'Name',
-      dataField: 'name'
+      dataField: 'name',
+      isSort: true,
     },
     {
       fieldName: 'Country',
-      dataField: 'countryName'
+      dataField: 'countryName',
+      isSort: true,
     },
     {
       fieldName: 'Status',
-      dataField: 'status'
+      dataField: 'status',
     },
     {
       fieldName: 'Action',
       type: 'action',
-      onEdit: onEdit,
-      onDelete: onDelete
+      onEdit: showModal,
+      onDelete: onDelete,
     }
   ];
 
+  const {
+    pageNumber,
+    pageSize,
+    sortField,
+    sortDirection
+  } = options
 
   return (
     <div className="card card-info">
@@ -46,29 +56,43 @@ const CityGrid = ({
             <h4>Cities: {totalItems}</h4>
           </div>
           <div className="col-sm-4 d-flex justify-content-end">
-            <button type="button" className="btn btn-info" onClick={onAddNew}>Add New</button>
+            <button type="button" className="btn btn-info" onClick={() => showModal()}>
+              Add New
+            </button>
           </div>
         </div>
         <Grid
-          data={data}
-          columns={columns}
-          currentPage={options.currentPage}
-          pageSize={options.pageSize}
           total={totalItems}
+          data={data}
+          dataReady={dataReady}
+          columns={columns}
+          currentPage={pageNumber}
+          pageSize={pageSize}
+          sortField={sortField}
+          sortDirection={sortDirection}
           onPageNumberChange={onHandlePageChange}
           onPageSizeChange={onHandlePageSizeChange}
+          onSortFieldChange={onHandleSortChange}
         />
       </div>
     </div>
-
-  )
-}
+  );
+};
 export default CityGrid;
+
 CityGrid.propTypes = {
   data: PropTypes.array,
-  totalItems: PropTypes.number
+  totalItems: PropTypes.number,
+  options: PropTypes.object,
+  showModal: PropTypes.func,
+  onDelete: PropTypes.func,
+  onHandlePageChange: PropTypes.func,
+  onHandlePageSizeChange: PropTypes.func,
+  onHandleSortChange: PropTypes.func
 };
+
 CityGrid.defaultProps = {
   data: [],
-  totalItems: 0
+  totalItems: 0,
+  options: {}
 };

@@ -12,20 +12,32 @@ import {
 } from './api/apiHandle.js';
 
 const CityContainer = () => {
-    const [total, setTotal] = useState(0);
-    const [data, setData] = useState([]);
+    const [state, setState] = useState({});
     const [countries, setCountries] = useState([]);
-    const [searchParam, setSearchParam] = useState({});
-    const [options, setOptions] = useState({ currentPage: 1, pageSize: 10 });
-    const [isShow, setIsShow] = useState(false);
-    const [city, setCity] = useState({});
     const didMountRef = useRef(false);
+    const fetCitiesRef = useRef(false);
+
+    const {
+        total,
+        data,
+        options,
+        isValid,
+        city,
+        isShow,
+        dataReady,
+        searchParam,
+        errorMessage,
+    } = state;
 
     useEffect(() => {
         if (!didMountRef.current) {
             getAllCountries();
             onHandleSearch({});
             didMountRef.current = true;
+        }
+
+        if (didMountRef.current && fetCitiesRef.current) {
+            fetCities();
         }
     });
 
@@ -37,119 +49,210 @@ const CityContainer = () => {
         });
     }
 
-    const onHandleSearchChange = (param) => {
-        setSearchParam(param);
-    };
+    const fetCities = () => {
+        fetCitiesRef.current = false;
 
-    const onHandleSearch = ({ cityName, countryId, status }, options = {}) => {
-        const params = {
-            name: cityName,
-            countryId: countryId,
-            status: status,
-            pageNumber: options.pageNumber || 1,
-            pageSize: options.pageSize || 10
-        }
+        const {
+            searchParam = {},
+            options = {}
+        } = state;
 
-        Object.keys(params).forEach(key => {
-            if (!params[key] || (typeof (params[key]) === "string" && params[key] === '')) {
-                delete params[key];
-            }
-        });
-
-        getCities(params).then(({ total, cities }) => {
+        getCities({ ...searchParam, ...options }, ({ total, cities }) => {
             const data = [];
-
             cities.forEach(city => {
                 let { _id, name } = city.country;
-
                 data.push({
                     ...city,
                     id: city._id,
                     countryId: _id,
                     countryName: name
                 });
-            });
+            })
+            setTimeout(() => {
+                setState({
+                    ...state,
+                    total,
+                    data,
+                    dataReady: true
+                });
+            }, 500);
+        }, () => {
+            setTimeout(() => {
+                setState({ ...state, dataReady: true })
+            }, 500);
+        });
+    };
 
-            setData(data);
-            setTotal(total);
-        }).catch(error => {
-            console.log(error);
+    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
+        const options = {
+            pageNumber: optionParams.pageNumber || 1,
+            pageSize: optionParams.pageSize || 50,
+            sortField: optionParams.sortField || null,
+            sortDirection: optionParams.sortDirection || null
+        };
+
+        fetCitiesRef.current = true;
+
+        setState({
+            ...state,
+            searchParam: searchParam,
+            options: options,
+            dataReady: false
+        });
+    };
+
+    const onHandleSearchChange = (param) => {
+        setState({
+            ...state,
+            searchParam: param
         });
     };
 
     const onHandlePageChange = (pageNumber) => {
-        onHandleSearch(searchParam, { pageSize: options.pageSize, pageNumber });
-        setOptions({ ...options, currentPage: pageNumber });
+        const { searchParam, options } = state;
+
+        const optionsUpdate = {
+            ...options,
+            pageNumber
+        };
+
+        onHandleSearch(searchParam, optionsUpdate);
     };
 
     const onHandlePageSizeChange = (pageSize) => {
-        onHandleSearch(searchParam, { pageSize: pageSize, pageNumber: 1 });
-        setOptions({ pageSize, currentPage: 1 });
+        const { searchParam, options } = state;
+
+        const optionsUpdate = {
+            ...options,
+            pageSize,
+            pageNumber: 1
+        };
+
+        onHandleSearch(searchParam, optionsUpdate);
+    };
+
+    const onHandleSortChange = (sortField, sortDirection) => {
+        const { searchParam, options } = state;
+
+        const optionsUpdate = {
+            ...options,
+            sortField,
+            sortDirection
+        };
+
+        onHandleSearch(searchParam, optionsUpdate);
     };
 
     const onHandleResetForm = () => {
-        setSearchParam({});
-        onHandleSearch({}, { pageSize: options.pageSize, pageNumber: 1 })
+        const searchParam = {
+            cityName: '',
+            countryName: '',
+            status: ''
+        };
+
+        const options = {
+            ...state.options,
+            pageNumber: 1
+        };
+
+        onHandleSearch(searchParam, options);
     };
 
-    const onAddNew = () => {
-        setIsShow(true);
+    const showModal = (city = {}) => {
+        setState({
+            ...state,
+            isShow: true,
+            isValid: !!city._id,
+            city: city,
+            errorMessage: {}
+        });
     };
-    const onClose = () => {
-        setIsShow(false);
-        setCity({});
+
+    const onClose = (isSearch) => {
+        fetCitiesRef.current = !!isSearch;
+
+        setState({
+            ...state,
+            isShow: false,
+            isValid: false,
+            errorMessage: {},
+            city: null,
+            dataReady: !isSearch
+        });
     };
 
     const onSaveCity = (city) => {
-        if (city.id) {
-            updateCity(city).then(() => {
-                onHandleSearch(searchParam);
-                onClose();
-            }).catch(error => {
-                console.log(error);
+        if (city._id) {
+            updateCity(city, () => {
+                onClose(true);
             });
-        }
-        else {
-            createNewCity(city).then(() => {
-                onHandleSearch(searchParam);
-                onClose();
-            }).catch(error => {
-                console.log(error);
+        } else {
+            createNewCity(city, () => {
+                onClose(true);
             });
-        }
+        };
     };
 
     const onSaveFormChange = (city) => {
-        setCity(city);
-    }
+        let isValid = true;
+        let errorMessage = {};
 
-    const onEdit = (city) => {
-        setCity(city);
-        setIsShow(true);
-    }
+        if (!city.name || !city.countryId || !city.status) {
+            isValid = false;
+        };
+
+        if (!city.name && city.name !== undefined) {
+            const cityNameErrorMsg = "The city name is required.";
+            errorMessage = { ...errorMessage, cityNameErrorMsg }
+            isValid = false;
+        };
+
+        if (!city.countryId && city.countryId !== undefined) {
+            const countryNameErrorMsg = "The country name is required.";
+            errorMessage = { ...errorMessage, countryNameErrorMsg }
+            isValid = false;
+        };
+
+        if (!city.status && city.status !== undefined) {
+            const cityStatusErrorMsg = "The city status is required.";
+            errorMessage = { ...errorMessage, cityStatusErrorMsg }
+            isValid = false;
+        };
+
+        setState({
+            ...state,
+            city,
+            isValid,
+            errorMessage
+        });
+    };
 
     const onDelete = ({ _id }) => {
-        deleteCity(_id).then(() => {
-            onHandleSearch(searchParam);
-        }).catch(error => {
-            console.log(error);
+        const { searchParam, options } = state;
+
+        deleteCity(_id, () => {
+            onHandleSearch(searchParam, options);
         });
-    }
+    };
 
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
-                title={city.id ? 'Edit City' : 'Add New City'}
+                title={city?._id ? 'Edit City' : 'Add New City'}
                 onClose={onClose}
-                onSave={onSaveCity}>
-                <CityForm city={city}
+            >
+                <CityForm
+                    city={city}
+                    isValid={isValid}
+                    errorMessage={errorMessage}
                     countries={countries}
-                    onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
-                    onSaveCity={onSaveCity} />
+                    onSaveFormChange={onSaveFormChange}
+                    onSaveCity={onSaveCity}
+                />
             </Modal>
-        )
-    }
+        );
+    };
 
     return (
         <>
@@ -170,11 +273,12 @@ const CityContainer = () => {
                         data={data}
                         options={options}
                         totalItems={total}
+                        dataReady={dataReady}
+                        showModal={showModal}
+                        onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
-                        onAddNew={onAddNew}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
+                        onHandleSortChange={onHandleSortChange}
                     />
                 </div>
             </div>
