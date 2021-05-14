@@ -36,7 +36,7 @@ const PropertyTypeSearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">Name</label>
+                                <label className="col-sm-2 col-form-label">Name</label>
                                 <div className="col-sm-10">
                                     <input type="text"
                                         className="form-control"
@@ -51,7 +51,7 @@ const PropertyTypeSearch = ({
                         </div>
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">Property</label>
+                                <label className="col-sm-2 col-form-label">Property</label>
                                 <div className="col-sm-10">
                                     <select
                                         className="form-control"
@@ -64,7 +64,7 @@ const PropertyTypeSearch = ({
                                         {
                                             properties.map(property => {
                                                 return (
-                                                    <option value={property._id}> {property.name} </option>
+                                                    <option key={property._id} value={property._id}> {property.name} </option>
                                                 )
                                             })
                                         }
@@ -76,7 +76,7 @@ const PropertyTypeSearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputPassword3" className="col-sm-2 col-form-label" >Status</label>
+                                <label className="col-sm-2 col-form-label" >Status</label>
                                 <div className="col-sm-10">
                                     <select name="status" className="form-control" value={status} onChange={onHandleFieldChange}>
                                         <option value=""></option>

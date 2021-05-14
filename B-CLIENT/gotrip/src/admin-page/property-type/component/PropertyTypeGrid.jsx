@@ -10,7 +10,7 @@ const PropertyTypeGrid = ({
     onDelete,
     showModal,
     dataReady,
-    onHandelSortChange
+    onHandleSortChange
 }) => {
     const columns = [
         {
@@ -80,7 +80,7 @@ const PropertyTypeGrid = ({
                     total={totalItems}
                     onPageNumberChange={onHandlePageChange}
                     onPageSizeChange={onHandlePageSizeChange}
-                    onSortFieldChange={onHandelSortChange}
+                    onSortFieldChange={onHandleSortChange}
                 />
             </div>
         </div>

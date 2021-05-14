@@ -83,7 +83,7 @@ const PropertyTypeForm = ({
                             properties.map(property => {
                                 console.log(property)
                                 return (
-                                    <option value={property._id}>{property.name}</option>
+                                    <option key={property._id} value={property._id}>{property.name}</option>
                                 )
                             })
                         }

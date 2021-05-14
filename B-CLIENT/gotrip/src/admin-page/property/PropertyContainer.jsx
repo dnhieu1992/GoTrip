@@ -81,6 +81,7 @@ const PropertyContainer = () => {
     }
 
     const onHandleSortChange = (sortField, sortDirection) => {
+        debugger
         onHandleSearch(searchParam, {
             sortField,
             sortDirection
