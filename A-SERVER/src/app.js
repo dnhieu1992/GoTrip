@@ -18,7 +18,7 @@ import propertyRoutes from './routes/property.routes.js';
 import propertyTypeRoutes from './routes/propertyType.routes.js';
 
 // set up express app
-const app = express();
+const app = express(express.static('public'));
 
 //const swaggerDocument = YAML.load('./swagger.yaml');
 app.use(cors())

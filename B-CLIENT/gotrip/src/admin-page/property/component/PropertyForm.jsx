@@ -10,9 +10,19 @@ const PropertyForm = ({
         onSaveFormChange({ ...property, [e.target.name]: e.target.value });
     }
 
+    const onHandleIconChange = (e) => {
+        const data = new FormData();
+        data.append('file', e.target.files[0]);
+        onSaveFormChange({ ...property, file: e.target.files[0] });
+    }
+
     return (
         <form id="addNew">
             <div className="card-body">
+                <div className="form-group">
+                    <label>Icon</label>
+                    <input type="file" name="name" className="form-control" id="name" placeholder="Name" onChange={onHandleIconChange} />
+                </div>
                 <div className="form-group">
                     <label for="exampleInputEmail1">Name</label>
                     <input type="text" name="name" className="form-control" id="name" placeholder="Name" value={name} onChange={onHandlePropertyChange} />

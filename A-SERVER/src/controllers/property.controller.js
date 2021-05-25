@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import multer from 'multer';
 import db from '../models/index.js';
 import { ERROR_MSG } from '../constants/messages.js';
 import {

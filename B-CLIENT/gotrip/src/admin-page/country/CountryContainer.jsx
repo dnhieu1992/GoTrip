@@ -3,6 +3,7 @@ import Modal from '../../shared/components/forms/Modal';
 import CountryGrid from './component/CountryGrid';
 import CountrySearch from './component/CountrySearch';
 import CountryForm from './component/CountryForm';
+import ImageUploader from '../../shared/components/ImageUploader';
 import {
     getCountries,
     updateCountry,
@@ -11,7 +12,12 @@ import {
 } from './api/apiHandle.js';
 
 const CountryContainer = () => {
-    const [state, setState] = useState({});
+    const [state, setState] = useState({
+        total: 0,
+        countries: [],
+        options: { pageNumber: 1, pageSize: 50, sortField: '', sortDirection: 'asc' },
+        searchParam: {},
+    });
     const didMountRef = useRef(false);
     const fetCountriesRef = useRef(false);
 
@@ -237,6 +243,7 @@ const CountryContainer = () => {
     return (
         <>
             {isShow && modalRender()}
+            
             <div className="card">
                 <div className="card-header text-uppercase">
                     <h3>Country</h3>
@@ -248,6 +255,7 @@ const CountryContainer = () => {
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
+                    <ImageUploader />
                     <CountryGrid
                         data={countries}
                         options={options}

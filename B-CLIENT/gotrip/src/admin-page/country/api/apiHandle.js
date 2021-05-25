@@ -19,7 +19,7 @@ const getCountries = async (params, onSuccess, onError) => {
             return onSuccess(data);
         }
     } catch (error) {
-        alertNotify.error(error);
+        alertNotify.error(error.message);
         if (onError) {
             return onError();
         }
