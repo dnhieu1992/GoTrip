@@ -16,6 +16,8 @@ import countryRoutes from './routes/country.routes.js';
 import cityRoutes from './routes/city.routes.js';
 import propertyRoutes from './routes/property.routes.js';
 import propertyTypeRoutes from './routes/propertyType.routes.js';
+import roomTypeRoutes from './routes/roomType.routes.js';
+import bedRoutes from './routes/bed.routes.js';
 
 // set up express app
 const app = express();
@@ -76,3 +78,5 @@ app.use('/api/country/', countryRoutes);
 app.use('/api/city/', cityRoutes);
 app.use('/api/property/', propertyRoutes);
 app.use('/api/propertyType/', propertyTypeRoutes);
+app.use('/api/roomType/', roomTypeRoutes);
+app.use('/api/bed/', bedRoutes);
