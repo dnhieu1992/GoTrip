@@ -32,7 +32,7 @@ const CitySearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">
+                                <label className="col-sm-2 col-form-label">
                                     Name
                                 </label>
                                 <div className="col-sm-10">
@@ -50,7 +50,9 @@ const CitySearch = ({
                         </div>
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputPassword3" className="col-sm-2 col-form-label">Country</label>
+                                <label className="col-sm-2 col-form-label">
+                                    Country
+                                </label>
                                 <div className="col-sm-10">
                                     <select
                                         className="form-control"
@@ -59,11 +61,11 @@ const CitySearch = ({
                                         value={countryId}
                                         onChange={onHandleFieldChange}
                                     >
-                                        <option value="" hidden>Choose the country...</option>
+                                        <option hidden>Choose the country...</option>
                                         <option value=""></option>
                                         {countries.map(country => {
                                             return (
-                                                <option value={country._id}>{country.name}</option>
+                                                <option key={country._id} value={country._id}>{country.name}</option>
                                             )
                                         })}
                                     </select>
@@ -74,7 +76,9 @@ const CitySearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputPassword3" className="col-sm-2 col-form-label">Status</label>
+                                <label className="col-sm-2 col-form-label">
+                                    Status
+                                </label>
                                 <div className="col-sm-10">
                                     <select
                                         className="form-control"
@@ -82,7 +86,7 @@ const CitySearch = ({
                                         name="status"
                                         onChange={onHandleFieldChange}
                                     >
-                                        <option value="" hidden>Choose a status...</option>
+                                        <option hidden>Choose a status...</option>
                                         <option value=""></option>
                                         <option value="Actived">Actived</option>
                                         <option value="Disabled">Disabled</option>

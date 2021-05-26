@@ -31,7 +31,7 @@ const BedSearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="name" className="col-sm-2 col-form-label">
+                                <label className="col-sm-2 col-form-label">
                                     Name
                                 </label>
                                 <div className="col-sm-10">
@@ -49,7 +49,9 @@ const BedSearch = ({
                         </div>
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="description" className="col-sm-2 col-form-label">Description</label>
+                                <label className="col-sm-2 col-form-label">
+                                    Description
+                                </label>
                                 <div className="col-sm-10">
                                     <textarea
                                         className="form-control"
@@ -66,7 +68,9 @@ const BedSearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="status" className="col-sm-2 col-form-label">Status</label>
+                                <label className="col-sm-2 col-form-label">
+                                    Status
+                                </label>
                                 <div className="col-sm-10">
                                     <select
                                         className="form-control"
@@ -74,7 +78,7 @@ const BedSearch = ({
                                         name="status"
                                         onChange={onHandleFieldChange}
                                     >
-                                        <option value="" hidden>Choose a status...</option>
+                                        <option hidden>Choose a status...</option>
                                         <option value=""></option>
                                         <option value="Actived">Actived</option>
                                         <option value="Disabled">Disabled</option>
