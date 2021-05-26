@@ -1,111 +1,99 @@
-import classNames from 'classnames';
+import { useState } from 'react';
+import Formsy from 'formsy-react';
+import {
+    Label,
+    FormsyInput,
+    FormsySelect,
+    LoaderButton
+} from '../../../shared/components/index.js';
 
 const CountryForm = ({
     country,
-    isValid,
-    errorMessage,
-    onSaveFormChange,
     onClose,
     onSaveCountry
 }) => {
+    const [isValid, setIsValid] = useState(false);
+
     const {
         name,
         code,
         status
     } = country;
 
-    const {
-        countryNameErrorMsg,
-        countryCodeErrorMsg,
-        countryStatusErrorMsg
-    } = errorMessage
+    const submit = (modal) => {
+        onSaveCountry(modal)
+    }
 
-    const onHandlePropertyChange = (e) => {
-        if (e?.target) {
-            onSaveFormChange({
-                ...country,
-                [e.target.name]: e.target.value
-            });
-        }
-    };
+    const enableButton = () => {
+        setIsValid(true);
+    }
+
+    const disableButton = () => {
+        setIsValid(false);
+    }
+
+    const statuses = [{ value: 'Actived', label: 'Actived' }, { value: 'Disabled', label: 'Disabled' }];
 
     return (
-        <form id="addNew">
+        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
             <div className="card-body">
                 <div className="form-group">
-                    <label>Name</label>
-                    <input
-                        type="text"
+                    <Label>Name</Label>
+                    <FormsyInput
+                        inputProps={{
+                            id: 'name',
+                            type: 'text',
+                            placeholder: 'Name',
+                        }}
                         name="name"
-                        className={classNames("form-control", { "is-invalid": countryNameErrorMsg })}
-                        id="name"
-                        placeholder="Name"
                         value={name}
-                        onChange={onHandlePropertyChange}
+                        required
+                        validationError="This is required field."
                     />
-                    {countryNameErrorMsg && (
-                        <div className="invalid-feedback">
-                            {countryNameErrorMsg}
-                        </div>
-                    )}
-
                 </div>
                 <div className="form-group">
-                    <label>Code</label>
-                    <input
-                        type="text"
-                        name="code"
-                        className={classNames("form-control", { "is-invalid": countryCodeErrorMsg })}
-                        id="code"
-                        placeholder="Code"
+                    <Label>Code</Label>
+                    <FormsyInput
+                        inputProps={{
+                            id: 'code',
+                            type: 'text',
+                            placeholder: 'Code',
+                        }}
+                        name='code'
                         value={code}
-                        onChange={onHandlePropertyChange}
+                        required
+                        validationError="This is required field."
                     />
-                    {countryCodeErrorMsg && (
-                        <div className="invalid-feedback">
-                            {countryCodeErrorMsg}
-                        </div>
-                    )}
                 </div>
                 <div className="form-group">
-                    <label>Status</label>
-                    <select
-                        className={classNames("form-control", { "is-invalid": countryStatusErrorMsg })}
-                        name="status"
+                    <FormsySelect
+                        name='status'
                         value={status}
-                        onChange={onHandlePropertyChange}
-                    >
-                        <option value=""></option>
-                        <option value="Actived">Actived</option>
-                        <option value="Disabled">Disabled</option>
-                    </select>
-                    {countryStatusErrorMsg && (
-                        <div className="invalid-feedback">
-                            {countryStatusErrorMsg}
-                        </div>
-                    )}
+                        dataSource={statuses}
+                        label='Status'
+                        required
+                        validationError="This is required field."
+                    />
                 </div>
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
-                        <button
+                        <LoaderButton
                             type="button"
-                            className="btn btn-danger mr-5"
+                            className="mr-5"
                             onClick={() => onClose(false)}
                         >
                             Close
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-info"
+                        </LoaderButton>
+                        <LoaderButton
+                            type="submit"
                             disabled={!isValid}
-                            onClick={() => onSaveCountry(country)}
                         >
                             Submit
-                        </button>
+                        </LoaderButton>
                     </div>
                 </div>
             </div>
-        </form>
+        </Formsy>
     );
 };
 

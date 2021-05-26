@@ -173,40 +173,6 @@ const CountryContainer = () => {
         }
     };
 
-    const onSaveFormChange = (country) => {
-        let isValid = true;
-        let errorMessage = {};
-
-        if (!country.name || !country.code || !country.status) {
-            isValid = false;
-        }
-
-        if (!country.name && country.name !== undefined) {
-            const countryNameErrorMsg = "The country name is required.";
-            errorMessage = { ...errorMessage, countryNameErrorMsg }
-            isValid = false;
-        }
-
-        if (!country.code && country.code !== undefined) {
-            const countryCodeErrorMsg = "The country code is required.";
-            errorMessage = { ...errorMessage, countryCodeErrorMsg }
-            isValid = false;
-        }
-
-        if (!country.status && country.status !== undefined) {
-            const countryStatusErrorMsg = "The country status is required.";
-            errorMessage = { ...errorMessage, countryStatusErrorMsg }
-            isValid = false;
-        }
-
-        setState({
-            ...state,
-            country,
-            isValid,
-            errorMessage
-        });
-    };
-
     const onDelete = ({ _id }) => {
         const { searchParam, options } = state;
 
@@ -225,9 +191,7 @@ const CountryContainer = () => {
                 <CountryForm
                     country={country}
                     isValid={isValid}
-                    errorMessage={errorMessage}
                     onClose={onClose}
-                    onSaveFormChange={onSaveFormChange}
                     onSaveCountry={onSaveCountry}
                 />
             </Modal>
