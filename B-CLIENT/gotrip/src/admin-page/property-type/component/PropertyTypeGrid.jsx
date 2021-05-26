@@ -46,7 +46,7 @@ const PropertyTypeGrid = ({
     ];
 
     const {
-        currentPage,
+        pageNumber,
         pageSize,
         sortField,
         sortDirection
@@ -73,7 +73,7 @@ const PropertyTypeGrid = ({
                     data={data}
                     columns={columns}
                     dataReady={dataReady}
-                    currentPage={currentPage}
+                    currentPage={pageNumber}
                     pageSize={pageSize}
                     sortField={sortField}
                     sortDirection={sortDirection}

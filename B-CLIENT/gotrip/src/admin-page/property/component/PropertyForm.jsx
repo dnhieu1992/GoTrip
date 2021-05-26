@@ -93,7 +93,7 @@ const PropertyForm = ({
                         <button
                             type="button"
                             className="btn btn-danger mr-5"
-                            onClick={onClose}
+                            onClick={() => onClose(false)}
                         >
                             Close
                         </button>

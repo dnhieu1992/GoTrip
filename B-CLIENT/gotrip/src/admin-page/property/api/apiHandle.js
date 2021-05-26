@@ -1,7 +1,7 @@
 import alertNotify from "../../../shared/ultils/alertNotify";
 import { cleanObject } from "../../shared/ultils/ultils";
 
-const getProperties = async (params) => {
+const getProperties = async (params, onSuccess, onError) => {
     try {
         const url = new URL("http://localhost:5000/api/property/search");
 
@@ -12,28 +12,42 @@ const getProperties = async (params) => {
         if (!res.ok) {
             throw new Error(res.status);
         }
-        return await res.json();
 
+        const data = await res.json();
+        if (onSuccess) {
+            return onSuccess(data);
+        }
     } catch (error) {
-        console.log(error);
+        alertNotify.error(error);
+        if (onError) {
+            return onError();
+        }
     }
 }
 
-const createNewProperty = async (property) => {
+const createNewProperty = async (property, onSuccess) => {
     try {
-        await fetch("http://localhost:5000/api/property/create", {
+        const res = await fetch("http://localhost:5000/api/property/create", {
             method: "POST",
             body: JSON.stringify(property),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
+        if (!res.ok && res.status === 409) {
+            throw "The item exists.";
+        }
+
         alertNotify.success("Create new a property seccess");
-    } catch {
-        console.log(error);
+
+        if (onSuccess) {
+            return onSuccess();
+        }
+    } catch (error) {
+        alertNotify.error(error);
     }
 }
 
-const updateProperty = async (property) => {
+const updateProperty = async (property, onSuccess) => {
     try {
         await fetch("http://localhost:5000/api/property/update", {
             method: "PUT",
@@ -41,13 +55,17 @@ const updateProperty = async (property) => {
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
-        alertNotify.success("Update the property seccess");
-    } catch {
-        console.log(error);
+        alertNotify.success("Update the property success");
+
+        if (onSuccess) {
+            return onSuccess();
+        }
+    } catch (error) {
+        alertNotify.error(error);
     }
 }
 
-const deleteProperty = async (id) => {
+const deleteProperty = async (id, onSuccess) => {
     try {
         await fetch(`http://localhost:5000/api/property/delete/${id}`, {
             method: "DELETE",
@@ -55,8 +73,12 @@ const deleteProperty = async (id) => {
         });
 
         alertNotify.error("Delete the property success");
-    } catch {
-        console.log(error);
+
+        if (onSuccess) {
+            return onSuccess();
+        }
+    } catch (error) {
+        alertNotify.error(error);
     }
 }
 

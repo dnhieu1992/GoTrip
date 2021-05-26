@@ -7,7 +7,7 @@ const PropertySearch = ({
     onHandleResetForm
 }) => {
 
-    const { propertyName, status } = searchParam;
+    const { name, status } = searchParam;
 
     const onHandleFieldChange = (e) => {
         if (e?.target) {
@@ -28,14 +28,14 @@ const PropertySearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">Name</label>
+                                <label className="col-sm-2 col-form-label">Name</label>
                                 <div className="col-sm-10">
                                     <input type="text"
                                         className="form-control"
                                         id="name"
-                                        name="propertyName"
+                                        name="name"
                                         placeholder="Name"
-                                        value={propertyName}
+                                        value={name}
                                         onChange={onHandleFieldChange}
                                     />
                                 </div>
@@ -43,7 +43,7 @@ const PropertySearch = ({
                         </div>
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputPasswword3" className="col-sm-2 col-form-label">Status</label>
+                                <label className="col-sm-2 col-form-label">Status</label>
                                 <div className="col-sm-10">
                                     <select className="form-control" value={status} name="status" onChange={onHandleFieldChange}>
                                         <option value=""></option>
