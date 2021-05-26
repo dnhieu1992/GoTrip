@@ -57,7 +57,8 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Bed'
+ *              type: object
+ *              items: {}
  *       500:
  *         description: Some server error
  */
