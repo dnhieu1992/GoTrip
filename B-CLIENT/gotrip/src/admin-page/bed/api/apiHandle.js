@@ -50,7 +50,6 @@ const createNewBed = async (bed, onSuccess, onError) => {
 }
 
 const updateBed = async (bed, onSuccess, onError) => {
-    debugger
     try {
         await fetch("http://localhost:5000/api/bed/update", {
             method: "PUT",

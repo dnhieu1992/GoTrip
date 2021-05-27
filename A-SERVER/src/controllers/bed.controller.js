@@ -104,13 +104,13 @@ function getById(req, res) {
 
 function updateBed(req, res) {
     const {
-        _id,
+        id,
         name,
         description,
         status
     } = req.body;
 
-    if (!_id) {
+    if (!id) {
         return badRequestResponse(res, '');
     }
 
@@ -120,7 +120,7 @@ function updateBed(req, res) {
         description
     };
 
-    db.Bed.findOneAndUpdate({ _id: _id }, bedUpdate).then((result) => {
+    db.Bed.findOneAndUpdate({ _id: id }, bedUpdate).then((result) => {
         return successResponse(res, "Update success");
     }).catch((error) => {
         return errorResponse(res, error);

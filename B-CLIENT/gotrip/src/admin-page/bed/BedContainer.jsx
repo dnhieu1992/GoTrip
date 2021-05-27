@@ -162,8 +162,13 @@ const BedContainer = () => {
     };
 
     const onSaveBed = (bed) => {
+        const data = {
+            ...bed,
+            id: bed._id
+        };
+
         if (bed._id) {
-            updateBed(bed, () => {
+            updateBed(data, () => {
                 onClose(true);
             });
         } else {
@@ -217,7 +222,7 @@ const BedContainer = () => {
 
     const modalRender = () => {
         return (
-            <Modal 
+            <Modal
                 classNames={'modal-lg'}
                 title={bed?._id ? 'Edit Bed' : 'Add New Bed'}
                 onClose={onClose}
