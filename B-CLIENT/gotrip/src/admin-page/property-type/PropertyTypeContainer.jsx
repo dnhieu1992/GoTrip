@@ -13,20 +13,31 @@ import {
 } from './api/apiHandle.js';
 
 const PropertyTypeContainer = () => {
-    const [total, setTotal] = useState(0);
-    const [data, setData] = useState([]);
-    const [searchParam, setSearchParam] = useState({});
-    const [options, setOptions] = useState({ currentPage: 1, pageSize: 5 });
-    const [isShow, setIsShow] = useState(false);
-    const [propertyType, setPropertyType] = useState({});
+    const [state, setState] = useState({});
     const didMountRef = useRef(false);
+    const fetPropertyTypesRef = useRef(false);
     const [properties, setProperties] = useState([]);
 
+    const {
+        total,
+        data,
+        options,
+        isValid,
+        propertyType,
+        isShow,
+        dataReady,
+        errorMessage,
+        searchParam
+    } = state;
     useEffect(() => {
         if (!didMountRef.current) {
             getAllProperties();
             onHandleSearch({});
             didMountRef.current = true;
+        }
+
+        if (didMountRef.current && fetPropertyTypesRef.current) {
+            fetPropertyTypes();
         }
     });
 
@@ -38,29 +49,17 @@ const PropertyTypeContainer = () => {
         })
     }
 
-    const onHandleSearchChange = (param) => {
-        setSearchParam(param);
-    }
+    const fetPropertyTypes = () => {
+        fetPropertyTypesRef.current = false;
 
-    const onHandleSearch = ({ propertyTypeName, propertyId, status }, options = {}) => {
-        const params = {
-            name: propertyTypeName,
-            property: propertyId,
-            status: status,
-            pageNumber: options.pageNumber || 1,
-            pageSize: options.pageSize || 10
-        }
+        const {
+            searchParam = {},
+            options = {},
+        } = state;
 
-        Object.keys(params).forEach(key => {
-            if (!params[key] || (typeof (params[key]) === "string" && params[key] === '')) {
-                delete params[key];
-            }
-        });
-
-        getPropertyTypes(params).then(({ total, propertyTyes }) => {
+        getPropertyTypes({ ...searchParam, ...options }, ({ total, propertyTypes }) => {
             const data = [];
-            //console.log("pro",propertyTyes)
-            propertyTyes.forEach(propertyType => {
+            propertyTypes.forEach(propertyType => {
                 let name = propertyType.property ? propertyType.property.name : ""
                 data.push({
                     ...propertyType,
@@ -68,72 +67,179 @@ const PropertyTypeContainer = () => {
                     property: name,
                 });
             });
+            setTimeout(() => {
+                setState({
+                    ...state,
+                    total,
+                    data,
+                    dataReady: true
+                });
+            }, 500);
 
-            setData(data);
-            setTotal(total);
-        }).catch(error => {
-            console.log(error);
+        }, () => {
+            setTimeout(() => {
+                setState({ ...state, dataReady: true })
+            }, 500);
+        });
+    }
+
+    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
+        const options = {
+            pageNumber: optionParams.pageNumber || 1,
+            pageSize: optionParams.pageSize || 50,
+            sortField: optionParams.sortField || null,
+            sortDirection: optionParams.sortDirection || null
+        }
+
+        fetPropertyTypesRef.current = true;
+
+        setState({
+            ...state,
+            searchParam: searchParam,
+            options: options,
+            dataReady: false
         });
     }
 
     const onHandlePageChange = (pageNumber) => {
-        onHandleSearch(searchParam, { pageSize: options.pageSize, pageNumber });
-        setOptions({ ...options, currentPage: pageNumber });
+        const { searchParam, options } = state;
+
+        const optionsUpdate = {
+            ...options,
+            pageNumber
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
+    }
+
+    const onHandleSearchChange = (param)=>{
+        setState({
+            ...state,
+            searchParam:param
+        });
     }
 
 
     const onHandlePageSizeChange = (pageSize) => {
-        onHandleSearch(searchParam, { pageSize: pageSize, pageNumber: 1 });
-        setOptions({ pageSize, currentPage: 1 });
+        const { searchParam, options } = state;
+
+        const optionsUpdate = {
+            ...options,
+            pageSize,
+            pageNumber: 1
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
+    }
+
+    const onHandleSortChange = (sortField, sortDirection) => {
+        const { searchParam, options } = state;
+
+        const optionsUpdate = {
+            ...options,
+            sortField,
+            sortDirection
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
     }
 
     const onHandleResetForm = () => {
-        setSearchParam({});
-        onHandleSearch({}, { pageSize: options.pageSize, pageNumber: 1 });
+        const searchParam = {
+            propertyTypeName: '',
+            property: '',
+            status: ''
+        }
+
+        const options = {
+            ...state.options,
+            pageNumber: 1
+        }
+
+        onHandleSearch(searchParam, options);
     }
 
-    const onAddNew = () => {
-        setIsShow(true);
+    const showModal = (propertyType = {}) => {
+        setState({
+            ...state,
+            isShow: true,
+            isValid: !!propertyType._id,
+            propertyType: propertyType,
+            errorMessage: {}
+        });
     }
 
-    const onClose = () => {
-        setIsShow(false);
-        setPropertyType({});
+    const onClose = (isSearch) => {
+        fetPropertyTypesRef.current = !!isSearch;
+
+        setState({
+            ...state,
+            isShow: false,
+            isValid: false,
+            errorMessage: {},
+            propertyType: null,
+            dataReady: !isSearch
+        });
+
     }
 
     const onSavePropertyType = (propertyType) => {
-
-        if (propertyType.id) {
-            updatePropertyType(propertyType).then(() => {
-                onHandleSearch(searchParam);
-                onClose();
-            }).catch(error => {
-                console.log(error);
+        if (propertyType._id) {
+            updatePropertyType(propertyType, () => {
+                onClose(true);
             });
         } else {
-            createPropertyType(propertyType).then(() => {
-                onHandleSearch(searchParam);
-                onClose();
-            }).catch(error => {
-                console.log(error);
+            createPropertyType(propertyType, () => {
+                onClose(true);
             });
         }
     }
 
     const onSaveFormChange = (propertyType) => {
-        setPropertyType(propertyType);
-    }
+        let isValid = true;
+        let errorMessage = {};
 
-    const onEdit = (propertyType) => {
-        setPropertyType(propertyType);
-        setIsShow(true);
+        if (!propertyType.name || !propertyType.description || !propertyType.propertyId || !propertyType.status) {
+            isValid = false;
+        }
+
+        if (!propertyType.name && propertyType.name !== undefined) {
+            const propertyTypeNameErrorMsg = "The property type name is required.";
+            errorMessage = { ...errorMessage, propertyTypeNameErrorMsg }
+            isValid = false;
+        }
+
+        if (!propertyType.description && propertyType.description !== undefined) {
+            const propertyTypeDescriptionErrorMsg = "The property type description is required.";
+            errorMessage = { ...errorMessage, propertyTypeDescriptionErrorMsg }
+            isValid = false;
+        }
+
+        if (!propertyType.propertyId && propertyType.propertyId !== undefined) {
+            const propertyTypePropertyErrorMsg = "The property is required.";
+            errorMessage = { ...errorMessage, propertyTypePropertyErrorMsg }
+            isValid = false;
+        }
+
+        if (!propertyType.status && propertyType.status !== undefined) {
+            const propertyTypeStatusErrorMsg = "The property type status is required.";
+            errorMessage = { ...errorMessage, propertyTypeStatusErrorMsg }
+            isValid = false;
+        }
+
+        setState({
+            ...state,
+            propertyType,
+            isValid,
+            errorMessage
+        });
     }
 
     const onDelete = ({ _id }) => {
-        deletePropertyType(_id).then(() => {
-            onHandleSearch(searchParam);
-        }).catch(error => {
-            console.log(error);
+        const { searchParam, options } = state;
+
+        deletePropertyType(_id, () => {
+            onHandleSearch(searchParam, options);
         });
     }
 
@@ -141,13 +247,15 @@ const PropertyTypeContainer = () => {
         return (
             <Modal
                 classNames={'modal-lg'}
-                title={propertyType.id ? 'Edit Property Type' : 'Add New PropertyType'}
+                title={propertyType?.id ? 'Edit Property Type' : 'Add New PropertyType'}
                 onClose={onClose}
-                onSave={onSavePropertyType}>
+            >
 
                 <PropertyTypeForm
                     propertyType={propertyType}
                     properties={properties}
+                    isValid={isValid}
+                    errorMessage={errorMessage}
                     onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSavePropertyType={onSavePropertyType}
@@ -175,11 +283,12 @@ const PropertyTypeContainer = () => {
                         data={data}
                         options={options}
                         totalItems={total}
+                        dataReady={dataReady}
+                        showModal={showModal}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
-                        onAddNew={onAddNew}
-                        onEdit={onEdit}
                         onDelete={onDelete}
+                        onHandleSortChange={onHandleSortChange}
                     />
                 </div>
             </div>

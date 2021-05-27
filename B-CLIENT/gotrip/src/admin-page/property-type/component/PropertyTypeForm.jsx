@@ -1,9 +1,13 @@
+import classNames from "classnames";
+
 const PropertyTypeForm = ({
     propertyType,
     onSaveFormChange,
     onClose,
     onSavePropertyType,
-    properties
+    properties,
+    isValid,
+    errorMessage
 }) => {
     const {
         name,
@@ -12,67 +16,119 @@ const PropertyTypeForm = ({
         status
     } = propertyType;
 
+    const {
+        propertyTypeNameErrorMsg,
+        propertyTypeDescriptionErrorMsg,
+        propertyTypePropertyErrorMsg,
+        propertyTypeStatusErrorMsg
+    } = errorMessage
+
     const onHandlePropertyTypeChange = (e) => {
-        onSaveFormChange({ ...propertyType, [e.target.name]: e.target.value });
+        if (e?.target) {
+            onSaveFormChange({
+                ...propertyType,
+                [e.target.name]: e.target.value
+            });
+        }
     }
 
     return (
         <form id="addNew">
             <div className="card-body">
                 <div className="form-group">
-                    <label for="exampleInputEmail1">Name</label>
+                    <label>Name</label>
                     <input type="text"
-                        className="form-control"
+                        className={classNames("form-control", { "is-invalid": propertyTypeNameErrorMsg })}
                         name="name"
                         id="name"
                         placeholder="Name"
                         value={name}
                         onChange={onHandlePropertyTypeChange} />
+
+                    {propertyTypeNameErrorMsg && (
+                        <div className="invalid-feedback">
+                            {propertyTypeNameErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputEmail1">Description</label>
+                    <label>Description</label>
                     <textarea
                         type="text"
                         name="description"
-                        className="form-control"
+                        className={classNames("form-control", { "is-invalid": propertyTypeDescriptionErrorMsg })}
                         id="description"
                         placeholder="Description"
                         value={description}
                         onChange={onHandlePropertyTypeChange} />
+
+                    {propertyTypeDescriptionErrorMsg && (
+                        <div className="invalid-feedback">
+                            {propertyTypeDescriptionErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputEmail1">Property</label>
+                    <label>Property</label>
                     <select
-                        className="form-select form-control"
+                        className={classNames("form-control", { "is-invalid": propertyTypePropertyErrorMsg })}
                         aria-label="Default select example"
                         name="propertyId"
                         value={propertyId}
-                        onChange={onHandlePropertyTypeChange}> 
+                        onChange={onHandlePropertyTypeChange}>
 
                         <option select hidden>Choose the property</option>
                         <option value=""></option>
                         {
-                            properties.map(property =>{
+                            properties.map(property => {
                                 console.log(property)
                                 return (
-                                    <option value={property._id}>{property.name}</option>
+                                    <option key={property._id} value={property._id}>{property.name}</option>
                                 )
                             })
                         }
                     </select>
+                    {propertyTypePropertyErrorMsg && (
+                        <div className="invalid-feedback">
+                            {propertyTypePropertyErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputPassword1">Status</label>
-                    <select class="form-control" name="status" value={status} onChange={onHandlePropertyTypeChange} >
+                    <label>Status</label>
+                    <select
+                        className={classNames("form-control", { "is-invalid": propertyTypeStatusErrorMsg })}
+                        name="status"
+                        value={status}
+                        onChange={onHandlePropertyTypeChange} >
+
                         <option value=""></option>
                         <option value="Actived">Actived</option>
                         <option value="Disabled">Disabled</option>
                     </select>
+
+                    {propertyTypeStatusErrorMsg && (
+                        <div className="invalid-feedback">
+                            {propertyTypeStatusErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
-                        <button type="button" className="btn btn-danger mr-5" onClick={onClose}>Close</button>
-                        <button type="button" className="btn btn-info" onClick={() => onSavePropertyType(propertyType)}>Submit</button>
+                        <button
+                            type="button"
+                            className="btn btn-danger mr-5"
+                            onClick={() => onClose(false)}
+                        >Close
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-info"
+                            disabled={!isValid}
+                            onClick={() => onSavePropertyType(propertyType)}
+                        >
+                            Submit
+                        </button>
                     </div>
                 </div>
             </div>

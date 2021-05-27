@@ -1,22 +1,21 @@
-const propertySearch = ({
+import PropTypes from 'prop-types';
+
+const PropertySearch = ({
     searchParam,
     onHandleSearchChange,
     onHandleSearch,
     onHandleResetForm
 }) => {
 
-    const {
-        propertyName = "",
-        status = ""
-    } = searchParam;
+    const { name, status } = searchParam;
 
     const onHandleFieldChange = (e) => {
-        onHandleSearchChange({ ...searchParam, [e.target.name]: e.target.value });
-
-    };
-
-    const onSearch = (searchParam) => {
-        onHandleSearch(searchParam);
+        if (e?.target) {
+            onHandleSearchChange({
+                ...searchParam,
+                [e.target.name]: e.target.value
+            });
+        }
     }
 
     return (
@@ -29,14 +28,14 @@ const propertySearch = ({
                     <div className="row">
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">Name</label>
+                                <label className="col-sm-2 col-form-label">Name</label>
                                 <div className="col-sm-10">
                                     <input type="text"
                                         className="form-control"
                                         id="name"
-                                        name="propertyName"
+                                        name="name"
                                         placeholder="Name"
-                                        value={propertyName}
+                                        value={name}
                                         onChange={onHandleFieldChange}
                                     />
                                 </div>
@@ -44,7 +43,7 @@ const propertySearch = ({
                         </div>
                         <div className="col-sm-6">
                             <div className="form-group row">
-                                <label for="inputPasswword3" className="col-sm-2 col-form-label">Status</label>
+                                <label className="col-sm-2 col-form-label">Status</label>
                                 <div className="col-sm-10">
                                     <select className="form-control" value={status} name="status" onChange={onHandleFieldChange}>
                                         <option value=""></option>
@@ -57,7 +56,7 @@ const propertySearch = ({
                     </div>
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
-                            <button type="button" className="btn btn-info mr-5" onClick={() => onSearch(searchParam)} >Search</button>
+                            <button type="button" className="btn btn-info mr-5" onClick={() => onHandleSearch(searchParam)} >Search</button>
                             <button type="button" className="btn btn-info" onClick={onHandleResetForm}>Reset</button>
                         </div>
                     </div>
@@ -66,4 +65,15 @@ const propertySearch = ({
         </div>
     )
 }
-export default propertySearch;
+export default PropertySearch;
+
+PropertySearch.propTypes = {
+    searchParam: PropTypes.object,
+    onHandleSearchChange: PropTypes.func.isRequired,
+    onHandleSearch: PropTypes.func.isRequired,
+    onHandleResetForm: PropTypes.func.isRequired,
+}
+
+PropertySearch.defaultProps = {
+    searchParam: {},
+}
