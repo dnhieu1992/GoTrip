@@ -3,124 +3,225 @@ import Modal from '../../shared/components/forms/Modal';
 import PropertyGrid from './component/PropertyGrid';
 import PropertySearch from './component/PropertySearch';
 import PropertyForm from './component/PropertyForm';
-import { 
-    getProperties, 
-    updateProperty, 
-    createNewProperty, 
-    deleteProperty 
+import {
+    getProperties,
+    updateProperty,
+    createNewProperty,
+    deleteProperty
 } from './api/apiHandle.js';
 
 const PropertyContainer = () => {
-    const [total, setTotal] = useState(0);
-    const [data, setData] = useState([]);
-    const [searchParam, setSearchParam] = useState({});
-    const [options, setOptions] = useState({ currentPage: 1, pageSize: 5 });
-    const [isShow, setIsShow] = useState(false);
-    const [property, setProperty] = useState({});
+
+    const [state, setState] = useState({});
     const didMountRef = useRef(false);
+    const fetPropertiesRef = useRef(false);
+
+    const {
+        total,
+        searchParam,
+        options,
+        isShow,
+        property,
+        dataReady,
+        properties,
+        isValid,
+        errorMessage
+    } = state;
 
     useEffect(() => {
         if (!didMountRef.current) {
             onHandleSearch({});
             didMountRef.current = true;
         }
+
+        if (didMountRef.current && fetPropertiesRef.current) {
+            fetProperties();
+        }
     });
 
-    const onHandleSearchChange = (param) => {
-        setSearchParam(param);
+    const fetProperties = () => {
+        fetPropertiesRef.current = false;
+        const {
+            searchParam = {},
+            options = {}
+        } = state;
+
+        getProperties({ ...searchParam, ...options }, ({ total, properties }) => {
+            setTimeout(() => {
+                setState({
+                    ...state,
+                    total,
+                    properties,
+                    dataReady: true
+                });
+            }, 500);
+        }, () => {
+            setTimeout(() => {
+                setState({ ...state, dataReady: true });
+            }, 500);
+        });
     }
 
-    const onHandleSearch = ({ propertyName, status }, options = {}) => {
-        const params = {
-            name: propertyName,
-            status: status,
-            pageNumber: options.pageNumber || 1,
-            pageSize: options.pageSize || 10
+    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
+        const options = {
+            pageNumber: optionParams.pageNumber || 1,
+            pageSize: optionParams.pageSize || 50,
+            sortField: optionParams.sortField || null,
+            sortDirection: optionParams.sortDirection || null
         }
 
-        Object.keys(params).forEach(key => {
-            if (params[key] === undefined || params[key] === null || (typeof (params[key]) === "string" && params[key] === '')) {
-                delete params[key];
-            }
-        });
+        fetPropertiesRef.current = true;
 
-        getProperties(params).then(({ total, properties }) => {
-            setData(properties);
-            setTotal(total);
-        }).catch(error => {
-            console.log(error);
+        setState({
+            ...state,
+            searchParam: searchParam,
+            options: options,
+            dataReady: false
+        });
+    }
+
+    const onHandleSearchChange = (param) => {
+        setState({
+            ...state,
+            searchParam: param
         });
     }
 
     const onHandlePageChange = (pageNumber) => {
-        onHandleSearch(searchParam, { pageSize: options.pageSize, pageNumber });
-        setOptions({ ...options, currentPage: pageNumber });
+        const { searchParam, options } = state;
 
+        const optionsUpdate = {
+            ...options,
+            pageNumber
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
     }
 
     const onHandlePageSizeChange = (pageSize) => {
-        onHandleSearch(searchParam, { pageSize: pageSize, pageNumber: 1 });
-        setOptions({ pageSize, currentPage: 1 });
+        const { searchParam, options } = state;
+
+        const optionsUpdate = {
+            ...options,
+            pageSize,
+            pageNumber: 1
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
+    }
+
+    const onHandleSortChange = (sortField, sortDirection) => {
+        const { searchParam, options } = state;
+        const optionsUpdate = {
+            ...options,
+            sortField,
+            sortDirection
+        }
+
+        onHandleSearch(searchParam, optionsUpdate);
     }
 
     const onHandleResetForm = () => {
-        setSearchParam({});
-        onHandleSearch({}, { pageSize: options.pageSize, pageNumber: 1 });
+        const searchParam = {
+            propertyName: '',
+            status: ''
+        }
+
+        const options = {
+            ...state.options,
+            pageNumber: 1
+        }
+
+        onHandleSearch(searchParam, options);
     }
 
-    const addNewForm = () => {
-        setIsShow(true);
+    const showModal = (property = {}) => {
+        setState({
+            ...state,
+            isShow: true,
+            isValid: !!property._id,
+            property: property,
+            errorMessage: {}
+        });
     }
 
-    const onClose = () => {
-        setIsShow(false);
-        setProperty({});
+    const onClose = (isSearch) => {
+        fetPropertiesRef.current = !!isSearch;
+
+        setState({
+            ...state,
+            isShow: false,
+            isValid: false,
+            errorMessage: {},
+            property: null,
+            dataReady: !isSearch
+        });
     }
 
     const onSaveProperty = (property) => {
         if (property._id) {
-            const updateRequest = { ...property, id: property._id }
-            updateProperty(updateRequest).then(() => {
-                onHandleSearch(searchParam);
-                onClose();
-            }).catch(error => {
-                console.log(error);
-            })
+            updateProperty(property, () => {
+                onClose(true);
+            });
         } else {
-            createNewProperty(property).then(() => {
-                onHandleSearch(searchParam);
-                onClose();
-            }).catch(error => {
-                console.log(error);
-            })
+            createNewProperty(property, () => {
+                onClose(true);
+            });
         }
     }
 
-    const onSaveFormChange = (property) => {
-        setProperty(property);
-    }
-
-    const onEdit = (property) => {
-        setProperty(property);
-        setIsShow(true);
-    }
-
     const onDelete = ({ _id }) => {
-        deleteProperty(_id).then(() => {
-            onHandleSearch(searchParam);
-        }).catch(error => {
-            console.log(error);
-        })
+        const { searchParam, options } = state;
+
+        deleteProperty(_id, () => {
+            onHandleSearch(searchParam, options);
+        });
+    }
+
+    const onSaveFormChange = (property) => {
+        let isValid = true;
+        let errorMessage = {};
+
+        if (!property.name || !property.description || !property.status) {
+            isValid = false;
+        }
+
+        if (!property.name && property.name !== undefined) {
+            const propertyNameErrorMsg = "The property name is required.";
+            errorMessage = { ...errorMessage, propertyNameErrorMsg }
+            isValid = false;
+        }
+
+        if (!property.description && property.description !== undefined) {
+            const propertyDescriptionErrorMsg = "The property description is required.";
+            errorMessage = { ...errorMessage, propertyDescriptionErrorMsg }
+            isValid = false;
+        }
+
+        if (!property.status && property.status !== undefined) {
+            const propertyStatusErrorMsg = "The property Status is required.";
+            errorMessage = { ...errorMessage, propertyStatusErrorMsg }
+            isValid = false;
+        }
+
+        setState({
+            ...state,
+            property,
+            isValid,
+            errorMessage
+        });
     }
 
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
-                title={property.id ? 'Edit Property' : 'Add New Property'}
+                title={property?.id ? 'Edit Property' : 'Add New Property'}
                 onClose={onClose}
-                onSave={onSaveProperty}>
+            >
                 <PropertyForm
                     property={property}
+                    isValid={isValid}
+                    errorMessage={errorMessage}
                     onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSaveProperty={onSaveProperty}
@@ -144,14 +245,15 @@ const PropertyContainer = () => {
                         onHandleResetForm={onHandleResetForm}
                     />
                     <PropertyGrid
-                        data={data}
+                        data={properties}
                         options={options}
                         totalItems={total}
+                        dataReady={dataReady}
+                        showModal={showModal}
+                        onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
-                        addNewForm={addNewForm}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
+                        onHandleSortChange={onHandleSortChange}
                     />
                 </div>
             </div>
