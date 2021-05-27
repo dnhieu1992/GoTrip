@@ -15,7 +15,7 @@ import { COUNTRY_TEXT_CONFIG } from './constants/resources';
 const CountryContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetCountriesRef = useRef(false);
+    const fetchCountriesRef = useRef(false);
 
     const {
         total,
@@ -35,13 +35,13 @@ const CountryContainer = () => {
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetCountriesRef.current) {
-            fetCountries();
+        if (didMountRef.current && fetchCountriesRef.current) {
+            fetchCountries();
         }
     });
 
-    const fetCountries = () => {
-        fetCountriesRef.current = false;
+    const fetchCountries = () => {
+        fetchCountriesRef.current = false;
 
         const {
             searchParam = {},
@@ -72,7 +72,7 @@ const CountryContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetCountriesRef.current = true;
+        fetchCountriesRef.current = true;
 
         setState({
             ...state,
@@ -148,7 +148,7 @@ const CountryContainer = () => {
     }
 
     const onClose = (isSearch) => {
-        fetCountriesRef.current = !!isSearch;
+        fetchCountriesRef.current = !!isSearch;
 
         setState({
             ...state,
