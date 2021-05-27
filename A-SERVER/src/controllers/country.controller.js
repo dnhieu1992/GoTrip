@@ -103,19 +103,19 @@ function getById(req, res) {
 
 function updateCountry(req, res) {
     const {
-        _id,
+        id,
         code,
         name,
         status
     } = req.body;
 
-    if (!_id) {
+    if (!id) {
         return badRequestResponse(res, '');
     }
 
     const countryUpdate = { code, name, status };
 
-    db.Country.findOneAndUpdate({ _id: _id }, countryUpdate).then((result) => {
+    db.Country.findOneAndUpdate({ _id: id }, countryUpdate).then((result) => {
         return successResponse(res, result);
     }).catch((error) => {
         return errorResponse(res, error);

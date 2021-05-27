@@ -8,6 +8,7 @@ import './shared/sass/login/login.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import App from './App';
+import _ from 'lodash';
 
 
 ReactDOM.render(<App />, document.getElementById('root'));
