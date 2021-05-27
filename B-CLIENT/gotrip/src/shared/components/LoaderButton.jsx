@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
-import Loader from "react-loader-spinner";
+import { Button, Spinner } from 'react-bootstrap';
 
 const LoaderButton = ({
     id,
@@ -8,6 +7,7 @@ const LoaderButton = ({
     size,
     active,
     variant,
+    spinnerVariant,
     children,
     disabled,
     isLoading,
@@ -19,7 +19,7 @@ const LoaderButton = ({
             <Button
                 id={id}
                 type={type}
-                className={className}
+                className={`loader-button ${className}`}
                 active={active}
                 disabled={disabled || isLoading}
                 size={size}
@@ -27,12 +27,7 @@ const LoaderButton = ({
                 onClick={onClick}
             >
                 {isLoading && (
-                    <Loader
-                        className="d-flex justify-content-start"
-                        type="ThreeDots"
-                        color="#00BFFF"
-                        height={80}
-                        width={80} />
+                    <Spinner className='loader-button__spinner' animation="border" variant={spinnerVariant} />
                 )}
                 {children}
             </Button>
@@ -48,6 +43,7 @@ LoaderButton.propTypes = {
     size: PropTypes.string,
     active: PropTypes.bool,
     variant: PropTypes.string,
+    spinnerVariant: PropTypes.string,
     disabled: PropTypes.bool,
     isLoading: PropTypes.bool,
     onClick: PropTypes.func,
@@ -61,5 +57,6 @@ LoaderButton.defaultProps = {
     disabled: false,
     isLoading: false,
     variant: 'info',
+    spinnerVariant: 'light',
     onClick: () => { },
 };

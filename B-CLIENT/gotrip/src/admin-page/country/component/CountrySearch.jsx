@@ -1,4 +1,7 @@
 import PropTypes from 'prop-types';
+import { STATUSES } from '../constants/country';
+import { Input, Label, FormGroup, Button, Select, Row } from '../../../shared/components/index';
+import { COUNTRY_TEXT_CONFIG } from '../constants/resources';
 
 const CountrySearch = ({
     searchParam,
@@ -7,8 +10,8 @@ const CountrySearch = ({
     onHandleResetForm,
 }) => {
     const {
-        countryName,
-        countryCode,
+        name,
+        code,
         status
     } = searchParam;
 
@@ -24,86 +27,79 @@ const CountrySearch = ({
     return (
         <div className="card card-info">
             <div className="card-header">
-                <h3 className="card-title">Search Criteria</h3>
+                <h3 className="card-title">{COUNTRY_TEXT_CONFIG.COUNTRY_SEARCH_HEADER_LBL}</h3>
             </div>
             <form className="form-horizontal" autoComplete="off">
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">
-                                    Name
-                                </label>
+                            <FormGroup as={Row}>
+                                <Label className="col-sm-2">
+                                    {COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL}
+                                </Label>
                                 <div className="col-sm-10">
-                                    <input
+                                    <Input
                                         type="text"
-                                        className="form-control"
                                         id="name"
-                                        name="countryName"
-                                        placeholder="Country Name"
-                                        value={countryName}
+                                        name="name"
+                                        placeholder={COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL}
+                                        value={name}
                                         onChange={onHandleFieldChange}
                                     />
                                 </div>
-                            </div>
+                            </FormGroup>
                         </div>
                         <div className="col-sm-6">
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">
-                                    Code
-                                 </label>
+                            <FormGroup as={Row}>
+                                <Label className="col-sm-2">
+                                    {COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL}
+                                </Label>
                                 <div className="col-sm-10">
-                                    <input
+                                    <Input
                                         type="text"
-                                        className="form-control"
                                         id="countryCode"
-                                        name="countryCode"
-                                        placeholder="Code"
-                                        value={countryCode}
+                                        name="code"
+                                        placeholder={COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL}
+                                        value={code}
                                         onChange={onHandleFieldChange}
                                     />
                                 </div>
-                            </div>
+                            </FormGroup>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">
-                                    Status
-                                </label>
+                            <FormGroup as={Row}>
+                                <Label className="col-sm-2">
+                                    {COUNTRY_TEXT_CONFIG.COUNTRY_STATUS_FIELD_LBL}
+                                </Label>
                                 <div className="col-sm-10">
-                                    <select
-                                        className="form-control"
+                                    <Select
+                                        inputProps={{ name: 'status' }}
                                         value={status}
-                                        name="status"
                                         onChange={onHandleFieldChange}
-                                    >
-                                        <option value=""></option>
-                                        <option value="Actived">Actived</option>
-                                        <option value="Disabled">Disabled</option>
-                                    </select>
+                                        dataSource={STATUSES}
+                                    />
                                 </div>
-                            </div>
+                            </FormGroup>
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
-                            <button
-                                type="button"
-                                className="btn btn-info mr-5"
+                            <Button
+                                variant="info"
+                                className='mr-3'
                                 onClick={() => onHandleSearch(searchParam)}
                             >
-                                Search
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-info"
+                                {COUNTRY_TEXT_CONFIG.COUNTRY_SEARCH_BTN}
+                            </Button>
+                            <Button
+                                variant="info"
                                 onClick={onHandleResetForm}
                             >
-                                Reset
-                            </button>
+                                {COUNTRY_TEXT_CONFIG.COUNTRY_RESET_BTN}
+                            </Button>
                         </div>
                     </div>
                 </div>

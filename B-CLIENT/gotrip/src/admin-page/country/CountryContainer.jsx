@@ -9,6 +9,8 @@ import {
     createNewCountry,
     deleteCountry
 } from './api/apiHandle.js';
+import { COUNTRY_TEXT_CONFIG } from './constants/resources';
+
 
 const CountryContainer = () => {
     const [state, setState] = useState({});
@@ -23,12 +25,11 @@ const CountryContainer = () => {
         country,
         isShow,
         dataReady,
+        isLoading,
         searchParam,
-        errorMessage,
     } = state;
 
     useEffect(() => {
-        console.log(state);
         if (!didMountRef.current) {
             onHandleSearch({});
             didMountRef.current = true;
@@ -125,8 +126,8 @@ const CountryContainer = () => {
 
     const onHandleResetForm = () => {
         const searchParam = {
-            countryName: '',
-            countryCode: '',
+            name: '',
+            code: '',
             status: ''
         };
 
@@ -142,9 +143,7 @@ const CountryContainer = () => {
         setState({
             ...state,
             isShow: true,
-            isValid: !!country._id,
-            country: country,
-            errorMessage: {}
+            country: country
         });
     }
 
@@ -157,19 +156,25 @@ const CountryContainer = () => {
             isValid: false,
             errorMessage: {},
             country: null,
-            dataReady: !isSearch
+            dataReady: !isSearch,
+            isLoading: false
         });
     };
 
     const onSaveCountry = (country) => {
-        if (country._id) {
-            updateCountry(country, () => {
-                onClose(true);
-            });
+        setState({ ...state, isLoading: true })
+        if (state.country._id) {
+            updateCountry({ ...country, id: state.country._id },
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         } else {
-            createNewCountry(country, () => {
-                onClose(true);
-            });
+            createNewCountry(country,
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         }
     };
 
@@ -189,6 +194,7 @@ const CountryContainer = () => {
                 onClose={onClose}
             >
                 <CountryForm
+                    isLoading={isLoading}
                     country={country}
                     isValid={isValid}
                     onClose={onClose}
@@ -203,7 +209,7 @@ const CountryContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>Country</h3>
+                    <h3>{COUNTRY_TEXT_CONFIG.COUNTRY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <CountrySearch

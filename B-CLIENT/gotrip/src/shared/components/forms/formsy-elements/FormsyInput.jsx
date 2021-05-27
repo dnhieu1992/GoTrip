@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import { withFormsy } from 'formsy-react';
+import classNames from 'classnames';
 
 const FormsyInput = (props) => {
 
@@ -11,15 +11,19 @@ const FormsyInput = (props) => {
     const {
         inputProps,
         value,
-        isPristine
+        isPristine,
+        label
     } = props;
 
     const errorMessages = !isPristine ? props.errorMessages : [];
+    const isValid = _.isEmpty(errorMessages);
 
     return (
-        <>
+        <Form.Group className='mb-3'>
+            <Form.Label>{label}</Form.Label>
             <Form.Control
                 {...inputProps}
+                className={classNames({ 'is-invalid': !isValid })}
                 type="text"
                 value={value || ''}
                 onChange={changeValue}
@@ -27,39 +31,14 @@ const FormsyInput = (props) => {
             {!_.isEmpty(errorMessages) && (
                 errorMessages.map((error, index) => {
                     return (
-                        <div className="invalid-feedback" key={index} style={{ display: 'block' }}>
+                        <Form.Text className="invalid-feedback" key={index} style={{ display: 'block', fontSize:'100%' }}>
                             {error}
-                        </div>
+                        </Form.Text>
                     )
                 })
             )}
-        </>
+        </Form.Group>
     )
 }
 
 export default withFormsy(FormsyInput);
-
-// FormsyInput.propTypes = {
-//     id: PropTypes.string,
-//     type: PropTypes.string,
-//     size: PropTypes.string,
-//     placeholder: PropTypes.string,
-//     readOnly: PropTypes.bool,
-//     disabled: PropTypes.bool,
-//     htmlSize: PropTypes.any,
-//     className: PropTypes.string,
-//     value: PropTypes.any,
-//     errors: PropTypes.array,
-//     onChange: PropTypes.func,
-// };
-
-// FormsyInput.defaultProps = {
-//     type: 'text',
-//     size: 'md',
-//     placeholder: '',
-//     readOnly: false,
-//     disabled: false,
-//     value: null,
-//     errors: [],
-//     onChange: () => { },
-// };

@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import Formsy from 'formsy-react';
-import {
-    Label,
+import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { STATUSES } from '../constants/country';
+import { COUNTRY_TEXT_CONFIG } from '../constants/resources';
+const {
     FormsyInput,
-    FormsySelect,
-    LoaderButton
-} from '../../../shared/components/index.js';
+    FormsySelect
+} = FormsyElement
 
 const CountryForm = ({
     country,
+    isLoading,
     onClose,
     onSaveCountry
 }) => {
-    const [isValid, setIsValid] = useState(false);
+    const [isValid, setIsValid] = useState(true);
 
     const {
         name,
@@ -32,47 +34,45 @@ const CountryForm = ({
         setIsValid(false);
     }
 
-    const statuses = [{ value: 'Actived', label: 'Actived' }, { value: 'Disabled', label: 'Disabled' }];
-
     return (
         <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
             <div className="card-body">
                 <div className="form-group">
-                    <Label>Name</Label>
                     <FormsyInput
                         inputProps={{
                             id: 'name',
                             type: 'text',
-                            placeholder: 'Name',
+                            placeholder: COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL,
                         }}
                         name="name"
+                        label={COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL}
                         value={name}
                         required
-                        validationError="This is required field."
+                        validationError={COUNTRY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
-                    <Label>Code</Label>
                     <FormsyInput
                         inputProps={{
                             id: 'code',
                             type: 'text',
-                            placeholder: 'Code',
+                            placeholder: COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL,
                         }}
                         name='code'
+                        label={COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL}
                         value={code}
                         required
-                        validationError="This is required field."
+                        validationError={COUNTRY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
                     <FormsySelect
                         name='status'
                         value={status}
-                        dataSource={statuses}
-                        label='Status'
+                        dataSource={STATUSES}
+                        label={COUNTRY_TEXT_CONFIG.COUNTRY_STATUS_FIELD_LBL}
                         required
-                        validationError="This is required field."
+                        validationError={COUNTRY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -82,13 +82,14 @@ const CountryForm = ({
                             className="mr-5"
                             onClick={() => onClose(false)}
                         >
-                            Close
+                            {COUNTRY_TEXT_CONFIG.COUNTRY_CLOSE_BTN}
                         </LoaderButton>
                         <LoaderButton
                             type="submit"
                             disabled={!isValid}
+                            isLoading={isLoading}
                         >
-                            Submit
+                            {COUNTRY_TEXT_CONFIG.COUNTRY_SUBMIT_BTN}
                         </LoaderButton>
                     </div>
                 </div>
