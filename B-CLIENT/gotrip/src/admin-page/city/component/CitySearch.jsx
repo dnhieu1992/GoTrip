@@ -1,4 +1,7 @@
 import PropTypes from 'prop-types';
+import { STATUSES } from '../constants/city';
+import { Input, Label, FormGroup, Button, Select, Row } from '../../../shared/components/index';
+import { CITY_TEXT_CONFIG } from '../constants/resources';
 
 const CitySearch = ({
     searchParam,
@@ -8,10 +11,22 @@ const CitySearch = ({
     onHandleResetForm
 }) => {
     const {
-        cityName,
-        countryId,
-        status
+        name = '',
+        countryId = '',
+        status = ''
     } = searchParam;
+
+    const data = countries.map(country => {
+        return {
+            value: country._id,
+            label: country.name
+        }
+    })
+
+    data.unshift({
+        value: '',
+        label: 'Choose the country...'
+    })
 
     const onHandleFieldChange = (e) => {
         if (e?.target) {
@@ -25,93 +40,77 @@ const CitySearch = ({
     return (
         <div className="card card-info">
             <div className="card-header">
-                <h3 className="card-title">Search Criteria</h3>
+                <h3 className="card-title">{CITY_TEXT_CONFIG.CITY_SEARCH_HEADER_LBL}</h3>
             </div>
             <form className="form-horizontal" autoComplete="off">
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">
-                                    Name
-                                </label>
+                            <FormGroup as={Row}>
+                                <Label className="col-sm-2">
+                                    {CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
+                                </Label>
                                 <div className="col-sm-10">
-                                    <input
+                                    <Input
                                         type="text"
-                                        className="form-control"
                                         id="name"
                                         name="name"
-                                        placeholder="City Name"
-                                        value={cityName}
+                                        placeholder={CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
+                                        value={name}
                                         onChange={onHandleFieldChange}
                                     />
                                 </div>
-                            </div>
+                            </FormGroup>
                         </div>
                         <div className="col-sm-6">
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">
-                                    Country
-                                </label>
+                            <FormGroup as={Row}>
+                                <Label className="col-sm-2">
+                                    {CITY_TEXT_CONFIG.CITY_COUNTRYID_FIELD_LBL}
+                                </Label>
                                 <div className="col-sm-10">
-                                    <select
-                                        className="form-control"
-                                        id="countryId"
-                                        name="countryId"
+                                    <Select
+                                        inputProps={{ name: 'countryId' }}
                                         value={countryId}
                                         onChange={onHandleFieldChange}
-                                    >
-                                        <option hidden>Choose the country...</option>
-                                        <option value=""></option>
-                                        {countries.map(country => {
-                                            return (
-                                                <option key={country._id} value={country._id}>{country.name}</option>
-                                            )
-                                        })}
-                                    </select>
+                                        dataSource={data}
+                                    />
                                 </div>
-                            </div>
+                            </FormGroup>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">
-                                    Status
-                                </label>
+                            <FormGroup as={Row}>
+                                <Label className="col-sm-2">
+                                    {CITY_TEXT_CONFIG.CITY_STATUS_FIELD_LBL}
+                                </Label>
                                 <div className="col-sm-10">
-                                    <select
-                                        className="form-control"
+                                    <Select
+                                        inputProps={{ name: 'status' }}
                                         value={status}
-                                        name="status"
                                         onChange={onHandleFieldChange}
-                                    >
-                                        <option hidden>Choose a status...</option>
-                                        <option value=""></option>
-                                        <option value="Actived">Actived</option>
-                                        <option value="Disabled">Disabled</option>
-                                    </select>
+                                        dataSource={STATUSES}
+                                    />
                                 </div>
-                            </div>
+                            </FormGroup>
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
-                            <button
-                                type="button"
-                                className="btn btn-info mr-5"
+                            <Button
+                                variant="info"
+                                className='mr-3'
                                 onClick={() => onHandleSearch(searchParam)}
                             >
-                                Search
-                                </button>
-                            <button
-                                type="button"
-                                className="btn btn-info"
+                                {CITY_TEXT_CONFIG.CITY_SEARCH_BTN}
+                            </Button>
+                            <Button
+                                variant="info"
                                 onClick={onHandleResetForm}
                             >
-                                Reset
-                            </button>
+                                {CITY_TEXT_CONFIG.CITY_RESET_BTN}
+                            </Button>
                         </div>
                     </div>
                 </div>

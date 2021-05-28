@@ -10,12 +10,13 @@ import {
     deleteCity,
     getCountries
 } from './api/apiHandle.js';
+import { CITY_TEXT_CONFIG } from './constants/resources';
 
 const CityContainer = () => {
     const [state, setState] = useState({});
     const [countries, setCountries] = useState([]);
     const didMountRef = useRef(false);
-    const fetCitiesRef = useRef(false);
+    const fetchCitiesRef = useRef(false);
 
     const {
         total,
@@ -25,8 +26,8 @@ const CityContainer = () => {
         city,
         isShow,
         dataReady,
+        isLoading,
         searchParam,
-        errorMessage,
     } = state;
 
     useEffect(() => {
@@ -36,8 +37,8 @@ const CityContainer = () => {
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetCitiesRef.current) {
-            fetCities();
+        if (didMountRef.current && fetchCitiesRef.current) {
+            fetchCities();
         }
     });
 
@@ -49,8 +50,8 @@ const CityContainer = () => {
         });
     }
 
-    const fetCities = () => {
-        fetCitiesRef.current = false;
+    const fetchCities = () => {
+        fetchCitiesRef.current = false;
 
         const {
             searchParam = {},
@@ -91,8 +92,7 @@ const CityContainer = () => {
             sortDirection: optionParams.sortDirection || null
         };
 
-        fetCitiesRef.current = true;
-
+        fetchCitiesRef.current = true;
         setState({
             ...state,
             searchParam: searchParam,
@@ -145,8 +145,8 @@ const CityContainer = () => {
 
     const onHandleResetForm = () => {
         const searchParam = {
-            cityName: '',
-            countryName: '',
+            name: '',
+            countryId: '',
             status: ''
         };
 
@@ -162,14 +162,12 @@ const CityContainer = () => {
         setState({
             ...state,
             isShow: true,
-            isValid: !!city._id,
-            city: city,
-            errorMessage: {}
+            city: city
         });
     };
 
     const onClose = (isSearch) => {
-        fetCitiesRef.current = !!isSearch;
+        fetchCitiesRef.current = !!isSearch;
 
         setState({
             ...state,
@@ -177,57 +175,30 @@ const CityContainer = () => {
             isValid: false,
             errorMessage: {},
             city: null,
-            dataReady: !isSearch
+            dataReady: !isSearch,
+            isLoading: false
         });
     };
 
     const onSaveCity = (city) => {
-        if (city._id) {
-            updateCity(city, () => {
-                onClose(true);
-            });
+        setState({ ...state, isLoading: true })
+        if (state.city._id) {
+            updateCity({ ...city, id: state.city._id },
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         } else {
-            createNewCity(city, () => {
-                onClose(true);
-            });
-        };
-    };
-
-    const onSaveFormChange = (city) => {
-        let isValid = true;
-        let errorMessage = {};
-
-        if (!city.name || !city.countryId || !city.status) {
-            isValid = false;
-        };
-
-        if (!city.name && city.name !== undefined) {
-            const cityNameErrorMsg = "The city name is required.";
-            errorMessage = { ...errorMessage, cityNameErrorMsg }
-            isValid = false;
-        };
-
-        if (!city.countryId && city.countryId !== undefined) {
-            const countryNameErrorMsg = "The country name is required.";
-            errorMessage = { ...errorMessage, countryNameErrorMsg }
-            isValid = false;
-        };
-
-        if (!city.status && city.status !== undefined) {
-            const cityStatusErrorMsg = "The city status is required.";
-            errorMessage = { ...errorMessage, cityStatusErrorMsg }
-            isValid = false;
-        };
-
-        setState({
-            ...state,
-            city,
-            isValid,
-            errorMessage
-        });
+            createNewCity(city,
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
+        }
     };
 
     const onDelete = ({ _id }) => {
+        debugger
         const { searchParam, options } = state;
 
         deleteCity(_id, () => {
@@ -242,12 +213,11 @@ const CityContainer = () => {
                 onClose={onClose}
             >
                 <CityForm
+                    isLoading={isLoading}
                     city={city}
-                    isValid={isValid}
-                    errorMessage={errorMessage}
                     countries={countries}
+                    isValid={isValid}
                     onClose={onClose}
-                    onSaveFormChange={onSaveFormChange}
                     onSaveCity={onSaveCity}
                 />
             </Modal>
@@ -259,7 +229,7 @@ const CityContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>City</h3>
+                    <h3>{CITY_TEXT_CONFIG.CITY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <CitySearch

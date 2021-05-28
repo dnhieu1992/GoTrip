@@ -10,11 +10,12 @@ import {
     createNewBed,
     deleteBed
 } from './api/apiHandle.js';
+import { BED_TEXT_CONFIG } from './constants/resources';
 
 const BedContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetBedsRef = useRef(false);
+    const fetchBedsRef = useRef(false);
 
     const {
         total,
@@ -24,8 +25,8 @@ const BedContainer = () => {
         bed,
         isShow,
         dataReady,
+        isLoading,
         searchParam,
-        errorMessage,
     } = state;
 
     useEffect(() => {
@@ -34,13 +35,13 @@ const BedContainer = () => {
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetBedsRef.current) {
-            fetBeds();
+        if (didMountRef.current && fetchBedsRef.current) {
+            fetchBeds();
         }
     });
 
-    const fetBeds = () => {
-        fetBedsRef.current = false;
+    const fetchBeds = () => {
+        fetchBedsRef.current = false;
 
         const {
             searchParam = {},
@@ -71,7 +72,7 @@ const BedContainer = () => {
             sortDirection: optionParams.sortDirection || null
         };
 
-        fetBedsRef.current = true;
+        fetchBedsRef.current = true;
 
         setState({
             ...state,
@@ -142,14 +143,12 @@ const BedContainer = () => {
         setState({
             ...state,
             isShow: true,
-            isValid: !!bed._id,
-            bed: bed,
-            errorMessage: {}
+            bed: bed
         });
     };
 
     const onClose = (isSearch) => {
-        fetBedsRef.current = !!isSearch;
+        fetchBedsRef.current = !!isSearch;
 
         setState({
             ...state,
@@ -157,59 +156,26 @@ const BedContainer = () => {
             isValid: false,
             errorMessage: {},
             bed: null,
-            dataReady: !isSearch
+            dataReady: !isSearch,
+            isLoading: false
         });
     };
 
     const onSaveBed = (bed) => {
-        const data = {
-            ...bed,
-            id: bed._id
-        };
-
-        if (bed._id) {
-            updateBed(data, () => {
-                onClose(true);
-            });
+        setState({ ...state, isLoading: true })
+        if (state.bed._id) {
+            updateBed({ ...bed, id: state.bed._id },
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         } else {
-            createNewBed(bed, () => {
-                onClose(true);
-            });
-        };
-    };
-
-    const onSaveFormChange = (bed) => {
-        let isValid = true;
-        let errorMessage = {};
-
-        if (!bed.name || !bed.description || !bed.status) {
-            isValid = false;
-        };
-
-        if (!bed.name && bed.name !== undefined) {
-            const bedNameErrorMsg = "The bed name is required.";
-            errorMessage = { ...errorMessage, bedNameErrorMsg }
-            isValid = false;
-        };
-
-        if (!bed.description && bed.description !== undefined) {
-            const bedDescriptionErrorMsg = "The bed description is required.";
-            errorMessage = { ...errorMessage, bedDescriptionErrorMsg }
-            isValid = false;
-        };
-
-        if (!bed.status && bed.status !== undefined) {
-            const bedStatusErrorMsg = "The bed status is required.";
-            errorMessage = { ...errorMessage, bedStatusErrorMsg }
-            isValid = false;
-        };
-
-        setState({
-            ...state,
-            bed,
-            isValid,
-            errorMessage
-        });
+            createNewBed(bed,
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
+        }
     };
 
     const onDelete = ({ _id }) => {
@@ -228,11 +194,10 @@ const BedContainer = () => {
                 onClose={onClose}
             >
                 <BedForm
+                    isLoading={isLoading}
                     bed={bed}
                     isValid={isValid}
-                    errorMessage={errorMessage}
                     onClose={onClose}
-                    onSaveFormChange={onSaveFormChange}
                     onSaveBed={onSaveBed}
                 />
             </Modal>
@@ -244,7 +209,7 @@ const BedContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>Bed</h3>
+                    <h3>{BED_TEXT_CONFIG.BED_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <BedSearch

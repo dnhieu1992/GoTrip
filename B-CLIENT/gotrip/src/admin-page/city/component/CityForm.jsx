@@ -1,119 +1,110 @@
-import classNames from 'classnames';
+import { useState } from 'react';
+import Formsy from 'formsy-react';
+import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { STATUSES } from '../constants/city';
+import { CITY_TEXT_CONFIG } from '../constants/resources';
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement
 
 const CityForm = ({
-  city,
-  isValid,
-  errorMessage,
-  countries,
-  onSaveFormChange,
-  onClose,
-  onSaveCity
+    city,
+    countries,
+    isLoading,
+    onClose,
+    onSaveCity
 }) => {
-  const {
-    name,
-    countryId,
-    status
-  } = city;
+    const [isValid, setIsValid] = useState(true);
 
-  const {
-    cityNameErrorMsg,
-    countryNameErrorMsg,
-    cityStatusErrorMsg
-  } = errorMessage
+    const {
+        name,
+        countryId,
+        status
+    } = city;
 
-  const onHandlePropertyChange = (e) => {
-    if (e?.target) {
-      onSaveFormChange({
-        ...city,
-        [e.target.name]: e.target.value
-      });
+    const data = countries.map(country => {
+        return {
+            value: country._id,
+            label: country.name
+        }
+    })
+
+    data.unshift({
+        value: '',
+        label: 'Choose the country...'
+    })
+
+    const submit = (modal) => {
+        onSaveCity(modal);
     }
-  };
 
-  return (
-    <form id="addNew">
-      <div className="card-body">
-        <div className="form-group">
-          <label for="exampleInputEmail1">Name</label>
-          <input
-            type="text"
-            name="name"
-            className={classNames("form-control", { "is-invalid": cityNameErrorMsg })}
-            id="name"
-            placeholder="Name"
-            value={name}
-            onChange={onHandlePropertyChange}
-          />
-          {cityNameErrorMsg && (
-            <div className="invalid-feedback">
-              {cityNameErrorMsg}
+    const enableButton = () => {
+        setIsValid(true);
+    }
+
+    const disableButton = () => {
+        setIsValid(false);
+    }
+
+    return (
+        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
+            <div className="card-body">
+                <div className="form-group">
+                    <FormsyInput
+                        inputProps={{
+                            id: 'name',
+                            type: 'text',
+                            placeholder: CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL,
+                        }}
+                        name="name"
+                        label={CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
+                        value={name}
+                        required
+                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
+                </div>
+                <div className="form-group">
+                    <FormsySelect
+                        name='countryId'
+                        value={countryId}
+                        dataSource={data}
+                        label={CITY_TEXT_CONFIG.CITY_COUNTRYID_FIELD_LBL}
+                        required
+                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
+                </div>
+                <div className="form-group">
+                    <FormsySelect
+                        name='status'
+                        value={status}
+                        dataSource={STATUSES}
+                        label={CITY_TEXT_CONFIG.CITY_STATUS_FIELD_LBL}
+                        required
+                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
+                </div>
+                <div className="form-group">
+                    <div className="col-sm-12 d-flex justify-content-end">
+                        <LoaderButton
+                            type="button"
+                            className="btn btn-danger mr-5"
+                            onClick={() => onClose(false)}
+                        >
+                            {CITY_TEXT_CONFIG.CITY_CLOSE_BTN}
+                        </LoaderButton>
+                        <LoaderButton
+                            type="submit"
+                            disabled={!isValid}
+                            isLoading={isLoading}
+                        >
+                            {CITY_TEXT_CONFIG.CITY_SUBMIT_BTN}
+                        </LoaderButton>
+                    </div>
+                </div>
             </div>
-          )}
-        </div>
-        <div className="form-group">
-          <label for="exampleInputPassword1">Country</label>
-          <select
-            className={classNames("form-control", { "is-invalid": countryNameErrorMsg })}
-            aria-label="Default select example"
-            name="countryId"
-            value={countryId}
-            onChange={onHandlePropertyChange}
-          >
-            <option hidden>Choose the country...</option>
-            <option value=""></option>
-            {countries.map(country => {
-              return (
-                <option value={country._id}>{country.name}</option>
-              )
-            })}
-          </select>
-          {countryNameErrorMsg && (
-            <div className="invalid-feedback">
-              {countryNameErrorMsg}
-            </div>
-          )}
-        </div>
-        <div className="form-group">
-          <label for="exampleInputPassword1">Status</label>
-          <select
-            className={classNames("form-control", { "is-invalid": cityStatusErrorMsg })}
-            name="status"
-            value={status}
-            onChange={onHandlePropertyChange}
-          >
-            <option hidden>Choose a status...</option>
-            <option value=""></option>
-            <option value="Actived">Actived</option>
-            <option value="Disabled">Disabled</option>
-          </select>
-          {cityStatusErrorMsg && (
-            <div className="invalid-feedback">
-              {cityStatusErrorMsg}
-            </div>
-          )}
-        </div>
-        <div className="form-group">
-          <div className="col-sm-12 d-flex justify-content-end">
-            <button
-              type="button"
-              className="btn btn-danger mr-5"
-              onClick={() => onClose(false)}
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              className="btn btn-info"
-              disabled={!isValid}
-              onClick={() => onSaveCity(city)}
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
-  );
+        </Formsy>
+    );
 };
 
 export default CityForm;

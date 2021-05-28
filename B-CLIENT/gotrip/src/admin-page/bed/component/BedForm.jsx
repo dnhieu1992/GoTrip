@@ -1,110 +1,109 @@
-import classNames from 'classnames'
+import { useState } from 'react';
+import Formsy from 'formsy-react';
+import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { STATUSES } from '../constants/bed';
+import { BED_TEXT_CONFIG } from '../constants/resources';
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement
 
 const BedForm = ({
     bed,
-    isValid,
-    errorMessage,
-    onSaveFormChange,
+    isLoading,
     onClose,
     onSaveBed
 }) => {
+    const [isValid, setIsValid] = useState(true);
+
     const {
         name,
         description,
         status
     } = bed;
 
-    const {
-        bedNameErrorMsg,
-        bedDescriptionErrorMsg,
-        bedStatusErrorMsg
-    } = errorMessage;
+    const submit = (modal) => {
+        onSaveBed(modal);
+    }
 
-    const onHandlePropertyChange = (e) => {
-        if (e?.target) {
-            onSaveFormChange({
-                ...bed,
-                [e.target.name]: e.target.value
-            });
-        }
-    };
+    const enableButton = () => {
+        setIsValid(true);
+    }
+
+    const disableButton = () => {
+        setIsValid(false);
+    }
 
     return (
-        <form id="addNew">
+        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
             <div className="card-body">
                 <div className="form-group">
-                    <label>Name</label>
-                    <input
-                        type="text"
+                    <FormsyInput
+                        inputProps={{
+                            id: 'name',
+                            type: 'text',
+                            placeholder: BED_TEXT_CONFIG.BED_NAME_FIELD_LBL,
+                        }}
                         name="name"
-                        className={classNames("form-control", { "is-invalid": bedNameErrorMsg })}
-                        id="name"
-                        placeholder="Name"
+                        label={BED_TEXT_CONFIG.BED_NAME_FIELD_LBL}
                         value={name}
-                        onChange={onHandlePropertyChange}
+                        required
+                        validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
-                    {bedNameErrorMsg && (
-                        <div className="invalid-feedback">
-                            {bedNameErrorMsg}
-                        </div>
-                    )}
                 </div>
                 <div className="form-group">
-                    <label>Description</label>
+                    <FormsyInput
+                        inputProps={{
+                            id: 'description',
+                            type: 'text',
+                            placeholder: BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL,
+                        }}
+                        name="description"
+                        label={BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
+                        value={description}
+                        required
+                        validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
+                    {/* <label>Description</label>
                     <textarea
-                        className={classNames("form-control", { "is-invalid": bedDescriptionErrorMsg })}
+                        className="form-control"
                         name="description"
                         value={description}
-                        onChange={onHandlePropertyChange}
+                        label={BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
+                        required
                     >
-
-                    </textarea>
-                    {bedDescriptionErrorMsg && (
-                        <div className="invalid-feedback">
-                            {bedDescriptionErrorMsg}
-                        </div>
-                    )}
+                    </textarea> */}
                 </div>
                 <div className="form-group">
-                    <label>Status</label>
-                    <select
-                        className={classNames("form-control", { "is-invalid": bedStatusErrorMsg })}
-                        name="status"
+                    <FormsySelect
+                        name='status'
                         value={status}
-                        onChange={onHandlePropertyChange}
-                    >
-                        <option hidden>Choose a status...</option>
-                        <option value=""></option>
-                        <option value="Actived">Actived</option>
-                        <option value="Disabled">Disabled</option>
-                    </select>
-                    {bedStatusErrorMsg && (
-                        <div className="invalid-feedback">
-                            {bedStatusErrorMsg}
-                        </div>
-                    )}
+                        dataSource={STATUSES}
+                        label={BED_TEXT_CONFIG.BED_STATUS_FIELD_LBL}
+                        required
+                        validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
                 </div>
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
-                        <button
+                        <LoaderButton
                             type="button"
                             className="btn btn-danger mr-5"
                             onClick={() => onClose(false)}
                         >
-                            Close
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-info"
+                            {BED_TEXT_CONFIG.BED_CLOSE_BTN}
+                        </LoaderButton>
+                        <LoaderButton
+                            type="submit"
                             disabled={!isValid}
-                            onClick={() => onSaveBed(bed)}
+                            isLoading={isLoading}
                         >
-                            Submit
-                        </button>
+                            {BED_TEXT_CONFIG.BED_SUBMIT_BTN}
+                        </LoaderButton>
                     </div>
                 </div>
             </div>
-        </form>
+        </Formsy>
     );
 };
 
