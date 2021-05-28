@@ -1,111 +1,100 @@
-import classNames from 'classnames';
+import { useState } from 'react';
+import Formsy from 'formsy-react';
+import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { STATUSES } from '../constants/country';
+import { COUNTRY_TEXT_CONFIG } from '../constants/resources';
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement
 
 const CountryForm = ({
     country,
-    isValid,
-    errorMessage,
-    onSaveFormChange,
+    isLoading,
     onClose,
     onSaveCountry
 }) => {
+    const [isValid, setIsValid] = useState(true);
+
     const {
         name,
         code,
         status
     } = country;
 
-    const {
-        countryNameErrorMsg,
-        countryCodeErrorMsg,
-        countryStatusErrorMsg
-    } = errorMessage
+    const submit = (modal) => {
+        onSaveCountry(modal)
+    }
 
-    const onHandlePropertyChange = (e) => {
-        if (e?.target) {
-            onSaveFormChange({
-                ...country,
-                [e.target.name]: e.target.value
-            });
-        }
-    };
+    const enableButton = () => {
+        setIsValid(true);
+    }
+
+    const disableButton = () => {
+        setIsValid(false);
+    }
 
     return (
-        <form id="addNew">
+        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
             <div className="card-body">
                 <div className="form-group">
-                    <label>Name</label>
-                    <input
-                        type="text"
+                    <FormsyInput
+                        inputProps={{
+                            id: 'name',
+                            type: 'text',
+                            placeholder: COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL,
+                        }}
                         name="name"
-                        className={classNames("form-control", { "is-invalid": countryNameErrorMsg })}
-                        id="name"
-                        placeholder="Name"
+                        label={COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL}
                         value={name}
-                        onChange={onHandlePropertyChange}
+                        required
+                        validationError={COUNTRY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
-                    {countryNameErrorMsg && (
-                        <div className="invalid-feedback">
-                            {countryNameErrorMsg}
-                        </div>
-                    )}
-
                 </div>
                 <div className="form-group">
-                    <label>Code</label>
-                    <input
-                        type="text"
-                        name="code"
-                        className={classNames("form-control", { "is-invalid": countryCodeErrorMsg })}
-                        id="code"
-                        placeholder="Code"
+                    <FormsyInput
+                        inputProps={{
+                            id: 'code',
+                            type: 'text',
+                            placeholder: COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL,
+                        }}
+                        name='code'
+                        label={COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL}
                         value={code}
-                        onChange={onHandlePropertyChange}
+                        required
+                        validationError={COUNTRY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
-                    {countryCodeErrorMsg && (
-                        <div className="invalid-feedback">
-                            {countryCodeErrorMsg}
-                        </div>
-                    )}
                 </div>
                 <div className="form-group">
-                    <label>Status</label>
-                    <select
-                        className={classNames("form-control", { "is-invalid": countryStatusErrorMsg })}
-                        name="status"
+                    <FormsySelect
+                        name='status'
                         value={status}
-                        onChange={onHandlePropertyChange}
-                    >
-                        <option value=""></option>
-                        <option value="Actived">Actived</option>
-                        <option value="Disabled">Disabled</option>
-                    </select>
-                    {countryStatusErrorMsg && (
-                        <div className="invalid-feedback">
-                            {countryStatusErrorMsg}
-                        </div>
-                    )}
+                        dataSource={STATUSES}
+                        label={COUNTRY_TEXT_CONFIG.COUNTRY_STATUS_FIELD_LBL}
+                        required
+                        validationError={COUNTRY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
                 </div>
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
-                        <button
+                        <LoaderButton
                             type="button"
-                            className="btn btn-danger mr-5"
+                            className="mr-5"
                             onClick={() => onClose(false)}
                         >
-                            Close
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-info"
+                            {COUNTRY_TEXT_CONFIG.COUNTRY_CLOSE_BTN}
+                        </LoaderButton>
+                        <LoaderButton
+                            type="submit"
                             disabled={!isValid}
-                            onClick={() => onSaveCountry(country)}
+                            isLoading={isLoading}
                         >
-                            Submit
-                        </button>
+                            {COUNTRY_TEXT_CONFIG.COUNTRY_SUBMIT_BTN}
+                        </LoaderButton>
                     </div>
                 </div>
             </div>
-        </form>
+        </Formsy>
     );
 };
 
