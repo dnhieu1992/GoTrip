@@ -11,7 +11,7 @@ const PropertyTypeForm = ({
 }) => {
     const {
         name,
-        propertyId,
+        property,
         description,
         status
     } = propertyType;
@@ -23,7 +23,7 @@ const PropertyTypeForm = ({
         propertyTypeStatusErrorMsg
     } = errorMessage
 
-    const onHandlePropertyTypeChange = (e) => {
+    const onHandlePropertyChange = (e) => {
         if (e?.target) {
             onSaveFormChange({
                 ...propertyType,
@@ -43,7 +43,7 @@ const PropertyTypeForm = ({
                         id="name"
                         placeholder="Name"
                         value={name}
-                        onChange={onHandlePropertyTypeChange} />
+                        onChange={onHandlePropertyChange} />
 
                     {propertyTypeNameErrorMsg && (
                         <div className="invalid-feedback">
@@ -60,7 +60,7 @@ const PropertyTypeForm = ({
                         id="description"
                         placeholder="Description"
                         value={description}
-                        onChange={onHandlePropertyTypeChange} />
+                        onChange={onHandlePropertyChange} />
 
                     {propertyTypeDescriptionErrorMsg && (
                         <div className="invalid-feedback">
@@ -74,10 +74,8 @@ const PropertyTypeForm = ({
                         className={classNames("form-control", { "is-invalid": propertyTypePropertyErrorMsg })}
                         aria-label="Default select example"
                         name="propertyId"
-                        value={propertyId}
-                        onChange={onHandlePropertyTypeChange}>
-
-                        <option select hidden>Choose the property</option>
+                        value={property._id}
+                        onChange={onHandlePropertyChange}>
                         <option value=""></option>
                         {
                             properties.map(property => {
@@ -100,7 +98,7 @@ const PropertyTypeForm = ({
                         className={classNames("form-control", { "is-invalid": propertyTypeStatusErrorMsg })}
                         name="status"
                         value={status}
-                        onChange={onHandlePropertyTypeChange} >
+                        onChange={onHandlePropertyChange} >
 
                         <option value=""></option>
                         <option value="Actived">Actived</option>

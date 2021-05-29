@@ -41,7 +41,7 @@ const PropertyGrid = ({
     ];
 
     const {
-        PageNumber,
+        pageNumber,
         pageSize,
         sortField,
         sortDirection
@@ -65,14 +65,14 @@ const PropertyGrid = ({
                     </div>
                 </div>
                 <Grid
-                    total={totalItems}
-                    data={data}
-                    dataReady={dataReady}
                     columns={columns}
-                    currentPage={PageNumber}
+                    currentPage={pageNumber}
                     pageSize={pageSize}
                     sortField={sortField}
                     sortDirection={sortDirection}
+                    total={totalItems}
+                    data={data}
+                    dataReady={dataReady}
                     onPageNumberChange={onHandlePageChange}
                     onPageSizeChange={onHandlePageSizeChange}
                     onSortFieldChange={onHandleSortChange}

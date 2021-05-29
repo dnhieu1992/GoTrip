@@ -50,6 +50,7 @@ const PropertyTypeContainer = () => {
     }
 
     const fetPropertyTypes = () => {
+
         fetPropertyTypesRef.current = false;
 
         const {
@@ -58,15 +59,12 @@ const PropertyTypeContainer = () => {
         } = state;
 
         getPropertyTypes({ ...searchParam, ...options }, ({ total, propertyTypes }) => {
-            const data = [];
-            propertyTypes.forEach(propertyType => {
-                let name = propertyType.property ? propertyType.property.name : ""
-                data.push({
+            const data=propertyTypes.map(propertyType=>{
+                return {
                     ...propertyType,
-                    id: propertyType._id,
-                    property: name,
-                });
-            });
+                    propertyName:propertyType.property.name
+                }
+            })
             setTimeout(() => {
                 setState({
                     ...state,

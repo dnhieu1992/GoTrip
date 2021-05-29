@@ -30,7 +30,7 @@ const PropertyTypeGrid = ({
         },
         {
             fieldName: 'Property',
-            dataField: 'property',
+            dataField: 'propertyName',
             isSort: true
         },
         {
