@@ -159,8 +159,9 @@ const PropertyContainer = () => {
     }
 
     const onSaveProperty = (property) => {
+        const propertyID = {...property,id:property._id}
         if (property._id) {
-            updateProperty(property, () => {
+            updateProperty(propertyID, () => {
                 onClose(true);
             });
         } else {
