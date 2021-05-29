@@ -68,7 +68,7 @@ function search(req, res) {
         .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
-        .exec((err, properties) => {
+        .exec((err, roomTypes) => {
             if (err) {
                 return errorResponse(res, err);
             }
@@ -80,7 +80,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    properties: properties
+                    roomTypes: roomTypes
                 });
             });
         });
