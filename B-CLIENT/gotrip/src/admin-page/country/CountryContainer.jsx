@@ -9,11 +9,13 @@ import {
     createNewCountry,
     deleteCountry
 } from './api/apiHandle.js';
+import { COUNTRY_TEXT_CONFIG } from './constants/resources';
+
 
 const CountryContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetCountriesRef = useRef(false);
+    const fetchCountriesRef = useRef(false);
 
     const {
         total,
@@ -23,24 +25,23 @@ const CountryContainer = () => {
         country,
         isShow,
         dataReady,
+        isLoading,
         searchParam,
-        errorMessage,
     } = state;
 
     useEffect(() => {
-        console.log(state);
         if (!didMountRef.current) {
             onHandleSearch({});
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetCountriesRef.current) {
-            fetCountries();
+        if (didMountRef.current && fetchCountriesRef.current) {
+            fetchCountries();
         }
     });
 
-    const fetCountries = () => {
-        fetCountriesRef.current = false;
+    const fetchCountries = () => {
+        fetchCountriesRef.current = false;
 
         const {
             searchParam = {},
@@ -71,7 +72,7 @@ const CountryContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetCountriesRef.current = true;
+        fetchCountriesRef.current = true;
 
         setState({
             ...state,
@@ -125,8 +126,8 @@ const CountryContainer = () => {
 
     const onHandleResetForm = () => {
         const searchParam = {
-            countryName: '',
-            countryCode: '',
+            name: '',
+            code: '',
             status: ''
         };
 
@@ -142,14 +143,12 @@ const CountryContainer = () => {
         setState({
             ...state,
             isShow: true,
-            isValid: !!country._id,
-            country: country,
-            errorMessage: {}
+            country: country
         });
     }
 
     const onClose = (isSearch) => {
-        fetCountriesRef.current = !!isSearch;
+        fetchCountriesRef.current = !!isSearch;
 
         setState({
             ...state,
@@ -157,54 +156,26 @@ const CountryContainer = () => {
             isValid: false,
             errorMessage: {},
             country: null,
-            dataReady: !isSearch
+            dataReady: !isSearch,
+            isLoading: false
         });
     };
 
     const onSaveCountry = (country) => {
-        if (country._id) {
-            updateCountry(country, () => {
-                onClose(true);
-            });
+        setState({ ...state, isLoading: true })
+        if (state.country._id) {
+            updateCountry({ ...country, id: state.country._id },
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         } else {
-            createNewCountry(country, () => {
-                onClose(true);
-            });
+            createNewCountry(country,
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         }
-    };
-
-    const onSaveFormChange = (country) => {
-        let isValid = true;
-        let errorMessage = {};
-
-        if (!country.name || !country.code || !country.status) {
-            isValid = false;
-        }
-
-        if (!country.name && country.name !== undefined) {
-            const countryNameErrorMsg = "The country name is required.";
-            errorMessage = { ...errorMessage, countryNameErrorMsg }
-            isValid = false;
-        }
-
-        if (!country.code && country.code !== undefined) {
-            const countryCodeErrorMsg = "The country code is required.";
-            errorMessage = { ...errorMessage, countryCodeErrorMsg }
-            isValid = false;
-        }
-
-        if (!country.status && country.status !== undefined) {
-            const countryStatusErrorMsg = "The country status is required.";
-            errorMessage = { ...errorMessage, countryStatusErrorMsg }
-            isValid = false;
-        }
-
-        setState({
-            ...state,
-            country,
-            isValid,
-            errorMessage
-        });
     };
 
     const onDelete = ({ _id }) => {
@@ -223,11 +194,10 @@ const CountryContainer = () => {
                 onClose={onClose}
             >
                 <CountryForm
+                    isLoading={isLoading}
                     country={country}
                     isValid={isValid}
-                    errorMessage={errorMessage}
                     onClose={onClose}
-                    onSaveFormChange={onSaveFormChange}
                     onSaveCountry={onSaveCountry}
                 />
             </Modal>
@@ -239,7 +209,7 @@ const CountryContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>Country</h3>
+                    <h3>{COUNTRY_TEXT_CONFIG.COUNTRY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <CountrySearch

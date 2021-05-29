@@ -12,7 +12,7 @@ import { TOAST_POSITION } from '../constants/toastConstant';
 
 const optionDefault = {
     position: TOAST_POSITION.TOP_RIGHT,
-    autoClose: 3000,
+    autoClose: 1000,
     hideProgressBar: false,
     transition: Slide,
     closeOnClick: true,
