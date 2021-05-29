@@ -1,42 +1,29 @@
 import { useState } from 'react';
 import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
-import { STATUSES } from '../constants/city';
-import { CITY_TEXT_CONFIG } from '../constants/resources';
+import { STATUSES } from '../constants/bed';
+import { BED_TEXT_CONFIG } from '../constants/resources';
 const {
     FormsyInput,
     FormsySelect
 } = FormsyElement
 
-const CityForm = ({
-    city,
-    countries,
+const BedForm = ({
+    bed,
     isLoading,
     onClose,
-    onSaveCity
+    onSaveBed
 }) => {
     const [isValid, setIsValid] = useState(true);
 
     const {
         name,
-        countryId,
+        description,
         status
-    } = city;
-
-    const data = countries.map(country => {
-        return {
-            value: country._id,
-            label: country.name
-        }
-    })
-
-    data.unshift({
-        value: '',
-        label: 'Choose the country...'
-    })
+    } = bed;
 
     const submit = (modal) => {
-        onSaveCity(modal);
+        onSaveBed(modal);
     }
 
     const enableButton = () => {
@@ -55,33 +42,46 @@ const CityForm = ({
                         inputProps={{
                             id: 'name',
                             type: 'text',
-                            placeholder: CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL,
+                            placeholder: BED_TEXT_CONFIG.BED_NAME_FIELD_LBL,
                         }}
                         name="name"
-                        label={CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
+                        label={BED_TEXT_CONFIG.BED_NAME_FIELD_LBL}
                         value={name}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
-                    <FormsySelect
-                        name='countryId'
-                        value={countryId}
-                        dataSource={data}
-                        label={CITY_TEXT_CONFIG.CITY_COUNTRYID_FIELD_LBL}
+                    <FormsyInput
+                        inputProps={{
+                            id: 'description',
+                            type: 'text',
+                            placeholder: BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL,
+                        }}
+                        name="description"
+                        label={BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
+                        value={description}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
+                    {/* <label>Description</label>
+                    <textarea
+                        className="form-control"
+                        name="description"
+                        value={description}
+                        label={BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
+                        required
+                    >
+                    </textarea> */}
                 </div>
                 <div className="form-group">
                     <FormsySelect
                         name='status'
                         value={status}
                         dataSource={STATUSES}
-                        label={CITY_TEXT_CONFIG.CITY_STATUS_FIELD_LBL}
+                        label={BED_TEXT_CONFIG.BED_STATUS_FIELD_LBL}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -91,14 +91,14 @@ const CityForm = ({
                             className="btn btn-danger mr-5"
                             onClick={() => onClose(false)}
                         >
-                            {CITY_TEXT_CONFIG.CITY_CLOSE_BTN}
+                            {BED_TEXT_CONFIG.BED_CLOSE_BTN}
                         </LoaderButton>
                         <LoaderButton
                             type="submit"
                             disabled={!isValid}
                             isLoading={isLoading}
                         >
-                            {CITY_TEXT_CONFIG.CITY_SUBMIT_BTN}
+                            {BED_TEXT_CONFIG.BED_SUBMIT_BTN}
                         </LoaderButton>
                     </div>
                 </div>
@@ -107,4 +107,5 @@ const CityForm = ({
     );
 };
 
-export default CityForm;
+export default BedForm;
+

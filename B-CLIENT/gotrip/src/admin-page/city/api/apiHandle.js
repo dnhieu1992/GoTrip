@@ -1,9 +1,11 @@
 import { cleanObject } from '../../shared/ultils/ultils';
+import { CITY_TEXT_CONFIG } from '../constants/resources';
 import alertNotify from '../../../shared/ultils/alertNotify.js';
+import { API } from '../constants/api';
 
 const getCities = async (params, onSuccess, onError) => {
     try {
-        const url = new URL("http://localhost:5000/api/city/search");
+        const url = new URL(API.SEARCH_CITY);
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -28,64 +30,81 @@ const getCities = async (params, onSuccess, onError) => {
 }
 const createNewCity = async (city, onSuccess, onError) => {
     try {
-        await fetch("http://localhost:5000/api/city/create", {
+        const res = await fetch(API.CREATE_CITY, {
             method: "POST",
             body: JSON.stringify(city),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw "The item exists.";
+            throw CITY_TEXT_CONFIG.CREATE_CITY_DUPLICATE_MSG;
         }
 
-        alertNotify.success("Create new a country success.");
+        alertNotify.success(CITY_TEXT_CONFIG.CREATE_CITY_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
+        if (onError) {
+            return onError();
+        }
     }
 }
 
 const updateCity = async (city, onSuccess, onError) => {
     try {
-        await fetch("http://localhost:5000/api/city/update", {
+        const res = await fetch(API.UPDATE_CITY, {
             method: "PUT",
             body: JSON.stringify(city),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
-        alertNotify.success("Update the city success.");
+        if (!res.ok) {
+            throw CITY_TEXT_CONFIG.UPDATE_CITY_FAILED_MSG;
+        }
+
+        alertNotify.success(CITY_TEXT_CONFIG.UPDATE_CITY_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
+        if (onError) {
+            return onError();
+        }
     }
 }
 
 const deleteCity = async (id, onSuccess, onError) => {
     try {
-        await fetch(`http://localhost:5000/api/city/delete/${id}`, {
+        const res = await fetch(`${API.DELETE_CITY}${id}`, {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
-        alertNotify.error("Delete the city success.");
+        if (!res.ok) {
+            throw CITY_TEXT_CONFIG.DELETE_CITY_FAILED_MSG;
+        }
+
+        alertNotify.error(CITY_TEXT_CONFIG.DELETE_CITY_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
+        if (onError) {
+            return onError();
+        }
     }
 }
 
 const getCountries = async () => {
     try {
-        const url = new URL("http://localhost:5000/api/country/getAll");
+        const url = new URL(API.GET_COUNTRIES);
         const res = await fetch(url);
 
         if (!res.ok) {
