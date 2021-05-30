@@ -31,7 +31,7 @@ const CountryContainer = () => {
 
     useEffect(() => {
         if (!didMountRef.current) {
-            onHandleSearch({});
+            onHandleSearch();
             didMountRef.current = true;
         }
 
@@ -64,7 +64,7 @@ const CountryContainer = () => {
         });
     }
 
-    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
+    const onHandleSearch = (searchParam, optionParams = {}) => {
         const options = {
             pageNumber: optionParams.pageNumber || 1,
             pageSize: optionParams.pageSize || 50,
@@ -125,18 +125,18 @@ const CountryContainer = () => {
     };
 
     const onHandleResetForm = () => {
-        const searchParam = {
-            name: '',
-            code: '',
-            status: ''
-        };
+        // const searchParam = {
+        //     name: '',
+        //     code: '',
+        //     status: ''
+        // };
 
         const options = {
             ...state.options,
             pageNumber: 1
         };
 
-        onHandleSearch(searchParam, options);
+        onHandleSearch({}, options);
     };
 
     const showModal = (country = {}) => {

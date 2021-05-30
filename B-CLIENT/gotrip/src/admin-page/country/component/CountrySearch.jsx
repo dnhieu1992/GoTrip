@@ -14,6 +14,7 @@ const CountrySearch = ({
         code,
         status
     } = searchParam;
+    console.log(name, code, status, searchParam);
 
     const onHandleFieldChange = (e) => {
         if (e?.target) {
@@ -108,15 +109,23 @@ const CountrySearch = ({
     );
 };
 
-export default CountrySearch;
-
 CountrySearch.propTypes = {
-    searchParam: PropTypes.object,
+    searchParam: PropTypes.shape({
+        name: PropTypes.string,
+        code: PropTypes.string,
+        status: PropTypes.string,
+    }),
     onHandleSearchChange: PropTypes.func.isRequired,
     onHandleSearch: PropTypes.func.isRequired,
     onHandleResetForm: PropTypes.func.isRequired,
 };
 
 CountrySearch.defaultProps = {
-    searchParam: {},
+    searchParam: {
+        name: '',
+        code: '',
+        status: ''
+    },
 };
+
+export default CountrySearch;
