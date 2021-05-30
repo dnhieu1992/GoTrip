@@ -18,6 +18,10 @@ import propertyRoutes from './routes/property.routes.js';
 import propertyTypeRoutes from './routes/propertyType.routes.js';
 import roomTypeRoutes from './routes/roomType.routes.js';
 import bedRoutes from './routes/bed.routes.js';
+import breakfastRoutes from './routes/breakfast.routes.js';
+import roomNameRoutes from './routes/roomName.routes.js';
+import amenityCategoryRoutes from './routes/amenityCategory.routes.js';
+import amenityRoutes from './routes/amenity.routes.js';
 
 // set up express app
 const app = express();
@@ -80,3 +84,7 @@ app.use('/api/property/', propertyRoutes);
 app.use('/api/propertyType/', propertyTypeRoutes);
 app.use('/api/roomType/', roomTypeRoutes);
 app.use('/api/bed/', bedRoutes);
+app.use('/api/breakfast/', breakfastRoutes);
+app.use('/api/roomName/', roomNameRoutes);
+app.use('/api/amenityCategory/', amenityCategoryRoutes);
+app.use('/api/amenity/', amenityRoutes);
