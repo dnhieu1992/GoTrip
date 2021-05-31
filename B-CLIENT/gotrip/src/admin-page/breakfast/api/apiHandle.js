@@ -1,11 +1,11 @@
 import { cleanObject } from '../../shared/ultils/ultils';
-import { BED_TEXT_CONFIG } from '../constants/resources';
+import { BREAKFAST_TEXT_CONFIG } from '../constants/resources';
 import alertNotify from '../../../shared/ultils/alertNotify.js';
 import { API } from '../constants/api';
 
-const getBeds = async (params, onSuccess, onError) => {
+const getBreakfasts = async (params, onSuccess, onError) => {
     try {
-        const url = new URL(API.SEARCH_BED);
+        const url = new URL(API.SEARCH_BREAKFAST);
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -29,19 +29,19 @@ const getBeds = async (params, onSuccess, onError) => {
     }
 }
 
-const createNewBed = async (bed, onSuccess, onError) => {
+const createNewBreakfast = async (breakfast, onSuccess, onError) => {
     try {
-        const res = await fetch(API.CREATE_BED, {
+        const res = await fetch(API.CREATE_BREAKFAST, {
             method: "POST",
-            body: JSON.stringify(bed),
+            body: JSON.stringify(breakfast),
             headers: { "Content-type": "application/json; charset = UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw BED_TEXT_CONFIG.CREATE_BED_DUPLICATE_MSG;
+            throw BREAKFAST_TEXT_CONFIG.CREATE_BREAKFAST_DUPLICATE_MSG;
         }
 
-        alertNotify.success(BED_TEXT_CONFIG.CREATE_BED_SUCCESS_MSG);
+        alertNotify.success(BREAKFAST_TEXT_CONFIG.CREATE_BREAKFAST_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -54,19 +54,19 @@ const createNewBed = async (bed, onSuccess, onError) => {
     }
 }
 
-const updateBed = async (bed, onSuccess, onError) => {
+const updateBreakfast= async (breakfast, onSuccess, onError) => {
     try {
-        const res = await fetch(API.UPDATE_BED, {
+        const res = await fetch(API.UPDATE_BREAKFAST, {
             method: "PUT",
-            body: JSON.stringify(bed),
+            body: JSON.stringify(breakfast),
             headers: { "Content-type": "application/json; charset = UTF-8" }
         });
 
         if (!res.ok) {
-            throw BED_TEXT_CONFIG.UPDATE_BED_FAILED_MSG;
+            throw BREAKFAST_TEXT_CONFIG.UPDATE_BREAKFAST_FAILED_MSG;
         }
 
-        alertNotify.success(BED_TEXT_CONFIG.UPDATE_BED_SUCCESS_MSG);
+        alertNotify.success(BREAKFAST_TEXT_CONFIG.UPDATE_BREAKFAST_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -79,18 +79,18 @@ const updateBed = async (bed, onSuccess, onError) => {
     }
 }
 
-const deleteBed = async (id, onSuccess, onError) => {
+const deleteBreakfast = async (id, onSuccess, onError) => {
     try {
-        const res = await fetch(`${API.DELETE_BED}${id}`, {
+        const res = await fetch(`${API.DELETE_BREAKFAST}${id}`, {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset = UTF-8" }
         });
 
         if (!res.ok) {
-            throw BED_TEXT_CONFIG.DELETE_BED_FAILED_MSG;
+            throw BREAKFAST_TEXT_CONFIG.DELETE_BREAKFAST_FAILED_MSG;
         }
 
-        alertNotify.success(BED_TEXT_CONFIG.DELETE_BED_SUCCESS_MSG);
+        alertNotify.success(BREAKFAST_TEXT_CONFIG.DELETE_BREAKFAST_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -104,8 +104,8 @@ const deleteBed = async (id, onSuccess, onError) => {
 }
 
 export {
-    getBeds,
-    createNewBed,
-    updateBed,
-    deleteBed,
+    getBreakfasts,
+    createNewBreakfast,
+    updateBreakfast,
+    deleteBreakfast,
 }
