@@ -4,6 +4,7 @@ import Navbar from './shared/components/Navbar';
 import MainSidebar from './shared/components/MainSidebar';
 import Footer from './shared/components/Footer';
 
+import AmenityContainer from './amenity/AmenityContainer'
 import CountryContainer from './country/CountryContainer';
 import CityContainer from './city/CityContainer';
 import BedContainer from './bed/BedContainer';
@@ -18,12 +19,13 @@ const AdminPage = () => {
       <Navbar />
       <MainSidebar />
       <div className="content-wrapper">
+        <Route path="/admin/amenity" component={AmenityContainer} />
         <Route path="/admin/country" component={CountryContainer} />
         <Route path="/admin/city" component={CityContainer} />
         <Route path="/admin/bed" component={BedContainer} />
         <Route path="/admin/breakfast" component={BreakfastContainer} />
-        <Route path="/admin/property" component={PropertyContainer}/>
-        <Route path="/admin/property-type" component={PropertyTypeContainer}/>
+        <Route path="/admin/property" component={PropertyContainer} />
+        <Route path="/admin/property-type" component={PropertyTypeContainer} />
       </div>
       <Footer />
     </div>

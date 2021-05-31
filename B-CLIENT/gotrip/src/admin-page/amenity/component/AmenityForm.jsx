@@ -1,41 +1,43 @@
 import { useState } from 'react';
 import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
-import { STATUSES } from '../constants/city';
-import { CITY_TEXT_CONFIG } from '../constants/resources';
+import { STATUSES } from '../constants/amenity';
+import { AMENITY_TEXT_CONFIG } from '../constants/resources';
 const {
     FormsyInput,
     FormsySelect
 } = FormsyElement
 
-const CityForm = ({
-    city,
-    countries,
+const AmenityForm = ({
+    amenity,
+    amenityCategories,
     isLoading,
     onClose,
-    onSaveCity
+    onSaveAmenity
 }) => {
+    console.log(amenity);
     const [isValid, setIsValid] = useState(true);
 
     const {
         name,
+        description,
         status
-    } = city;
+    } = amenity;
 
-    const data = countries.map(country => {
+    const data = amenityCategories.map(amenityCategory => {
         return {
-            value: country._id,
-            label: country.name
+            value: amenityCategory._id,
+            label: amenityCategory.name
         }
     })
 
     data.unshift({
         value: '',
-        label: 'Choose the country...'
+        label: 'Choose the amenity category...'
     })
 
     const submit = (modal) => {
-        onSaveCity(modal);
+        onSaveAmenity(modal);
     }
 
     const enableButton = () => {
@@ -54,23 +56,37 @@ const CityForm = ({
                         inputProps={{
                             id: 'name',
                             type: 'text',
-                            placeholder: CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL,
+                            placeholder: AMENITY_TEXT_CONFIG.AMENITY_NAME_FIELD_LBL,
                         }}
                         name="name"
-                        label={CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
+                        label={AMENITY_TEXT_CONFIG.AMENITY_NAME_FIELD_LBL}
                         value={name}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={AMENITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
+                </div>
+                <div className="form-group">
+                    <FormsyInput
+                        inputProps={{
+                            id: 'description',
+                            type: 'text',
+                            placeholder: AMENITY_TEXT_CONFIG.AMENITY_DESCRIPTION_FIELD_LBL,
+                        }}
+                        name="description"
+                        label={AMENITY_TEXT_CONFIG.AMENITY_DESCRIPTION_FIELD_LBL}
+                        value={description}
+                        required
+                        validationError={AMENITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
                     <FormsySelect
-                        name='countryId'
-                        value={city?.country?._id}
+                        name='amenityCategoryId'
+                        value={amenity?.amenityCategory?._id}
                         dataSource={data}
-                        label={CITY_TEXT_CONFIG.CITY_COUNTRYID_FIELD_LBL}
+                        label={AMENITY_TEXT_CONFIG.AMENITY_AMENITYCATEGORYID_FIELD_LBL}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={AMENITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -78,9 +94,9 @@ const CityForm = ({
                         name='status'
                         value={status}
                         dataSource={STATUSES}
-                        label={CITY_TEXT_CONFIG.CITY_STATUS_FIELD_LBL}
+                        label={AMENITY_TEXT_CONFIG.AMENITY_STATUS_FIELD_LBL}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={AMENITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -90,14 +106,14 @@ const CityForm = ({
                             className="btn btn-danger mr-5"
                             onClick={() => onClose(false)}
                         >
-                            {CITY_TEXT_CONFIG.CITY_CLOSE_BTN}
+                            {AMENITY_TEXT_CONFIG.AMENITY_CLOSE_BTN}
                         </LoaderButton>
                         <LoaderButton
                             type="submit"
                             disabled={!isValid}
                             isLoading={isLoading}
                         >
-                            {CITY_TEXT_CONFIG.CITY_SUBMIT_BTN}
+                            {AMENITY_TEXT_CONFIG.AMENITY_SUBMIT_BTN}
                         </LoaderButton>
                     </div>
                 </div>
@@ -106,4 +122,4 @@ const CityForm = ({
     );
 };
 
-export default CityForm;
+export default AmenityForm;

@@ -1,29 +1,29 @@
 import { useState, useRef, useEffect } from 'react';
 import Modal from '../../shared/components/forms/Modal';
-import CityGrid from './component/CityGrid';
-import CitySearch from './component/CitySearch';
-import CityForm from './component/CityForm';
+import AmenityGrid from './component/AmenityGrid';
+import AmenitySearch from './component/AmenitySearch';
+import AmenityForm from './component/AmenityForm';
 import {
-    getCities,
-    updateCity,
-    createNewCity,
-    deleteCity,
-    getCountries
+    getAmenities,
+    updateAmenity,
+    createNewAmenity,
+    deleteAmenity,
+    getAmenityCategories
 } from './api/apiHandle.js';
-import { CITY_TEXT_CONFIG } from './constants/resources';
+import { AMENITY_TEXT_CONFIG } from './constants/resources';
 
-const CityContainer = () => {
+const AmenityContainer = () => {
     const [state, setState] = useState({});
-    const [countries, setCountries] = useState([]);
+    const [amenityCategories, setAmenityCategories] = useState([]);
     const didMountRef = useRef(false);
-    const fetchCitiesRef = useRef(false);
+    const fetchAmenitiesRef = useRef(false);
 
     const {
         total,
         data,
         options,
         isValid,
-        city,
+        amenity,
         isShow,
         dataReady,
         isLoading,
@@ -32,39 +32,40 @@ const CityContainer = () => {
 
     useEffect(() => {
         if (!didMountRef.current) {
-            getAllCountries();
+            getAllAmenityCategories();
             onHandleSearch({});
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchCitiesRef.current) {
-            fetchCities();
+        if (didMountRef.current && fetchAmenitiesRef.current) {
+            fetchAmenities();
         }
     });
 
-    const getAllCountries = () => {
-        getCountries().then((countries) => {
-            setCountries(countries);
+    const getAllAmenityCategories = () => {
+        getAmenityCategories().then((amenityCategories) => {
+            setAmenityCategories(amenityCategories);
         }).catch(error => {
             console.log(error);
         });
     }
 
-    const fetchCities = () => {
-        fetchCitiesRef.current = false;
+    const fetchAmenities = () => {
+        fetchAmenitiesRef.current = false;
 
         const {
             searchParam = {},
             options = {}
         } = state;
 
-        getCities({ ...searchParam, ...options }, ({ total, cities }) => {
-            const data = cities.map(city => {
+        getAmenities({ ...searchParam, ...options }, ({ total, amenities }) => {
+            const data = amenities.map(amenity => {
                 return {
-                    ...city,
-                    countryName: city.country.name
+                    ...amenity,
+                    amenityCategoryName: amenity.amenityCategory.name
                 }
             });
+            
             setTimeout(() => {
                 setState({
                     ...state,
@@ -88,7 +89,7 @@ const CityContainer = () => {
             sortDirection: optionParams.sortDirection || null
         };
 
-        fetchCitiesRef.current = true;
+        fetchAmenitiesRef.current = true;
         setState({
             ...state,
             searchParam: searchParam,
@@ -142,7 +143,7 @@ const CityContainer = () => {
     const onHandleResetForm = () => {
         const searchParam = {
             name: '',
-            countryId: '',
+            amenityCategoryId: '',
             status: ''
         };
 
@@ -154,38 +155,37 @@ const CityContainer = () => {
         onHandleSearch(searchParam, options);
     };
 
-    const showModal = (city = {}) => {
+    const showModal = (amenity = {}) => {
         setState({
             ...state,
             isShow: true,
-            city: city
+            amenity: amenity
         });
     };
 
     const onClose = (isSearch) => {
-        fetchCitiesRef.current = !!isSearch;
-        
+        fetchAmenitiesRef.current = !!isSearch;
         setState({
             ...state,
             isShow: false,
             isValid: false,
             errorMessage: {},
-            city: null,
+            amenity: null,
             dataReady: !isSearch,
             isLoading: false
         });
     };
 
-    const onSaveCity = (city) => {
+    const onSaveAmenity = (amenity) => {
         setState({ ...state, isLoading: true })
-        if (state.city._id) {
-            updateCity({ ...city, id: state.city._id },
+        if (state.amenity._id) {
+            updateAmenity({ ...amenity, id: state.amenity._id },
                 () => {
                     onClose(true);
                 },
                 () => setState({ ...state, isLoading: false }));
         } else {
-            createNewCity(city,
+            createNewAmenity(amenity,
                 () => {
                     onClose(true);
                 },
@@ -196,7 +196,7 @@ const CityContainer = () => {
     const onDelete = ({ _id }) => {
         const { searchParam, options } = state;
 
-        deleteCity(_id, () => {
+        deleteAmenity(_id, () => {
             onHandleSearch(searchParam, options);
         });
     };
@@ -204,16 +204,16 @@ const CityContainer = () => {
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
-                title={city?._id ? 'Edit City' : 'Add New City'}
+                title={amenity?._id ? 'Edit Amenity' : 'Add New Amenity'}
                 onClose={onClose}
             >
-                <CityForm
+                <AmenityForm
                     isLoading={isLoading}
-                    city={city}
-                    countries={countries}
+                    amenity={amenity}
+                    amenityCategories={amenityCategories}
                     isValid={isValid}
                     onClose={onClose}
-                    onSaveCity={onSaveCity}
+                    onSaveAmenity={onSaveAmenity}
                 />
             </Modal>
         );
@@ -224,17 +224,17 @@ const CityContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{CITY_TEXT_CONFIG.CITY_PAGE_HEADER}</h3>
+                    <h3>{AMENITY_TEXT_CONFIG.AMENITY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
-                    <CitySearch
+                    <AmenitySearch
                         searchParam={searchParam}
-                        countries={countries}
+                        amenityCategories={amenityCategories}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <CityGrid
+                    <AmenityGrid
                         data={data}
                         options={options}
                         totalItems={total}
@@ -251,4 +251,4 @@ const CityContainer = () => {
     )
 }
 
-export default CityContainer;
+export default AmenityContainer;

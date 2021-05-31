@@ -57,6 +57,12 @@ const MainSidebar = ({
                         data-accordion="false"
                     >
                         <li className="nav-item">
+                            <NavLink to="/admin/amenity" className="nav-link" activeClassName="active">
+                                <i className="nav-icon fa fa-coffee"></i>
+                                Amenity
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
                             <NavLink to="/admin/country" className="nav-link" activeClassName="active">
                                 <i className="nav-icon fa fa-globe"></i>
                                     Country
