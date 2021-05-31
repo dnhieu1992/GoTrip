@@ -1,29 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
 import Modal from '../../shared/components/forms/Modal';
-import CityGrid from './component/CityGrid';
-import CitySearch from './component/CitySearch';
-import CityForm from './component/CityForm';
-import {
-    getCities,
-    updateCity,
-    createNewCity,
-    deleteCity,
-    getCountries
-} from './api/apiHandle.js';
-import { CITY_TEXT_CONFIG } from './constants/resources';
+import BreakfastGrid from './component/BreakfastGrid';
+import BreakfastSearch from './component/BreakfastSearch';
+import BreakfastForm from './component/BreakfastForm';
 
-const CityContainer = () => {
+import {
+    getBreakfasts,
+    updateBreakfast,
+    createNewBreakfast,
+    deleteBreakfast
+} from './api/apiHandle.js';
+import { BREAKFAST_TEXT_CONFIG } from './constants/resources';
+
+const BreakfastContainer = () => {
     const [state, setState] = useState({});
-    const [countries, setCountries] = useState([]);
     const didMountRef = useRef(false);
-    const fetchCitiesRef = useRef(false);
+    const fetchBreakfastsRef = useRef(false);
 
     const {
         total,
-        data,
+        breakfasts,
         options,
         isValid,
-        city,
+        breakfast,
         isShow,
         dataReady,
         isLoading,
@@ -32,44 +31,29 @@ const CityContainer = () => {
 
     useEffect(() => {
         if (!didMountRef.current) {
-            getAllCountries();
             onHandleSearch({});
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchCitiesRef.current) {
-            fetchCities();
+        if (didMountRef.current && fetchBreakfastsRef.current) {
+            fetchBreakfasts();
         }
     });
 
-    const getAllCountries = () => {
-        getCountries().then((countries) => {
-            setCountries(countries);
-        }).catch(error => {
-            console.log(error);
-        });
-    }
-
-    const fetchCities = () => {
-        fetchCitiesRef.current = false;
+    const fetchBreakfasts = () => {
+        fetchBreakfastsRef.current = false;
 
         const {
             searchParam = {},
             options = {}
         } = state;
 
-        getCities({ ...searchParam, ...options }, ({ total, cities }) => {
-            const data = cities.map(city => {
-                return {
-                    ...city,
-                    countryName: city.country.name
-                }
-            });
+        getBreakfasts({ ...searchParam, ...options }, ({ total, breakfasts }) => {
             setTimeout(() => {
                 setState({
                     ...state,
                     total,
-                    data,
+                    breakfasts,
                     dataReady: true
                 });
             }, 500);
@@ -88,7 +72,8 @@ const CityContainer = () => {
             sortDirection: optionParams.sortDirection || null
         };
 
-        fetchCitiesRef.current = true;
+        fetchBreakfastsRef.current = true;
+
         setState({
             ...state,
             searchParam: searchParam,
@@ -142,7 +127,7 @@ const CityContainer = () => {
     const onHandleResetForm = () => {
         const searchParam = {
             name: '',
-            countryId: '',
+            description: '',
             status: ''
         };
 
@@ -154,38 +139,38 @@ const CityContainer = () => {
         onHandleSearch(searchParam, options);
     };
 
-    const showModal = (city = {}) => {
+    const showModal = (breakfast = {}) => {
         setState({
             ...state,
             isShow: true,
-            city: city
+            breakfast: breakfast
         });
     };
 
     const onClose = (isSearch) => {
-        fetchCitiesRef.current = !!isSearch;
+        fetchBreakfastsRef.current = !!isSearch;
 
         setState({
             ...state,
             isShow: false,
             isValid: false,
             errorMessage: {},
-            city: null,
+            bed: null,
             dataReady: !isSearch,
             isLoading: false
         });
     };
 
-    const onSaveCity = (city) => {
+    const onSaveBreakfast = (breakfast) => {
         setState({ ...state, isLoading: true })
-        if (state.city._id) {
-            updateCity({ ...city, id: state.city._id },
+        if (state.breakfast._id) {
+            updateBreakfast({ ...breakfast, id: state.breakfast._id },
                 () => {
                     onClose(true);
                 },
                 () => setState({ ...state, isLoading: false }));
         } else {
-            createNewCity(city,
+            createNewBreakfast(breakfast,
                 () => {
                     onClose(true);
                 },
@@ -194,27 +179,26 @@ const CityContainer = () => {
     };
 
     const onDelete = ({ _id }) => {
-        debugger
         const { searchParam, options } = state;
 
-        deleteCity(_id, () => {
+        deleteBreakfast(_id, () => {
             onHandleSearch(searchParam, options);
         });
     };
 
     const modalRender = () => {
         return (
-            <Modal classNames={'modal-lg'}
-                title={city?._id ? 'Edit City' : 'Add New City'}
+            <Modal
+                classNames={'modal-lg'}
+                title={breakfast?._id ? 'Edit Breakfast' : 'Add New Breakfast'}
                 onClose={onClose}
             >
-                <CityForm
+                <BreakfastForm
                     isLoading={isLoading}
-                    city={city}
-                    countries={countries}
+                    breakfast={breakfast}
                     isValid={isValid}
                     onClose={onClose}
-                    onSaveCity={onSaveCity}
+                    onSaveBreakfast={onSaveBreakfast}
                 />
             </Modal>
         );
@@ -225,18 +209,17 @@ const CityContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{CITY_TEXT_CONFIG.CITY_PAGE_HEADER}</h3>
+                    <h3>{BREAKFAST_TEXT_CONFIG.BREAKFAST_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
-                    <CitySearch
+                    <BreakfastSearch
                         searchParam={searchParam}
-                        countries={countries}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <CityGrid
-                        data={data}
+                    <BreakfastGrid
+                        data={breakfasts}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
@@ -252,4 +235,4 @@ const CityContainer = () => {
     )
 }
 
-export default CityContainer;
+export default BreakfastContainer;

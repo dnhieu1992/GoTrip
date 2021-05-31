@@ -7,6 +7,7 @@ import Footer from './shared/components/Footer';
 import CountryContainer from './country/CountryContainer';
 import CityContainer from './city/CityContainer';
 import BedContainer from './bed/BedContainer';
+import BreakfastContainer from './breakfast/BreakfastContainer';
 import PropertyContainer from './property/PropertyContainer'
 import PropertyTypeContainer from './property-type/PropertyTypeContainer';
 import RoomTypeContainer from './room-type/RoomTypeContainer';
@@ -21,6 +22,7 @@ const AdminPage = () => {
         <Route path="/admin/country" component={CountryContainer} />
         <Route path="/admin/city" component={CityContainer} />
         <Route path="/admin/bed" component={BedContainer} />
+        <Route path="/admin/breakfast" component={BreakfastContainer} />
         <Route path="/admin/property" component={PropertyContainer}/>
         <Route path="/admin/property-type" component={PropertyTypeContainer}/>
         <Route path="/admin/room-type" component={RoomTypeContainer} />

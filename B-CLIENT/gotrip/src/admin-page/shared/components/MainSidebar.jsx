@@ -75,6 +75,12 @@ const MainSidebar = ({
                             </NavLink>
                         </li>
                         <li className="nav-item">
+                            <NavLink to="/admin/breakfast" className="nav-link" activeClassName="active">
+                                <i className="nav-icon fa fa-coffee"></i>
+                                Breakfast
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
                             <NavLink to="/admin/property" className="nav-link" activeClassName="active">
                                 <i className="nav-icon fa fa-home"></i>
                                 Property
