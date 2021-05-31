@@ -9,6 +9,7 @@ import CityContainer from './city/CityContainer';
 import BedContainer from './bed/BedContainer';
 import PropertyContainer from './property/PropertyContainer'
 import PropertyTypeContainer from './property-type/PropertyTypeContainer';
+import RoomTypeContainer from './room-type/RoomTypeContainer';
 const AdminPage = () => {
   return (
     <div className="wrapper">
@@ -22,6 +23,7 @@ const AdminPage = () => {
         <Route path="/admin/bed" component={BedContainer} />
         <Route path="/admin/property" component={PropertyContainer}/>
         <Route path="/admin/property-type" component={PropertyTypeContainer}/>
+        <Route path="/admin/room-type" component={RoomTypeContainer} />
       </div>
       <Footer />
     </div>

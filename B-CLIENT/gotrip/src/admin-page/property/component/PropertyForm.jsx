@@ -1,114 +1,100 @@
-import classNames from 'classnames';
+import { useState } from 'react';
+import Formsy from 'formsy-react';
+import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { PROPERTY_TEXT_CONFIG } from '../constants/resources.js';
+import { STATUSES } from '../../country/constants/country.js';
+
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement
 
 const PropertyForm = ({
     property,
-    onSaveFormChange,
     onClose,
     onSaveProperty,
-    isValid,
-    errorMessage
+    isLoading
 }) => {
+    const [isValid, setIsValid] = useState(true);
     const {
         name,
         description,
         status
     } = property;
 
-    const {
-        propertyNameErrorMsg,
-        propertyDescriptionErrorMsg,
-        propertyStatusErrorMsg
-    } = errorMessage
+    const submit = (modal) => {
+        onSaveProperty(modal);
+    }
 
-    const onHandlePropertyChange = (e) => {
-        if (e?.target) {
-            onSaveFormChange({
-                ...property,
-                [e.target.name]: e.target.value
-            });
-        }
+    const enableButton = () => {
+        setIsValid(true);
+    }
 
+    const disableButton = () => {
+        setIsValid(fasle);
     }
 
     return (
-        <form id="addNew">
+        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInValid={disableButton}>
             <div className="card-body">
                 <div className="form-group">
-                    <label>Name</label>
-                    <input
-                        type="text"
+                    <FormsyInput
+                        inputProps={{
+                            id: 'name',
+                            type: 'text',
+                            placeholder: PROPERTY_TEXT_CONFIG.PROPERTY_NAME_FIELD_LBL,
+                        }}
                         name="name"
-                        className={classNames("form-control", { "is-invalid": propertyNameErrorMsg })}
-                        id="name"
-                        placeholder="Name"
+                        label={PROPERTY_TEXT_CONFIG.PROPERTY_NAME_FIELD_LBL}
                         value={name}
-                        onChange={onHandlePropertyChange}
+                        required
+                        validationError={PROPERTY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
-
-                    {propertyNameErrorMsg && (
-                        <div className="invalid-feedback">
-                            {propertyNameErrorMsg}
-                        </div>
-                    )}
                 </div>
                 <div className="form-group">
-                    <label>Description</label>
-                    <textarea
-                        type="text"
-                        name="description"
-                        className={classNames("form-control", { "is-invalid": propertyDescriptionErrorMsg })}
-                        id="description"
-                        placeholder="Description"
+                    <FormsyInput
+                        inputProps={{
+                            id: 'description',
+                            type: 'text',
+                            placeholder: PROPERTY_TEXT_CONFIG.PROPERTY_DESCRIPTION_FIELD_LBL,
+                        }}
+                        name='description'
+                        label={PROPERTY_TEXT_CONFIG.PROPERTY_DESCRIPTION_FIELD_LBL}
                         value={description}
-                        onChange={onHandlePropertyChange}
+                        required
+                        validationError={PROPERTY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
-
-                    {propertyDescriptionErrorMsg && (
-                        <div className="invalid-feedback">
-                            {propertyDescriptionErrorMsg}
-                        </div>
-                    )}
                 </div>
                 <div className="form-group">
-                    <label>Status</label>
-                    <select
-                        className={classNames("form-control", { "is-invalid": propertyStatusErrorMsg })}
-                        name="status"
+                    <FormsySelect
+                        name='status'
                         value={status}
-                        onChange={onHandlePropertyChange} >
-
-                        <option value=""></option>
-                        <option value="Actived">Actived</option>
-                        <option value="Disabled">Disabled</option>
-                    </select>
-
-                    {propertyStatusErrorMsg && (
-                        <div className="invalid-feedback">
-                            {propertyStatusErrorMsg}
-                        </div>
-                    )}
+                        dataSource={STATUSES}
+                        label={PROPERTY_TEXT_CONFIG.PROPERTY_STATUS_FIELD_LBL}
+                        required
+                        validationError={PROPERTY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
                 </div>
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
-                        <button
+                        <LoaderButton
                             type="button"
-                            className="btn btn-danger mr-5"
+                            className="mr-5"
                             onClick={() => onClose(false)}
                         >
-                            Close
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-info"
+                            {PROPERTY_TEXT_CONFIG.PROPERTY_CLOSE_BTN}
+                        </LoaderButton>
+                        <LoaderButton
+                            type="submit"
                             disabled={!isValid}
-                            onClick={() => onSaveProperty(property)}
+                            isLoading={isLoading}
                         >
-                            Submit
-                        </button>
+                            {PROPERTY_TEXT_CONFIG.PROPERTY_SUBMIT_BTN}
+                        </LoaderButton>
                     </div>
                 </div>
             </div>
-        </form>
+        </Formsy>
     )
 }
 export default PropertyForm;

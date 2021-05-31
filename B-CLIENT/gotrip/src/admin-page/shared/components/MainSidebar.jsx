@@ -86,6 +86,12 @@ const MainSidebar = ({
                                 Property Type
                             </NavLink>
                         </li>
+                        <li className="nav-item">
+                            <NavLink to="/admin/room-type" className="nav-link" activeClassName="active">
+                                <i className="nav-icon fa fa-home"></i>
+                                Room Type
+                            </NavLink>
+                        </li>
                         {/* <li className="nav-item">
                             <a href="pages/widgets.html" className="nav-link">
                                 <i className="nav-icon fa fa-th"></i>

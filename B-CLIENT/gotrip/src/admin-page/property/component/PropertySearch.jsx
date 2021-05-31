@@ -1,4 +1,7 @@
 import PropTypes from 'prop-types';
+import { Button, FormGroup, Input, Label, Row, Select } from '../../../shared/components/index';
+import { STATUSES } from '../constants/property';
+import { PROPERTY_TEXT_CONFIG } from '../constants/resources';
 
 const PropertySearch = ({
     searchParam,
@@ -21,43 +24,59 @@ const PropertySearch = ({
     return (
         <div className="card card-info">
             <div className="card-header">
-                <h3 className="card-title">Search</h3>
+                <h3 className="card-title">{PROPERTY_TEXT_CONFIG.PROPERTY_SEARCH_HEADER_LBL}</h3>
             </div>
             <form className="form-horizontal" autoComplete="off">
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">Name</label>
+                            <FormGroup as={Row}>
+                                <Label className="col-sm-2">
+                                    {PROPERTY_TEXT_CONFIG.PROPERTY_NAME_FIELD_LBL}
+                                </Label>
                                 <div className="col-sm-10">
-                                    <input type="text"
-                                        className="form-control"
+                                    <Input
+                                        type="text"
                                         id="name"
                                         name="name"
-                                        placeholder="Name"
+                                        placeholder={PROPERTY_TEXT_CONFIG.PROPERTY_NAME_FIELD_LBL}
                                         value={name}
                                         onChange={onHandleFieldChange}
                                     />
                                 </div>
-                            </div>
+                            </FormGroup>
                         </div>
                         <div className="col-sm-6">
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">Status</label>
+                            <FormGroup as={Row}>
+                                <Label className="col-sm-2">
+                                    {PROPERTY_TEXT_CONFIG.PROPERTY_STATUS_FIELD_LBL}
+                                </Label>
                                 <div className="col-sm-10">
-                                    <select className="form-control" value={status} name="status" onChange={onHandleFieldChange}>
-                                        <option value=""></option>
-                                        <option value="Actived">Actived</option>
-                                        <option value="Disabled">Disabled</option>
-                                    </select>
+                                    <Select
+                                        inputProps={{ name: 'status' }}
+                                        value={status}
+                                        onChange={onHandleFieldChange}
+                                        dataSource={STATUSES}
+                                    />
                                 </div>
-                            </div>
+                            </FormGroup>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
-                            <button type="button" className="btn btn-info mr-5" onClick={() => onHandleSearch(searchParam)} >Search</button>
-                            <button type="button" className="btn btn-info" onClick={onHandleResetForm}>Reset</button>
+                            <Button
+                                variant="info"
+                                className='mr-3'
+                                onClick={() => onHandleSearch(searchParam)}
+                            >
+                                {PROPERTY_TEXT_CONFIG.PROPERTY_SEARCH_BTN}
+                            </Button>
+                            <Button
+                                variant="info"
+                                onClick={onHandleResetForm}
+                            >
+                                {PROPERTY_TEXT_CONFIG.PROPERTY_RESET_BTN}
+                            </Button>
                         </div>
                     </div>
                 </div>
