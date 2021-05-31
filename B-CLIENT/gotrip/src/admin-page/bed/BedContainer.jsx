@@ -1,29 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
 import Modal from '../../shared/components/forms/Modal';
-import CityGrid from './component/CityGrid';
-import CitySearch from './component/CitySearch';
-import CityForm from './component/CityForm';
-import {
-    getCities,
-    updateCity,
-    createNewCity,
-    deleteCity,
-    getCountries
-} from './api/apiHandle.js';
-import { CITY_TEXT_CONFIG } from './constants/resources';
+import BedGrid from './component/BedGrid';
+import BedSearch from './component/BedSearch';
+import BedForm from './component/BedForm';
 
-const CityContainer = () => {
+import {
+    getBeds,
+    updateBed,
+    createNewBed,
+    deleteBed
+} from './api/apiHandle.js';
+import { BED_TEXT_CONFIG } from './constants/resources';
+
+const BedContainer = () => {
     const [state, setState] = useState({});
-    const [countries, setCountries] = useState([]);
     const didMountRef = useRef(false);
-    const fetchCitiesRef = useRef(false);
+    const fetchBedsRef = useRef(false);
 
     const {
         total,
-        data,
+        beds,
         options,
         isValid,
-        city,
+        bed,
         isShow,
         dataReady,
         isLoading,
@@ -32,48 +31,29 @@ const CityContainer = () => {
 
     useEffect(() => {
         if (!didMountRef.current) {
-            getAllCountries();
             onHandleSearch({});
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchCitiesRef.current) {
-            fetchCities();
+        if (didMountRef.current && fetchBedsRef.current) {
+            fetchBeds();
         }
     });
 
-    const getAllCountries = () => {
-        getCountries().then((countries) => {
-            setCountries(countries);
-        }).catch(error => {
-            console.log(error);
-        });
-    }
-
-    const fetchCities = () => {
-        fetchCitiesRef.current = false;
+    const fetchBeds = () => {
+        fetchBedsRef.current = false;
 
         const {
             searchParam = {},
             options = {}
         } = state;
 
-        getCities({ ...searchParam, ...options }, ({ total, cities }) => {
-            const data = [];
-            cities.forEach(city => {
-                let { _id, name } = city.country;
-                data.push({
-                    ...city,
-                    id: city._id,
-                    countryId: _id,
-                    countryName: name
-                });
-            })
+        getBeds({ ...searchParam, ...options }, ({ total, beds }) => {
             setTimeout(() => {
                 setState({
                     ...state,
                     total,
-                    data,
+                    beds,
                     dataReady: true
                 });
             }, 500);
@@ -92,7 +72,8 @@ const CityContainer = () => {
             sortDirection: optionParams.sortDirection || null
         };
 
-        fetchCitiesRef.current = true;
+        fetchBedsRef.current = true;
+
         setState({
             ...state,
             searchParam: searchParam,
@@ -146,7 +127,7 @@ const CityContainer = () => {
     const onHandleResetForm = () => {
         const searchParam = {
             name: '',
-            countryId: '',
+            description: '',
             status: ''
         };
 
@@ -158,38 +139,38 @@ const CityContainer = () => {
         onHandleSearch(searchParam, options);
     };
 
-    const showModal = (city = {}) => {
+    const showModal = (bed = {}) => {
         setState({
             ...state,
             isShow: true,
-            city: city
+            bed: bed
         });
     };
 
     const onClose = (isSearch) => {
-        fetchCitiesRef.current = !!isSearch;
+        fetchBedsRef.current = !!isSearch;
 
         setState({
             ...state,
             isShow: false,
             isValid: false,
             errorMessage: {},
-            city: null,
+            bed: null,
             dataReady: !isSearch,
             isLoading: false
         });
     };
 
-    const onSaveCity = (city) => {
+    const onSaveBed = (bed) => {
         setState({ ...state, isLoading: true })
-        if (state.city._id) {
-            updateCity({ ...city, id: state.city._id },
+        if (state.bed._id) {
+            updateBed({ ...bed, id: state.bed._id },
                 () => {
                     onClose(true);
                 },
                 () => setState({ ...state, isLoading: false }));
         } else {
-            createNewCity(city,
+            createNewBed(bed,
                 () => {
                     onClose(true);
                 },
@@ -198,27 +179,26 @@ const CityContainer = () => {
     };
 
     const onDelete = ({ _id }) => {
-        debugger
         const { searchParam, options } = state;
 
-        deleteCity(_id, () => {
+        deleteBed(_id, () => {
             onHandleSearch(searchParam, options);
         });
     };
 
     const modalRender = () => {
         return (
-            <Modal classNames={'modal-lg'}
-                title={city?._id ? 'Edit City' : 'Add New City'}
+            <Modal
+                classNames={'modal-lg'}
+                title={bed?._id ? 'Edit Bed' : 'Add New Bed'}
                 onClose={onClose}
             >
-                <CityForm
+                <BedForm
                     isLoading={isLoading}
-                    city={city}
-                    countries={countries}
+                    bed={bed}
                     isValid={isValid}
                     onClose={onClose}
-                    onSaveCity={onSaveCity}
+                    onSaveBed={onSaveBed}
                 />
             </Modal>
         );
@@ -229,18 +209,17 @@ const CityContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{CITY_TEXT_CONFIG.CITY_PAGE_HEADER}</h3>
+                    <h3>{BED_TEXT_CONFIG.BED_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
-                    <CitySearch
+                    <BedSearch
                         searchParam={searchParam}
-                        countries={countries}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <CityGrid
-                        data={data}
+                    <BedGrid
+                        data={beds}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
@@ -256,4 +235,4 @@ const CityContainer = () => {
     )
 }
 
-export default CityContainer;
+export default BedContainer;

@@ -3,57 +3,57 @@ import {
     getAll,
     search,
     getById,
-    createBed,
-    updateBed,
-    deleteBed
-} from '../controllers/Bed.controller.js';
+    createBreakfast,
+    updateBreakfast,
+    deleteBreakfast
+} from '../controllers/breakfast.controller.js';
 
 const router = express.Router();
 /**
  * @swagger
  * components:
  *   schemas:
- *     Bed:
+ *     Breakfast:
  *       type: object
  *       required:
  *         - name
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the bed
+ *           description: The auto-generated id of the breakfast
  *         name:
  *           type: string
- *           description: The bed name
+ *           description: The breakfast name
  *         description:
  *           type: string
- *           description: The bed code
+ *           description: The breakfast code
  *         status: 
  *           type: string
- *           description: The bed status,
+ *           description: The breakfast status,
  */
 
 /**
  * @swagger
  * tags:
- *   name: Beds
- *   description: The beds managing API
+ *   name: Breakfasts
+ *   description: The breakfast managing API
  */
 
 /**
  * @swagger
- * /api/bed/create:
+ * /api/breakfast/create:
  *   post:
- *     summary: Create a new bed
- *     tags: [Beds]
+ *     summary: Create a new Breakfast
+ *     tags: [Breakfasts]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Bed'
+ *             $ref: '#/components/schemas/Breakfast'
  *     responses:
  *       200:
- *         description: The bed was successfully created
+ *         description: The Breakfast was successfully created
  *         content:
  *           application/json:
  *             schema:
@@ -62,78 +62,78 @@ const router = express.Router();
  *       500:
  *         description: Some server error
  */
-router.post('/create', createBed);
+router.post('/create', createBreakfast);
 
 /**
  * @swagger
- * /api/bed/update:
+ * /api/breakfast/update:
  *  put:
- *    summary: Update the bed by the id
- *    tags: [Beds]
+ *    summary: Update the Breakfast by the id
+ *    tags: [Breakfasts]
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Bed'
+ *            $ref: '#/components/schemas/Breakfast'
  *    responses:
  *      200:
- *        description: The Bed was updated
+ *        description: The Breakfast was updated
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              items: {}
  *      404:
- *        description: The bed was not found
+ *        description: The Breakfast was not found
  *      500:
  *        description: Some error happened
  */
-router.put('/update', updateBed);
+router.put('/update', updateBreakfast);
 
 /**
  * @swagger
- * /api/bed/getAll:
+ * /api/breakfast/getAll:
  *   get:
- *     summary: Returns the list of all the beds
- *     tags: [Beds]
+ *     summary: Returns the list of all the Breakfasts
+ *     tags: [Breakfasts]
  *     responses:
  *       200:
- *         description: The list of the beds
+ *         description: The list of the Breakfasts
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Bed'
+ *                 $ref: '#/components/schemas/Breakfast'
  */
  router.get('/getAll', getAll);
 
 /**
  * @swagger
- * /api/bed/search:
+ * /api/breakfast/search:
  *   get:
- *     summary: Returns the list of all the bed
- *     tags: [Beds]
+ *     summary: Returns the list of all the Breakfast
+ *     tags: [Breakfasts]
  *     parameters:
  *       - in: query
  *         name: name
  *         schema:
  *           type: string
  *         required: false
- *         description: The Bed name.
+ *         description: The Breakfast name.
  *       - in: query
  *         name: description
  *         schema:
  *           type: String
  *         required: false
- *         description: The Bed description.
+ *         description: The Breakfast description.
  *       - in: query
  *         name: status
  *         schema:
  *           type: String
  *         required: false
- *         description: The Bed status
+ *         description: The Breakfast status
  *       - in: query
  *         name: pageNumber
  *         schema:
@@ -164,61 +164,61 @@ router.put('/update', updateBed);
  *         description: The Sort Field
  *     responses:
  *       200:
- *         description: The list of the bed
+ *         description: The list of the Breakfast
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Bed'
+ *                 $ref: '#/components/schemas/Breakfast'
  */
 router.get('/search', search);
 
 /**
  * @swagger
- * /api/bed/{id}:
+ * /api/breakfast/{id}:
  *   get:
- *     summary: Get the bed by id
- *     tags: [Beds]
+ *     summary: Get the Breakfast by id
+ *     tags: [Breakfasts]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The bed id
+ *         description: The Breakfast id
  *     responses:
  *       200:
- *         description: The bed description by id
+ *         description: The Breakfast description by id
  *         contens:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Bed'
+ *               $ref: '#/components/schemas/Breakfast'
  *       404:
- *         description: The bed was not found
+ *         description: The Breakfast was not found
  */
 router.get('/:id', getById);
 
 /**
  * @swagger
- * /api/bed/delete/{id}:
+ * /api/breakfast/delete/{id}:
  *   delete:
- *     summary: Remove the bed by id
- *     tags: [Beds]
+ *     summary: Remove the Breakfast by id
+ *     tags: [Breakfasts]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The bed id
+ *         description: The Breakfast id
  * 
  *     responses:
  *       200:
- *         description: The bed was deleted
+ *         description: The Breakfast was deleted
  *       404:
- *         description: The bed was not found
+ *         description: The Breakfast was not found
  */
-router.delete('/delete/:id', deleteBed);
+router.delete('/delete/:id', deleteBreakfast);
 
 export default router;

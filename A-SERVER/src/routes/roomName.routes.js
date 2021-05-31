@@ -1,139 +1,120 @@
 import express from 'express';
 import {
-    getAll,
+    createRoomName,
+    updateRoomName,
     search,
     getById,
-    createBed,
-    updateBed,
-    deleteBed
-} from '../controllers/Bed.controller.js';
+    deleteRoomName
+} from '../controllers/RoomName.controller.js';
 
 const router = express.Router();
+
 /**
  * @swagger
  * components:
  *   schemas:
- *     Bed:
+ *     RoomName:
  *       type: object
  *       required:
  *         - name
+ *         - roomType
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the bed
+ *           description: The auto-generated id of the room name
  *         name:
  *           type: string
- *           description: The bed name
- *         description:
+ *           description: The name of room
+ *         roomTypeId:
  *           type: string
- *           description: The bed code
+ *           description: The room type code
  *         status: 
  *           type: string
- *           description: The bed status,
+ *           description: The room name status
  */
 
 /**
  * @swagger
  * tags:
- *   name: Beds
- *   description: The beds managing API
+ *   name: RoomNames
+ *   description: The room names managing API
  */
 
 /**
  * @swagger
- * /api/bed/create:
+ * /api/roomName/create:
  *   post:
- *     summary: Create a new bed
- *     tags: [Beds]
+ *     summary: Create a new Room Name
+ *     tags: [RoomNames]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Bed'
+ *             $ref: '#/components/schemas/RoomName'
  *     responses:
  *       200:
- *         description: The bed was successfully created
+ *         description: The room name was successfully created
  *         content:
  *           application/json:
  *             schema:
- *              type: object
- *              items: {}
+ *               $ref: '#/components/schemas/RoomName'
  *       500:
  *         description: Some server error
  */
-router.post('/create', createBed);
+router.post('/create', createRoomName);
 
 /**
  * @swagger
- * /api/bed/update:
+ * /api/roomName/update:
  *  put:
- *    summary: Update the bed by the id
- *    tags: [Beds]
+ *    summary: Update the Room Name by the id
+ *    tags: [RoomNames]
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Bed'
+ *            $ref: '#/components/schemas/RoomName'
  *    responses:
  *      200:
- *        description: The Bed was updated
+ *        description: The Room Name was updated
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              items: {}
  *      404:
- *        description: The bed was not found
+ *        description: The Room Name was not found
  *      500:
  *        description: Some error happened
  */
-router.put('/update', updateBed);
-
+router.put('/update', updateRoomName);
 /**
  * @swagger
- * /api/bed/getAll:
+ * /api/roomName/search:
  *   get:
- *     summary: Returns the list of all the beds
- *     tags: [Beds]
- *     responses:
- *       200:
- *         description: The list of the beds
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Bed'
- */
- router.get('/getAll', getAll);
-
-/**
- * @swagger
- * /api/bed/search:
- *   get:
- *     summary: Returns the list of all the bed
- *     tags: [Beds]
+ *     summary: Returns the list of all the Room Names  
+ *     tags: [RoomNames]
  *     parameters:
  *       - in: query
  *         name: name
  *         schema:
  *           type: string
  *         required: false
- *         description: The Bed name.
+ *         description: The RoomName name.
  *       - in: query
- *         name: description
+ *         name: roomTypeId
  *         schema:
  *           type: String
  *         required: false
- *         description: The Bed description.
+ *         description: The room typeid.
  *       - in: query
  *         name: status
  *         schema:
  *           type: String
  *         required: false
- *         description: The Bed status
+ *         description: The status of RoomName
  *       - in: query
  *         name: pageNumber
  *         schema:
@@ -164,61 +145,61 @@ router.put('/update', updateBed);
  *         description: The Sort Field
  *     responses:
  *       200:
- *         description: The list of the bed
+ *         description: The list of the RoomName
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Bed'
+ *                 $ref: '#/components/schemas/RoomName'
  */
 router.get('/search', search);
 
 /**
  * @swagger
- * /api/bed/{id}:
+ * /api/roomName/{id}:
  *   get:
- *     summary: Get the bed by id
- *     tags: [Beds]
+ *     summary: Get the RoomName by id
+ *     tags: [RoomNames]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The bed id
+ *         description: The RoomName id
  *     responses:
  *       200:
- *         description: The bed description by id
+ *         description: The RoomName description by id
  *         contens:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Bed'
+ *               $ref: '#/components/schemas/RoomName'
  *       404:
- *         description: The bed was not found
+ *         description: The RoomName was not found
  */
 router.get('/:id', getById);
 
 /**
  * @swagger
- * /api/bed/delete/{id}:
+ * /api/roomName/delete/{id}:
  *   delete:
- *     summary: Remove the bed by id
- *     tags: [Beds]
+ *     summary: Remove the RoomName by id
+ *     tags: [RoomNames]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The bed id
+ *         description: The RoomName id
  * 
  *     responses:
  *       200:
- *         description: The bed was deleted
+ *         description: The RoomName was deleted
  *       404:
- *         description: The bed was not found
+ *         description: The RoomName was not found
  */
-router.delete('/delete/:id', deleteBed);
+router.delete('/delete/:id', deleteRoomName);
 
 export default router;

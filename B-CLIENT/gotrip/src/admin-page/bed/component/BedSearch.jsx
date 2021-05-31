@@ -1,32 +1,19 @@
 import PropTypes from 'prop-types';
-import { STATUSES } from '../constants/city';
+import { STATUSES } from '../constants/bed';
 import { Input, Label, FormGroup, Button, Select, Row } from '../../../shared/components/index';
-import { CITY_TEXT_CONFIG } from '../constants/resources';
+import { BED_TEXT_CONFIG } from '../constants/resources';
 
-const CitySearch = ({
+const BedSearch = ({
     searchParam,
-    countries,
     onHandleSearchChange,
     onHandleSearch,
     onHandleResetForm
 }) => {
     const {
         name = '',
-        countryId = '',
+        description = '',
         status = ''
     } = searchParam;
-
-    const data = countries.map(country => {
-        return {
-            value: country._id,
-            label: country.name
-        }
-    })
-
-    data.unshift({
-        value: '',
-        label: 'Choose the country...'
-    })
 
     const onHandleFieldChange = (e) => {
         if (e?.target) {
@@ -40,7 +27,7 @@ const CitySearch = ({
     return (
         <div className="card card-info">
             <div className="card-header">
-                <h3 className="card-title">{CITY_TEXT_CONFIG.CITY_SEARCH_HEADER_LBL}</h3>
+                <h3 className="card-title">{BED_TEXT_CONFIG.BED_SEARCH_HEADER_LBL}</h3>
             </div>
             <form className="form-horizontal" autoComplete="off">
                 <div className="card-body">
@@ -48,14 +35,14 @@ const CitySearch = ({
                         <div className="col-sm-6">
                             <FormGroup as={Row}>
                                 <Label className="col-sm-2">
-                                    {CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
+                                    {BED_TEXT_CONFIG.BED_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
                                     <Input
                                         type="text"
                                         id="name"
                                         name="name"
-                                        placeholder={CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
+                                        placeholder={BED_TEXT_CONFIG.BED_NAME_FIELD_LBL}
                                         value={name}
                                         onChange={onHandleFieldChange}
                                     />
@@ -63,26 +50,28 @@ const CitySearch = ({
                             </FormGroup>
                         </div>
                         <div className="col-sm-6">
-                            <FormGroup as={Row}>
+                            <div className="form-group row">
                                 <Label className="col-sm-2">
-                                    {CITY_TEXT_CONFIG.CITY_COUNTRYID_FIELD_LBL}
+                                    {BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'countryId' }}
-                                        value={countryId}
+                                    <textarea
+                                        className="form-control"
+                                        id="description"
+                                        name="description"
+                                        value={description}
                                         onChange={onHandleFieldChange}
-                                        dataSource={data}
-                                    />
+                                    >
+                                    </textarea>
                                 </div>
-                            </FormGroup>
+                            </div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
                             <FormGroup as={Row}>
                                 <Label className="col-sm-2">
-                                    {CITY_TEXT_CONFIG.CITY_STATUS_FIELD_LBL}
+                                    {BED_TEXT_CONFIG.BED_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
                                     <Select
@@ -103,13 +92,13 @@ const CitySearch = ({
                                 className='mr-3'
                                 onClick={() => onHandleSearch(searchParam)}
                             >
-                                {CITY_TEXT_CONFIG.CITY_SEARCH_BTN}
+                                {BED_TEXT_CONFIG.BED_SEARCH_BTN}
                             </Button>
                             <Button
                                 variant="info"
                                 onClick={onHandleResetForm}
                             >
-                                {CITY_TEXT_CONFIG.CITY_RESET_BTN}
+                                {BED_TEXT_CONFIG.BED_RESET_BTN}
                             </Button>
                         </div>
                     </div>
@@ -117,16 +106,17 @@ const CitySearch = ({
             </form>
         </div>
     )
-}
-export default CitySearch;
+};
 
-CitySearch.propTypes = {
+export default BedSearch;
+
+BedSearch.propTypes = {
     searchParam: PropTypes.object,
     onHandleSearchChange: PropTypes.func.isRequired,
     onHandleSearch: PropTypes.func.isRequired,
-    onHandleResetForm: PropTypes.func.isRequired,
+    onHandleResetForm: PropTypes.func.isRequired
 };
 
-CitySearch.defaultProps = {
+BedSearch.defaultProps = {
     searchParam: {},
 };

@@ -1,139 +1,123 @@
 import express from 'express';
 import {
-    getAll,
+    createAmenity,
+    updateAmenity,
     search,
     getById,
-    createBed,
-    updateBed,
-    deleteBed
-} from '../controllers/Bed.controller.js';
+    deleteAmenity
+} from '../controllers/amenity.controller.js';
 
 const router = express.Router();
+
 /**
  * @swagger
  * components:
  *   schemas:
- *     Bed:
+ *     Amenity:
  *       type: object
  *       required:
  *         - name
+ *         - amenity
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the bed
+ *           description: The auto-generated id of the Amenity
  *         name:
  *           type: string
- *           description: The bed name
+ *           description: The Amenity name
  *         description:
  *           type: string
- *           description: The bed code
+ *           description: The Amenity description
+ *         amenityCategoryId:
+ *           type: string
+ *           description: The amenity code
  *         status: 
  *           type: string
- *           description: The bed status,
+ *           description: The Amenity status
  */
 
 /**
  * @swagger
  * tags:
- *   name: Beds
- *   description: The beds managing API
+ *   name: Amenities
+ *   description: The Amenities managing API
  */
 
 /**
  * @swagger
- * /api/bed/create:
+ * /api/amenity/create:
  *   post:
- *     summary: Create a new bed
- *     tags: [Beds]
+ *     summary: Create a new Amenity
+ *     tags: [Amenities]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Bed'
+ *             $ref: '#/components/schemas/Amenity'
  *     responses:
  *       200:
- *         description: The bed was successfully created
+ *         description: The amenity was successfully created
  *         content:
  *           application/json:
  *             schema:
- *              type: object
- *              items: {}
+ *               $ref: '#/components/schemas/Amenity'
  *       500:
  *         description: Some server error
  */
-router.post('/create', createBed);
+router.post('/create', createAmenity);
 
 /**
  * @swagger
- * /api/bed/update:
+ * /api/amenity/update:
  *  put:
- *    summary: Update the bed by the id
- *    tags: [Beds]
+ *    summary: Update the Amenity by the id
+ *    tags: [Amenities]
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/Bed'
+ *            $ref: '#/components/schemas/Amenity'
  *    responses:
  *      200:
- *        description: The Bed was updated
+ *        description: The Amenity was updated
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              items: {}
  *      404:
- *        description: The bed was not found
+ *        description: The Amenity was not found
  *      500:
  *        description: Some error happened
  */
-router.put('/update', updateBed);
-
+router.put('/update', updateAmenity);
 /**
  * @swagger
- * /api/bed/getAll:
+ * /api/amenity/search:
  *   get:
- *     summary: Returns the list of all the beds
- *     tags: [Beds]
- *     responses:
- *       200:
- *         description: The list of the beds
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Bed'
- */
- router.get('/getAll', getAll);
-
-/**
- * @swagger
- * /api/bed/search:
- *   get:
- *     summary: Returns the list of all the bed
- *     tags: [Beds]
+ *     summary: Returns the list of all the Amenity
+ *     tags: [Amenities]
  *     parameters:
  *       - in: query
  *         name: name
  *         schema:
  *           type: string
  *         required: false
- *         description: The Bed name.
+ *         description: The Amenity name.
  *       - in: query
- *         name: description
+ *         name: amenityCategoryId
  *         schema:
  *           type: String
  *         required: false
- *         description: The Bed description.
+ *         description: The amenity id.
  *       - in: query
  *         name: status
  *         schema:
  *           type: String
  *         required: false
- *         description: The Bed status
+ *         description: The status of Amenity
  *       - in: query
  *         name: pageNumber
  *         schema:
@@ -164,61 +148,61 @@ router.put('/update', updateBed);
  *         description: The Sort Field
  *     responses:
  *       200:
- *         description: The list of the bed
+ *         description: The list of the Amenity
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Bed'
+ *                 $ref: '#/components/schemas/Amenity'
  */
 router.get('/search', search);
 
 /**
  * @swagger
- * /api/bed/{id}:
+ * /api/amenity/{id}:
  *   get:
- *     summary: Get the bed by id
- *     tags: [Beds]
+ *     summary: Get the Amenity by id
+ *     tags: [Amenities]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The bed id
+ *         description: The Amenity id
  *     responses:
  *       200:
- *         description: The bed description by id
+ *         description: The Amenity description by id
  *         contens:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Bed'
+ *               $ref: '#/components/schemas/Amenity'
  *       404:
- *         description: The bed was not found
+ *         description: The Amenity was not found
  */
 router.get('/:id', getById);
 
 /**
  * @swagger
- * /api/bed/delete/{id}:
+ * /api/amenity/delete/{id}:
  *   delete:
- *     summary: Remove the bed by id
- *     tags: [Beds]
+ *     summary: Remove the Amenity by id
+ *     tags: [Amenities]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The bed id
+ *         description: The Amenity id
  * 
  *     responses:
  *       200:
- *         description: The bed was deleted
+ *         description: The Amenity was deleted
  *       404:
- *         description: The bed was not found
+ *         description: The Amenity was not found
  */
-router.delete('/delete/:id', deleteBed);
+router.delete('/delete/:id', deleteAmenity);
 
 export default router;

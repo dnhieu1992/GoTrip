@@ -22,7 +22,7 @@ const FormsySelect = (props) => {
             <option key={`${item?.value}_${index}`} value={item.value}>
                 {item?.label}
             </option>
-            );
+        )
     });
 
     return (

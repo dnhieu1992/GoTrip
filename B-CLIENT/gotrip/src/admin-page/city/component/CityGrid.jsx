@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Grid from '../../../shared/components/grid/Grid';
+import { CITY_TEXT_CONFIG } from '../constants/resources';
 
 const CityGrid = ({
   data,
@@ -53,11 +54,11 @@ const CityGrid = ({
       <div className="card-body">
         <div className="row mb-2">
           <div className="col-sm-8">
-            <h4>Cities: {totalItems}</h4>
+            <h4>{CITY_TEXT_CONFIG.CITY_TOTAL_LBL}: {totalItems}</h4>
           </div>
           <div className="col-sm-4 d-flex justify-content-end">
             <button type="button" className="btn btn-info" onClick={() => showModal()}>
-              Add New
+              {CITY_TEXT_CONFIG.CITY_ADD_BTN}
             </button>
           </div>
         </div>
