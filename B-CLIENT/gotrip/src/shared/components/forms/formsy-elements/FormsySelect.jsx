@@ -19,9 +19,10 @@ const FormsySelect = (props) => {
 
     const optionsRender = dataSource.map((item, index) => {
         return (
-            <option key={`${item?.value}_${index}`}>
+            <option key={`${item?.value}_${index}`} value={item.value}>
                 {item?.label}
-            </option>)
+            </option>
+            );
     });
 
     return (

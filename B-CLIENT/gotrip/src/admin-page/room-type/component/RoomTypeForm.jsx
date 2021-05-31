@@ -1,111 +1,102 @@
-import classNames from 'classnames';
+import Formsy from 'formsy-react';
+import { useState } from 'react';
+import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { ROOMTYPE_TEXT_CONFIG } from '../constants/resources';
+import { STATUSES } from '../constants/roomType';
+
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement
 
 const RoomTypeForm = ({
     roomType,
-    onSaveFormChange,
     onClose,
     onSaveRoomType,
-    isValid,
-    errorMessage
+    isLoading
 }) => {
+    const [isValid, setIsValid] = useState(true);
+
     const {
         name,
         description,
         status
     } = roomType;
 
-    const {
-        roomTypeNameErrorMsg,
-        roomTypeDescriptionMsg,
-        roomTypeStatusMsg
-    } = errorMessage;
+    const submit = (modal) => {
+        onSaveRoomType(modal);
+    }
 
-    const onHandlePropertyChange = (e) => {
-        if (e?.target) {
-            onSaveFormChange({
-                ...roomType,
-                [e.target.name]: e.target.value
-            });
-        }
+    const enableButton = () => {
+        setIsValid(true);
+    }
+
+    const disableButton = () => {
+        setIsValid(false);
     }
 
     return (
-        <form id="addNew">
+        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
             <div className="card-body">
                 <div className="form-group">
-                    <label >Name</label>
-                    <input
-                        type="text"
+                    <FormsyInput
+                        inputProps={{
+                            id: 'name',
+                            type: 'text',
+                            placeholder: ROOMTYPE_TEXT_CONFIG.ROOMTYPE_NAME_FIELD_LBL,
+                        }}
                         name="name"
-                        className={classNames("form-control", { "is-invalid": roomTypeNameErrorMsg })}
-                        id="name"
-                        placeholder="Name"
+                        label={ROOMTYPE_TEXT_CONFIG.ROOMTYPE_NAME_FIELD_LBL}
                         value={name}
-                        onChange={onHandlePropertyChange}
+                        required
+                        validationError={ROOMTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
+                </div>
+                <div className="form-group">
+                    <FormsyInput
+                        inputProps={{
+                            id: 'description',
+                            type: 'text',
+                            placeholder: ROOMTYPE_TEXT_CONFIG.ROOMTYPE_DESCRIPTION_FIELD_LBL,
+                        }}
+                        name='description'
+                        label={ROOMTYPE_TEXT_CONFIG.ROOMTYPE_DESCRIPTION_FIELD_LBL}
+                        value={description}
+                        required
+                        validationError={ROOMTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
+                </div>
+                <div className="form-group">
+                    <FormsySelect
+                        name='status'
+                        value={status}
+                        dataSource={STATUSES}
+                        label={ROOMTYPE_TEXT_CONFIG.ROOMTYPE_STATUS_FIELD_LBL}
+                        required
+                        validationError={ROOMTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                    />
+                </div>
+                <div className="form-group">
+                    <div className="col-sm-12 d-flex justify-content-end">
+                        <LoaderButton
+                            type="button"
+                            className="mr-5"
+                            onClick={() => onClose(false)}
+                        >
+                            {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_CLOSE_BTN}
+                        </LoaderButton>
 
-                    {roomTypeNameErrorMsg && (
-                        <div className="invalid-feedback">
-                            {roomTypeNameErrorMsg}
-                        </div>
-                    )}
-                    <div className="form-group">
-                        <label>Description</label>
-                        <textarea
-                            type="text"
-                            name="description"
-                            id="description"
-                            className={classNames("form-control", { "is-invalid": roomTypeDescriptionMsg })}
-                            placeholder="Description"
-                            value={description}
-                            onChange={onHandlePropertyChange}
-                        />
-                        {roomTypeDescriptionMsg && (
-                            <div className="invalid-feedback">
-                                {roomTypeDescriptionMsg}
-                            </div>
-                        )}
-                    </div>
-                    <div className="form-group">
-                        <label>Status</label>
-                        <select
-                            name="status"
-                            value={status}
-                            className={classNames("form-control", { "is-invalid": roomTypeStatusMsg })}
-                            onChange={onHandlePropertyChange}>
-
-                            <option value=""></option>
-                            <option value="Actived">Actived</option>
-                            <option value="Disabled">Disabled</option>
-                        </select>
-
-                        {roomTypeStatusMsg && (
-                            <div className="invalid-feedback">
-                                {roomTypeStatusMsg}
-                            </div>
-                        )}
-                    </div>
-                    <div className="form-group">
-                        <div className="col-sm-12 d-flex justify-content-end">
-                            <button
-                                type="button"
-                                className="btn btn-danger mr-5"
-                                onClick={() => onClose(false)}
-                            >
-                                Close
-                            </button>
-
-                            <button
-                                type="button"
-                                className="btn btn-info"
-                                disabled={!isValid}
-                                onClick={() => onSaveRoomType(roomType)}
-                            >Submit</button>
-                        </div>
+                        <LoaderButton
+                            type="submit"
+                            disabled={!isValid}
+                            isLoading={isLoading}
+                        >
+                            {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_SUBMIT_BTN}
+                        </LoaderButton>
                     </div>
                 </div>
             </div>
-        </form>
+        </Formsy>
     )
 }
 

@@ -10,11 +10,12 @@ import {
     createNewRoomType,
     deleteRoomType
 } from './api/apiHandle.js';
+import { ROOMTYPE_TEXT_CONFIG } from './constants/resources';
 
 const RoomTypeContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetRoomTypesRef = useRef(false);
+    const fetchRoomTypesRef = useRef(false);
 
     const {
         total,
@@ -25,7 +26,7 @@ const RoomTypeContainer = () => {
         dataReady,
         roomTypes,
         isValid,
-        errorMessage
+        isLoading
     } = state;
 
     useEffect(() => {
@@ -34,13 +35,13 @@ const RoomTypeContainer = () => {
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetRoomTypesRef.current) {
-            fetRoomTypes();
+        if (didMountRef.current && fetchRoomTypesRef.current) {
+            fetchRoomTypes();
         }
     });
 
-    const fetRoomTypes = () => {
-        fetRoomTypesRef.current = false;
+    const fetchRoomTypes = () => {
+        fetchRoomTypesRef.current = false;
         const {
             searchParam = {},
             options = {}
@@ -70,7 +71,7 @@ const RoomTypeContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetRoomTypesRef.current = true;
+        fetchRoomTypesRef.current = true;
 
         setState({
             ...state,
@@ -124,7 +125,7 @@ const RoomTypeContainer = () => {
     const onHandleResetForm = () => {
         const searchParam = {
             name: '',
-            description:'',
+            description: '',
             status: ''
         }
 
@@ -140,14 +141,12 @@ const RoomTypeContainer = () => {
         setState({
             ...state,
             isShow: true,
-            isValid: !!roomType._id,
-            roomType: roomType,
-            errorMessage: {}
+            roomType: roomType
         });
     }
 
     const onClose = (isSearch) => {
-        fetRoomTypesRef.current = !!isSearch;
+        fetchRoomTypesRef.current = !!isSearch;
 
         setState({
             ...state,
@@ -155,21 +154,25 @@ const RoomTypeContainer = () => {
             isValid: false,
             errorMessage: {},
             roomType: null,
-            dataReady: !isSearch
+            dataReady: !isSearch,
+            isLoading: false
         });
     }
 
     const onSaveRoomType = (roomType) => {
-        console.log(roomType)
-        const roomTypeId={...roomType,id:roomType._id}
-        if (roomType._id) {
-            updateRoomType(roomTypeId, () => {
-                onClose(true);
-            });
+        setState({ ...state, isLoading: true });
+        if (state.roomType._id) {
+            updateRoomType({ ...roomType, id: state.roomType._id },
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         } else {
-            createNewRoomType(roomType, () => {
-                onClose(true);
-            });
+            createNewRoomType(roomType,
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         }
     }
 
@@ -181,40 +184,6 @@ const RoomTypeContainer = () => {
         });
     }
 
-    const onSaveFormChange = (roomType) => {
-        let isValid = true;
-        let errorMessage = {};
-
-        if (!roomType.name || !roomType.description || !roomType.status) {
-            isValid = false;
-        }
-
-        if (!roomType.name && roomType.name !== undefined) {
-            const roomTypeNameErrorMsg = "The room type name is required.";
-            errorMessage = { ...errorMessage, roomTypeNameErrorMsg }
-            isValid = false;
-        }
-
-        if (!roomType.description && roomType.description !== undefined) {
-            const roomTypeDescriptionErrorMsg = "The room type description is required.";
-            errorMessage = { ...errorMessage, roomTypeDescriptionErrorMsg }
-            isValid = false;
-        }
-
-        if (!roomType.status && roomType.status !== undefined) {
-            const roomTypeStatusErrorMsg = "The room type status is required.";
-            errorMessage = { ...errorMessage, roomTypeStatusErrorMsg }
-            isValid = false;
-        }
-
-        setState({
-            ...state,
-            roomType,
-            isValid,
-            errorMessage
-        });
-    }
-
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
@@ -222,10 +191,9 @@ const RoomTypeContainer = () => {
                 onClose={onClose}
             >
                 <RoomTypeForm
+                    isLoading={isLoading}
                     roomType={roomType}
                     isValid={isValid}
-                    errorMessage={errorMessage}
-                    onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSaveRoomType={onSaveRoomType}
                 />
@@ -237,7 +205,7 @@ const RoomTypeContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>Room Type</h3>
+                    <h3>{ROOMTYPE_TEXT_CONFIG.ROOMTYPE_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <RoomTypeSearch
