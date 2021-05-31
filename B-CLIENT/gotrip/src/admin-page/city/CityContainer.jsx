@@ -59,16 +59,12 @@ const CityContainer = () => {
         } = state;
 
         getCities({ ...searchParam, ...options }, ({ total, cities }) => {
-            const data = [];
-            cities.forEach(city => {
-                let { _id, name } = city.country;
-                data.push({
+            const data = cities.map(city => {
+                return {
                     ...city,
-                    id: city._id,
-                    countryId: _id,
-                    countryName: name
-                });
-            })
+                    countryName: city.country.name
+                }
+            });
             setTimeout(() => {
                 setState({
                     ...state,
