@@ -30,10 +30,10 @@ const AmenityContainer = () => {
         searchParam,
     } = state;
 
-    useEffect(() => {
+    useEffect(async() => {
         if (!didMountRef.current) {
+            await getAllAmenityCategories();
             onHandleSearch({});
-            getAllAmenityCategories();
             didMountRef.current = true;
         }
 
@@ -42,13 +42,11 @@ const AmenityContainer = () => {
         }
     });
 
-    const getAllAmenityCategories = () => {
-        fetchAmenitiesRef.current = false;
-        getAmenityCategories().then((amenityCategories) => {
-            fetchAmenitiesRef.current = true;
+    const getAllAmenityCategories = async() => {
+        await getAmenityCategories().then((amenityCategories) => {
             setState({
                 ...state,
-                amenityCategories
+                amenityCategories: amenityCategories
             });
         }).catch(error => {
             console.log(error);
@@ -210,7 +208,7 @@ const AmenityContainer = () => {
         return (
             <Modal 
                 classNames={'modal-lg'}
-                title={amenity?._id ? 'Edit Amenity' : 'Add New Amenity'}
+                title={amenity?._id ? AMENITY_TEXT_CONFIG.AMENITY_UPDATE_HEADER_LBL : AMENITY_TEXT_CONFIG.AMENITY_CREATE_HEADER_LBL}
                 onClose={onClose}
             >
                 <AmenityForm

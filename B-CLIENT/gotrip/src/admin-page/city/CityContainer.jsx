@@ -30,9 +30,9 @@ const CityContainer = () => {
         searchParam,
     } = state;
 
-    useEffect(() => {
+    useEffect(async () => {
         if (!didMountRef.current) {
-            getAllCountries();
+            await getAllCountries();
             onHandleSearch({});
             didMountRef.current = true;
         }
@@ -42,13 +42,11 @@ const CityContainer = () => {
         }
     });
 
-    const getAllCountries = () => {
-        fetchCitiesRef.current = false;
-        getCountries().then((countries) => {
-            fetchCitiesRef.current = true;
+    const getAllCountries = async () => {
+        await getCountries().then((countries) => {
             setState({
                 ...state,
-                countries
+                countries: countries
             });
         }).catch(error => {
             console.log(error);
@@ -209,7 +207,7 @@ const CityContainer = () => {
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
-                title={city?._id ? 'Edit City' : 'Add New City'}
+                title={city?._id ? CITY_TEXT_CONFIG.CITY_UPDATE_HEADER_LBL : CITY_TEXT_CONFIG.CITY_CREATE_HEADER_LBL}
                 onClose={onClose}
             >
                 <CityForm
