@@ -14,7 +14,6 @@ import { CITY_TEXT_CONFIG } from './constants/resources';
 
 const CityContainer = () => {
     const [state, setState] = useState({});
-    const [countries, setCountries] = useState([]);
     const didMountRef = useRef(false);
     const fetchCitiesRef = useRef(false);
 
@@ -24,6 +23,7 @@ const CityContainer = () => {
         options,
         isValid,
         city,
+        countries = [],
         isShow,
         dataReady,
         isLoading,
@@ -43,8 +43,13 @@ const CityContainer = () => {
     });
 
     const getAllCountries = () => {
+        fetchCitiesRef.current = false;
         getCountries().then((countries) => {
-            setCountries(countries);
+            fetchCitiesRef.current = true;
+            setState({
+                ...state,
+                countries
+            });
         }).catch(error => {
             console.log(error);
         });
@@ -164,7 +169,7 @@ const CityContainer = () => {
 
     const onClose = (isSearch) => {
         fetchCitiesRef.current = !!isSearch;
-        
+
         setState({
             ...state,
             isShow: false,

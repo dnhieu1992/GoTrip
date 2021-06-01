@@ -14,7 +14,6 @@ import { AMENITY_TEXT_CONFIG } from './constants/resources';
 
 const AmenityContainer = () => {
     const [state, setState] = useState({});
-    const [amenityCategories, setAmenityCategories] = useState([]);
     const didMountRef = useRef(false);
     const fetchAmenitiesRef = useRef(false);
 
@@ -24,6 +23,7 @@ const AmenityContainer = () => {
         options,
         isValid,
         amenity,
+        amenityCategories = [],
         isShow,
         dataReady,
         isLoading,
@@ -32,8 +32,8 @@ const AmenityContainer = () => {
 
     useEffect(() => {
         if (!didMountRef.current) {
-            getAllAmenityCategories();
             onHandleSearch({});
+            getAllAmenityCategories();
             didMountRef.current = true;
         }
 
@@ -43,8 +43,13 @@ const AmenityContainer = () => {
     });
 
     const getAllAmenityCategories = () => {
+        fetchAmenitiesRef.current = false;
         getAmenityCategories().then((amenityCategories) => {
-            setAmenityCategories(amenityCategories);
+            fetchAmenitiesRef.current = true;
+            setState({
+                ...state,
+                amenityCategories
+            });
         }).catch(error => {
             console.log(error);
         });
@@ -62,7 +67,7 @@ const AmenityContainer = () => {
             const data = amenities.map(amenity => {
                 return {
                     ...amenity,
-                    amenityCategoryName: amenity.amenityCategory.name
+                    amenityCategoryName: amenity?.amenityCategory?.name
                 }
             });
             
@@ -203,7 +208,8 @@ const AmenityContainer = () => {
 
     const modalRender = () => {
         return (
-            <Modal classNames={'modal-lg'}
+            <Modal 
+                classNames={'modal-lg'}
                 title={amenity?._id ? 'Edit Amenity' : 'Add New Amenity'}
                 onClose={onClose}
             >

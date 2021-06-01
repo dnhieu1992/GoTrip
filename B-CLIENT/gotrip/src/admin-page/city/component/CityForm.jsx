@@ -34,20 +34,20 @@ const CityForm = ({
         label: 'Choose the country...'
     })
 
-    const submit = (modal) => {
+    const onSubmit = (modal) => {
         onSaveCity(modal);
     }
 
-    const enableButton = () => {
+    const onValid = () => {
         setIsValid(true);
     }
 
-    const disableButton = () => {
+    const onInvalid = () => {
         setIsValid(false);
     }
 
     return (
-        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
+        <Formsy id="addNew" onSubmit={onSubmit} onValid={onValid} onInvalid={onInvalid}>
             <div className="card-body">
                 <div className="form-group">
                     <FormsyInput

@@ -15,7 +15,6 @@ const AmenityForm = ({
     onClose,
     onSaveAmenity
 }) => {
-    console.log(amenity);
     const [isValid, setIsValid] = useState(true);
 
     const {
@@ -36,20 +35,20 @@ const AmenityForm = ({
         label: 'Choose the amenity category...'
     })
 
-    const submit = (modal) => {
+    const onSubmit = (modal) => {
         onSaveAmenity(modal);
     }
 
-    const enableButton = () => {
+    const onValid = () => {
         setIsValid(true);
     }
 
-    const disableButton = () => {
+    const onInvalid = () => {
         setIsValid(false);
     }
 
     return (
-        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
+        <Formsy id="addNew" onSubmit={onSubmit} onValid={onValid} onInvalid={onInvalid}>
             <div className="card-body">
                 <div className="form-group">
                     <FormsyInput
