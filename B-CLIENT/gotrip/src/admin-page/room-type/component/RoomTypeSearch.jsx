@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Button, FormGroup, Input, Label, Row, Select } from '../../../shared/components/index.js';
-import { ROOMTYPE_TEXT_CONFIG } from '../constants/resources';
+import { ROOM_TYPE_TEXT_CONFIG } from '../constants/resources';
 import { STATUSES } from '../constants/roomType.js';
 
 const RoomTypeSearch = ({
@@ -22,7 +22,7 @@ const RoomTypeSearch = ({
     return (
         <div className="card card-info">
             <div className="card-header">
-                <h3 className="card-title">{ROOMTYPE_TEXT_CONFIG.ROOMTYPE_SEARCH_HEADER_LBL}</h3>
+                <h3 className="card-title">{ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_SEARCH_HEADER_LBL}</h3>
             </div>
             <form className="form-horizontal" autoComplete="off">
                 <div className="card-body">
@@ -30,14 +30,14 @@ const RoomTypeSearch = ({
                         <div className="col-sm-6">
                             <FormGroup as={Row}>
                                 <Label className="col-sm-2">
-                                    {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_NAME_FIELD_LBL}
+                                    {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
                                     <Input
                                         type="text"
                                         id="name"
                                         name="name"
-                                        placeholder={ROOMTYPE_TEXT_CONFIG.ROOMTYPE_NAME_FIELD_LBL}
+                                        placeholder={ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_NAME_FIELD_LBL}
                                         value={name}
                                         onChange={onHandleFieldChange}
                                     />
@@ -47,7 +47,7 @@ const RoomTypeSearch = ({
                         <div className="col-sm-6">
                             <FormGroup as={Row}>
                                 <Label className="col-sm-2">
-                                    {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_STATUS_FIELD_LBL}
+                                    {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
                                     <Select
@@ -67,13 +67,13 @@ const RoomTypeSearch = ({
                                 className="mr-3"
                                 onClick={() => onHandleSearch(searchParam)}
                             >
-                                {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_SEARCH_BTN}
+                                {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_SEARCH_BTN}
                             </Button>
                             <Button
                                 variant="info"
                                 onClick={onHandleResetForm}
                             >
-                                {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_RESET_BTN}
+                                {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_RESET_BTN}
                             </Button>
                         </div>
                     </div>

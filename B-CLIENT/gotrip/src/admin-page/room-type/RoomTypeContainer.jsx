@@ -10,7 +10,7 @@ import {
     createNewRoomType,
     deleteRoomType
 } from './api/apiHandle.js';
-import { ROOMTYPE_TEXT_CONFIG } from './constants/resources';
+import { ROOM_TYPE_TEXT_CONFIG } from './constants/resources';
 
 const RoomTypeContainer = () => {
     const [state, setState] = useState({});
@@ -205,7 +205,7 @@ const RoomTypeContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{ROOMTYPE_TEXT_CONFIG.ROOMTYPE_PAGE_HEADER}</h3>
+                    <h3>{ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <RoomTypeSearch

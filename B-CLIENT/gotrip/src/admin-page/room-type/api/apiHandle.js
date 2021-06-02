@@ -1,11 +1,11 @@
 import alertNotify from '../../../shared/ultils/alertNotify';
 import { cleanObject } from '../../shared/ultils/ultils';
 import { API } from '../constants/api';
-import { ROOMTYPE_TEXT_CONFIG } from '../constants/resources';
+import { ROOM_TYPE_TEXT_CONFIG } from '../constants/resources';
 
 const getRoomTypes = async (params, onSuccess, onError) => {
     try {
-        const url = new URL(API.SEARCH_ROOMTYPE);
+        const url = new URL(API.SEARCH_ROOM_TYPE);
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
@@ -29,17 +29,17 @@ const getRoomTypes = async (params, onSuccess, onError) => {
 
 const createNewRoomType = async (roomType, onSuccess, onError) => {
     try {
-        const res = await fetch(API.CREATE_ROOMTYPE, {
+        const res = await fetch(API.CREATE_ROOM_TYPE, {
             method: "POST",
             body: JSON.stringify(roomType),
             headers: { "Content-type": "application/json;charset=UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw ROOMTYPE_TEXT_CONFIG.CREATE_ROOMTYPE_DUPLICATE_MSG;
+            throw ROOM_TYPE_TEXT_CONFIG.CREATE_ROOM_TYPE_DUPLICATE_MSG;
         }
 
-        alertNotify.success(ROOMTYPE_TEXT_CONFIG.CREATE_ROOMTYPE_SUCCESS_MSG);
+        alertNotify.success(ROOM_TYPE_TEXT_CONFIG.CREATE_ROOM_TYPE_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -54,17 +54,17 @@ const createNewRoomType = async (roomType, onSuccess, onError) => {
 
 const updateRoomType = async (roomType, onSuccess, onError) => {
     try {
-        const res = await fetch(API.UPDATE_ROOMTYPE, {
+        const res = await fetch(API.UPDATE_ROOM_TYPE, {
             method: "PUT",
             body: JSON.stringify(roomType),
             headers: { "Content-type": "application/json;charset=UTF-8" }
         });
 
         if (!res.ok) {
-            throw ROOMTYPE_TEXT_CONFIG.UPDATE_ROOMTYPE_FAILED_MSG;
+            throw ROOM_TYPE_TEXT_CONFIG.UPDATE_ROOM_TYPE_FAILED_MSG;
         }
 
-        alertNotify.success(ROOMTYPE_TEXT_CONFIG.UPDATE_ROOMTYPE_SUCCESS_MSG);
+        alertNotify.success(ROOM_TYPE_TEXT_CONFIG.UPDATE_ROOM_TYPE_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -79,16 +79,16 @@ const updateRoomType = async (roomType, onSuccess, onError) => {
 
 const deleteRoomType = async (id, onSuccess) => {
     try {
-        const res = await fetch(`${API.DELETE_ROOMTYPE}${id}`, {
+        const res = await fetch(`${API.DELETE_ROOM_TYPE}${id}`, {
             method: "DELETE",
             header: { "Content-type": "application/json;charset=UTF-8" }
         });
 
         if (!res.ok) {
-            throw ROOMTYPE_TEXT_CONFIG.DELETE_ROOMTYPE_FAILED_MSG;
+            throw ROOM_TYPE_TEXT_CONFIG.DELETE_ROOM_TYPE_FAILED_MSG;
         }
 
-        alertNotify.error(ROOMTYPE_TEXT_CONFIG.DELETE_ROOMTYPE_SUCCESS_MSG);
+        alertNotify.error(ROOM_TYPE_TEXT_CONFIG.DELETE_ROOM_TYPE_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();

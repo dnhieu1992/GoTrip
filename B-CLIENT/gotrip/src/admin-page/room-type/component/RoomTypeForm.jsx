@@ -1,7 +1,7 @@
 import Formsy from 'formsy-react';
 import { useState } from 'react';
 import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
-import { ROOMTYPE_TEXT_CONFIG } from '../constants/resources';
+import { ROOM_TYPE_TEXT_CONFIG } from '../constants/resources';
 import { STATUSES } from '../constants/roomType';
 
 const {
@@ -43,13 +43,13 @@ const RoomTypeForm = ({
                         inputProps={{
                             id: 'name',
                             type: 'text',
-                            placeholder: ROOMTYPE_TEXT_CONFIG.ROOMTYPE_NAME_FIELD_LBL,
+                            placeholder: ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_NAME_FIELD_LBL,
                         }}
                         name="name"
-                        label={ROOMTYPE_TEXT_CONFIG.ROOMTYPE_NAME_FIELD_LBL}
+                        label={ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_NAME_FIELD_LBL}
                         value={name}
                         required
-                        validationError={ROOMTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={ROOM_TYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -57,13 +57,13 @@ const RoomTypeForm = ({
                         inputProps={{
                             id: 'description',
                             type: 'text',
-                            placeholder: ROOMTYPE_TEXT_CONFIG.ROOMTYPE_DESCRIPTION_FIELD_LBL,
+                            placeholder: ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_DESCRIPTION_FIELD_LBL,
                         }}
                         name='description'
-                        label={ROOMTYPE_TEXT_CONFIG.ROOMTYPE_DESCRIPTION_FIELD_LBL}
+                        label={ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_DESCRIPTION_FIELD_LBL}
                         value={description}
                         required
-                        validationError={ROOMTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={ROOM_TYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -71,9 +71,9 @@ const RoomTypeForm = ({
                         name='status'
                         value={status}
                         dataSource={STATUSES}
-                        label={ROOMTYPE_TEXT_CONFIG.ROOMTYPE_STATUS_FIELD_LBL}
+                        label={ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_STATUS_FIELD_LBL}
                         required
-                        validationError={ROOMTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={ROOM_TYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -83,7 +83,7 @@ const RoomTypeForm = ({
                             className="mr-5"
                             onClick={() => onClose(false)}
                         >
-                            {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_CLOSE_BTN}
+                            {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_CLOSE_BTN}
                         </LoaderButton>
 
                         <LoaderButton
@@ -91,7 +91,7 @@ const RoomTypeForm = ({
                             disabled={!isValid}
                             isLoading={isLoading}
                         >
-                            {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_SUBMIT_BTN}
+                            {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_SUBMIT_BTN}
                         </LoaderButton>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Grid from '../../../shared/components/grid/Grid';
-import { ROOMTYPE_TEXT_CONFIG } from '../constants/resources';
+import { ROOM_TYPE_TEXT_CONFIG } from '../constants/resources';
 
 const RoomTypeGrid = ({
     data,
@@ -53,7 +53,7 @@ const RoomTypeGrid = ({
             <div className="card-body">
                 <div className="row mb-2">
                     <div className="col-sm-8">
-                        <h4>{ROOMTYPE_TEXT_CONFIG.ROOMTYPE_TOTAL_LBL}:{totalItems}</h4>
+                        <h4>{ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_TOTAL_LBL}:{totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
                         <button
@@ -61,7 +61,7 @@ const RoomTypeGrid = ({
                             className="btn btn-info"
                             onClick={() => showModal()}
                         >
-                            {ROOMTYPE_TEXT_CONFIG.ROOMTYPE_ADD_BTN}
+                            {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_ADD_BTN}
                         </button>
                     </div>
                 </div>
