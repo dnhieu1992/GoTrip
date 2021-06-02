@@ -11,12 +11,13 @@ import {
     deletePropertyType,
     getProperties
 } from './api/apiHandle.js';
+import { PROPERTY_TYPE_TEXT_CONFIG } from './constants/resources';
 
 const PropertyTypeContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetPropertyTypesRef = useRef(false);
-    const [properties, setProperties] = useState([]);
+    const fetchPropertyTypesRef = useRef(false);
+    //const [properties, setProperties] = useState([]);
 
     const {
         total,
@@ -26,32 +27,36 @@ const PropertyTypeContainer = () => {
         propertyType,
         isShow,
         dataReady,
-        errorMessage,
-        searchParam
+        isLoading,
+        searchParam,
+        properties=[]
     } = state;
-    useEffect(() => {
+    useEffect(async() => {
         if (!didMountRef.current) {
-            getAllProperties();
+            await getAllProperties();
             onHandleSearch({});
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetPropertyTypesRef.current) {
-            fetPropertyTypes();
+        if (didMountRef.current && fetchPropertyTypesRef.current) {
+            fetchPropertyTypes();
         }
     });
 
-    const getAllProperties = () => {
-        getProperties().then((properties) => {
-            setProperties(properties);
+    const getAllProperties = async() => {
+        await getProperties().then((properties) => {
+            setState({
+                ...state,
+                properties:properties
+            })
         }).catch(error => {
             console.log(error);
         })
     }
 
-    const fetPropertyTypes = () => {
+    const fetchPropertyTypes = () => {
 
-        fetPropertyTypesRef.current = false;
+        fetchPropertyTypesRef.current = false;
 
         const {
             searchParam = {},
@@ -59,10 +64,11 @@ const PropertyTypeContainer = () => {
         } = state;
 
         getPropertyTypes({ ...searchParam, ...options }, ({ total, propertyTypes }) => {
-            const data=propertyTypes.map(propertyType=>{
+            const data = propertyTypes.map(propertyType => {
                 return {
                     ...propertyType,
-                    propertyName:propertyType.property.name
+                    propertyID:propertyType.property._id,
+                    propertyName: propertyType?.property?.name
                 }
             })
             setTimeout(() => {
@@ -89,7 +95,7 @@ const PropertyTypeContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetPropertyTypesRef.current = true;
+        fetchPropertyTypesRef.current = true;
 
         setState({
             ...state,
@@ -110,10 +116,10 @@ const PropertyTypeContainer = () => {
         onHandleSearch(searchParam, optionsUpdate);
     }
 
-    const onHandleSearchChange = (param)=>{
+    const onHandleSearchChange = (param) => {
         setState({
             ...state,
-            searchParam:param
+            searchParam: param
         });
     }
 
@@ -168,7 +174,7 @@ const PropertyTypeContainer = () => {
     }
 
     const onClose = (isSearch) => {
-        fetPropertyTypesRef.current = !!isSearch;
+        fetchPropertyTypesRef.current = !!isSearch;
 
         setState({
             ...state,
@@ -176,61 +182,27 @@ const PropertyTypeContainer = () => {
             isValid: false,
             errorMessage: {},
             propertyType: null,
-            dataReady: !isSearch
+            dataReady: !isSearch,
+            isLoading: false
         });
 
     }
 
     const onSavePropertyType = (propertyType) => {
-        if (propertyType._id) {
-            updatePropertyType(propertyType, () => {
-                onClose(true);
-            });
+        setState({ ...state, isLoading: true })
+        if (state.propertyType._id) {
+            updatePropertyType({ ...propertyType, id: state.propertyType._id },
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         } else {
-            createPropertyType(propertyType, () => {
-                onClose(true);
-            });
+            createPropertyType(propertyType,
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         }
-    }
-
-    const onSaveFormChange = (propertyType) => {
-        let isValid = true;
-        let errorMessage = {};
-
-        if (!propertyType.name || !propertyType.description || !propertyType.propertyId || !propertyType.status) {
-            isValid = false;
-        }
-
-        if (!propertyType.name && propertyType.name !== undefined) {
-            const propertyTypeNameErrorMsg = "The property type name is required.";
-            errorMessage = { ...errorMessage, propertyTypeNameErrorMsg }
-            isValid = false;
-        }
-
-        if (!propertyType.description && propertyType.description !== undefined) {
-            const propertyTypeDescriptionErrorMsg = "The property type description is required.";
-            errorMessage = { ...errorMessage, propertyTypeDescriptionErrorMsg }
-            isValid = false;
-        }
-
-        if (!propertyType.propertyId && propertyType.propertyId !== undefined) {
-            const propertyTypePropertyErrorMsg = "The property is required.";
-            errorMessage = { ...errorMessage, propertyTypePropertyErrorMsg }
-            isValid = false;
-        }
-
-        if (!propertyType.status && propertyType.status !== undefined) {
-            const propertyTypeStatusErrorMsg = "The property type status is required.";
-            errorMessage = { ...errorMessage, propertyTypeStatusErrorMsg }
-            isValid = false;
-        }
-
-        setState({
-            ...state,
-            propertyType,
-            isValid,
-            errorMessage
-        });
     }
 
     const onDelete = ({ _id }) => {
@@ -250,11 +222,10 @@ const PropertyTypeContainer = () => {
             >
 
                 <PropertyTypeForm
+                    isLoading={isLoading}
                     propertyType={propertyType}
                     properties={properties}
                     isValid={isValid}
-                    errorMessage={errorMessage}
-                    onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSavePropertyType={onSavePropertyType}
                 />
@@ -267,7 +238,7 @@ const PropertyTypeContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>Property Type</h3>
+                    <h3>{PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <PropertyTypeSearch

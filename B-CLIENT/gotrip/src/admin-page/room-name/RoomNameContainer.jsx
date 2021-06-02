@@ -1,66 +1,87 @@
-import { useEffect, useRef, useState } from 'react';
-import Modal from '../../shared/components/forms/Modal';
-import RoomTypeGrid from './component/RoomTypeGrid';
-import RoomTypeSearch from './component/RoomTypeSearch';
-import RoomTypeForm from './component/RoomTypeForm';
-
+import { useState, useRef, useEffect } from 'react';
+import { Modal } from '../../shared/components';
 import {
+    createRoomName,
+    deleteRoomName,
+    getRoomNames,
     getRoomTypes,
-    updateRoomType,
-    createNewRoomType,
-    deleteRoomType
-} from './api/apiHandle.js';
-import { ROOM_TYPE_TEXT_CONFIG } from './constants/resources';
+    updateRoomName
+} from './api/apiHandle';
+import RoomNameForm from './component/RoomNameForm';
+import RoomNameGrid from './component/RoomNameGrid';
+import RoomNameSearch from './component/RoomNameSearch';
+import { ROOM_NAME_TEXT_CONFIG } from './constants/resources';
 
-const RoomTypeContainer = () => {
+const RoomNameContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetchRoomTypesRef = useRef(false);
+    const fetchRoomNamesRef = useRef(false);
 
     const {
         total,
-        searchParam,
+        data,
         options,
-        isShow,
-        roomType,
-        dataReady,
-        roomTypes,
         isValid,
-        isLoading
+        roomName,
+        isShow,
+        dataReady,
+        isLoading,
+        searchParam,
+        roomTypes=[]
     } = state;
 
-    useEffect(() => {
+    useEffect(async() => {
         if (!didMountRef.current) {
+            await getAllRoomTypes();
             onHandleSearch({});
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchRoomTypesRef.current) {
-            fetchRoomTypes();
+        if (didMountRef.current && fetchRoomNamesRef.current) {
+            fetchRoomNames();
         }
     });
 
-    const fetchRoomTypes = () => {
-        fetchRoomTypesRef.current = false;
+    const getAllRoomTypes = async() => {
+        await getRoomTypes().then((roomTypes) => {
+            setState({
+                ...state,
+                roomTypes:roomTypes
+            })
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    const fetchRoomNames = () => {
+        fetchRoomNamesRef.current = false;
+
         const {
             searchParam = {},
             options = {}
         } = state;
 
-        getRoomTypes({ ...searchParam, ...options }, ({ total, roomTypes }) => {
+        getRoomNames({ ...searchParam, ...options }, ({ total, roomNames }) => {
+            const data = roomNames.map(roomName => {
+                return {
+                    ...roomName,
+                    roomTypeName: roomName?.roomType?.name
+                }
+            });
             setTimeout(() => {
                 setState({
                     ...state,
                     total,
-                    roomTypes,
+                    data,
                     dataReady: true
                 });
             }, 500);
+
         }, () => {
             setTimeout(() => {
-                setState({ ...state, dataReady: true });
+                setState({ ...state, dataReady: true })
             }, 500);
-        });
+        })
     }
 
     const onHandleSearch = (searchParam = {}, optionParams = {}) => {
@@ -71,20 +92,13 @@ const RoomTypeContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetchRoomTypesRef.current = true;
+        fetchRoomNamesRef.current = true;
 
         setState({
             ...state,
             searchParam: searchParam,
             options: options,
             dataReady: false
-        });
-    }
-
-    const onHandleSearchChange = (param) => {
-        setState({
-            ...state,
-            searchParam: param
         });
     }
 
@@ -98,6 +112,14 @@ const RoomTypeContainer = () => {
 
         onHandleSearch(searchParam, optionsUpdate);
     }
+
+    const onHandleSearchChange = (param) => {
+        setState({
+            ...state,
+            searchParam: param
+        });
+    }
+
 
     const onHandlePageSizeChange = (pageSize) => {
         const { searchParam, options } = state;
@@ -113,6 +135,7 @@ const RoomTypeContainer = () => {
 
     const onHandleSortChange = (sortField, sortDirection) => {
         const { searchParam, options } = state;
+
         const optionsUpdate = {
             ...options,
             sortField,
@@ -124,8 +147,8 @@ const RoomTypeContainer = () => {
 
     const onHandleResetForm = () => {
         const searchParam = {
-            name: '',
-            description: '',
+            roomNameName: '',
+            roomType: '',
             status: ''
         }
 
@@ -137,92 +160,97 @@ const RoomTypeContainer = () => {
         onHandleSearch(searchParam, options);
     }
 
-    const showModal = (roomType = {}) => {
+    const showModal = (roomName = {}) => {
         setState({
             ...state,
             isShow: true,
-            roomType: roomType
+            isValid: !!roomName._id,
+            roomName: roomName
         });
     }
 
     const onClose = (isSearch) => {
-        fetchRoomTypesRef.current = !!isSearch;
+        fetchRoomNamesRef.current = !!isSearch;
 
         setState({
             ...state,
             isShow: false,
             isValid: false,
-            errorMessage: {},
-            roomType: null,
+            roomName: null,
             dataReady: !isSearch,
             isLoading: false
         });
     }
 
-    const onSaveRoomType = (roomType) => {
-        setState({ ...state, isLoading: true });
-        if (state.roomType._id) {
-            updateRoomType({ ...roomType, id: state.roomType._id },
+    const onSaveRoomName = (roomName) => {
+        setState({ ...state, isLoading: true })
+        if (state.roomName._id) {
+            updateRoomName({ ...roomName, id: state.roomName._id },
                 () => {
                     onClose(true);
                 },
                 () => setState({ ...state, isLoading: false }));
         } else {
-            createNewRoomType(roomType,
+            createRoomName(roomName,
                 () => {
                     onClose(true);
                 },
-                () => setState({ ...state, isLoading: false }));
+                () => setState({ ...state, isLoading: false }))
         }
     }
 
     const onDelete = ({ _id }) => {
         const { searchParam, options } = state;
 
-        deleteRoomType(_id, () => {
+        deleteRoomName(_id, () => {
             onHandleSearch(searchParam, options);
         });
     }
 
     const modalRender = () => {
         return (
-            <Modal classNames={'modal-lg'}
-                title={roomType?.id ? 'Edit Room Type' : 'Add Room Type'}
+            <Modal
+                classNames={'modal-lg'}
+                title={roomName?.id ? 'Edit Room Name' : 'Add New RoomName'}
                 onClose={onClose}
             >
-                <RoomTypeForm
+                <RoomNameForm
                     isLoading={isLoading}
-                    roomType={roomType}
+                    roomName={roomName}
+                    roomTypes={roomTypes}
                     isValid={isValid}
                     onClose={onClose}
-                    onSaveRoomType={onSaveRoomType}
+                    onSaveRoomName={onSaveRoomName}
                 />
             </Modal>
         )
     }
+
     return (
         <>
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_PAGE_HEADER}</h3>
+                    <h3>{ROOM_NAME_TEXT_CONFIG.ROOM_NAME_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
-                    <RoomTypeSearch
+                    <RoomNameSearch
                         searchParam={searchParam}
+                        roomTypes={roomTypes}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <RoomTypeGrid
-                        data={roomTypes}
+
+                    <RoomNameGrid
+                        data={data}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
                         showModal={showModal}
-                        onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
+                        onDelete={onDelete}
                         onHandleSortChange={onHandleSortChange}
                     />
                 </div>
@@ -231,4 +259,4 @@ const RoomTypeContainer = () => {
     )
 }
 
-export default RoomTypeContainer;
+export default RoomNameContainer;

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import Grid from '../../../shared/components/grid/Grid';
-import { ROOM_TYPE_TEXT_CONFIG } from '../constants/resources';
+import Grid  from '../../../shared/components/grid/Grid';
+import { AMENITY_CATEGORY_TEXT_CONFIG } from '../constants/resources';
 
-const RoomTypeGrid = ({
+const AmenityCategoryGrid = ({
     data,
     options,
     totalItems,
@@ -53,7 +53,7 @@ const RoomTypeGrid = ({
             <div className="card-body">
                 <div className="row mb-2">
                     <div className="col-sm-8">
-                        <h4>{ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_TOTAL_LBL}:{totalItems}</h4>
+                        <h4>{AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_TOTAL_LBL}:{totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
                         <button
@@ -61,7 +61,7 @@ const RoomTypeGrid = ({
                             className="btn btn-info"
                             onClick={() => showModal()}
                         >
-                            {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_ADD_BTN}
+                            {AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_ADD_BTN}
                         </button>
                     </div>
                 </div>
@@ -83,9 +83,9 @@ const RoomTypeGrid = ({
     )
 }
 
-export default RoomTypeGrid;
+export default AmenityCategoryGrid;
 
-RoomTypeGrid.propTypes = {
+AmenityCategoryGrid.PropTypes = {
     data: PropTypes.array,
     totalItems: PropTypes.number,
     options: PropTypes.object,
@@ -96,7 +96,7 @@ RoomTypeGrid.propTypes = {
     onHandleSortChange: PropTypes.func
 }
 
-RoomTypeGrid.defaultProps = {
+AmenityCategoryGrid.defaultProps = {
     data: [],
     totalItems: 0,
     options: {}

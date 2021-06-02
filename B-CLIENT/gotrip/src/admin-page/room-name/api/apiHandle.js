@@ -1,11 +1,11 @@
 import alertNotify from "../../../shared/ultils/alertNotify";
 import { cleanObject } from "../../shared/ultils/ultils";
 import { API } from "../constants/api";
-import { PROPERTY_TYPE_TEXT_CONFIG } from "../constants/resources";
+import { ROOM_NAME_TEXT_CONFIG } from '../constants/resources';
 
-const getPropertyTypes = async (params, onSuccess, onError) => {
+const getRoomNames = async (params, onSuccess, onError) => {
     try {
-        const url = new URL(API.SEARCH_PROPERTY_TYPE);
+        const url = new URL(API.SEARCH_ROOM_NAME);
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -27,19 +27,19 @@ const getPropertyTypes = async (params, onSuccess, onError) => {
     }
 }
 
-const createPropertyType = async (propertyType, onSuccess, onError) => {
+const createRoomName = async (roomName, onSuccess, onError) => {
     try {
-        const res = await fetch(API.CREATE_PROPERTY_TYPE, {
+        const res = await fetch(API.CREATE_ROOM_NAME, {
             method: "POST",
-            body: JSON.stringify(propertyType),
+            body: JSON.stringify(roomName),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw PROPERTY_TYPE_TEXT_CONFIG.CREATE_PROPERTY_TYPE_DUPLICATE_MSG;
+            throw ROOM_NAME_TEXT_CONFIG.CREATE_ROOM_NAME_DUPLICATE_MSG;
         }
 
-        alertNotify.success(PROPERTY_TYPE_TEXT_CONFIG.CREATE_PROPERTY_TYPE_SUCCESS_MSG);
+        alertNotify.success(ROOM_NAME_TEXT_CONFIG.CREATE_ROOM_NAME_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -52,19 +52,19 @@ const createPropertyType = async (propertyType, onSuccess, onError) => {
     }
 }
 
-const updatePropertyType = async (propertyType, onSuccess, onError) => {
+const updateRoomName = async (roomName, onSuccess, onError) => {
     try {
-        const res = await fetch(API.UPDATE_PROPERTY_TYPE, {
+        const res = await fetch(API.UPDATE_ROOM_NAME, {
             method: "PUT",
-            body: JSON.stringify(propertyType),
+            body: JSON.stringify(roomName),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok) {
-            throw PROPERTY_TYPE_TEXT_CONFIG.UPDATE_PROPERTY_TYPE_FAILED_MSG;
+            throw ROOM_NAME_TEXT_CONFIG.UPDATE_ROOM_NAME_FAILED_MSG;
         }
 
-        alertNotify.success(PROPERTY_TYPE_TEXT_CONFIG.UPDATE_PROPERTY_TYPE_SUCCESS_MSG);
+        alertNotify.success(ROOM_NAME_TEXT_CONFIG.UPDATE_ROOM_NAME_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -77,18 +77,18 @@ const updatePropertyType = async (propertyType, onSuccess, onError) => {
     }
 }
 
-const deletePropertyType = async (id, onSuccess, onError) => {
+const deleteRoomName = async (id, onSuccess, onError) => {
     try {
-        const res = await fetch(`${API.DELETE_PROPERTY_TYPE}${id}`, {
+        const res = await fetch(`${API.DELETE_ROOM_NAME}${id}`, {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok) {
-            throw PROPERTY_TYPE_TEXT_CONFIG.DELETE_PROPERTY_TYPE_FAILED_MSG;
+            throw ROOM_NAME_TEXT_CONFIG.DELETE_ROOM_NAME_FAILED_MSG;
         }
 
-        alertNotify.error(PROPERTY_TYPE_TEXT_CONFIG.DELETE_PROPERTY_TYPE_SUCCESS_MSG);
+        alertNotify.error(ROOM_NAME_TEXT_CONFIG.DELETE_ROOM_NAME_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -101,9 +101,9 @@ const deletePropertyType = async (id, onSuccess, onError) => {
     }
 }
 
-const getProperties = async () => {
+const getRoomTypes = async () => {
     try {
-        const url = new URL(API.GET_PROPERTIES);
+        const url = new URL(API.GET_ROOM_TYPE);
         const res = await fetch(url);
         if (!res.ok) {
             throw new Error(res.status);
@@ -117,9 +117,9 @@ const getProperties = async () => {
 }
 
 export {
-    getPropertyTypes,
-    createPropertyType,
-    updatePropertyType,
-    deletePropertyType,
-    getProperties
+    getRoomNames,
+    createRoomName,
+    updateRoomName,
+    deleteRoomName,
+    getRoomTypes
 }

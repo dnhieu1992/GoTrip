@@ -118,7 +118,7 @@ function updatePropertyType(req, res) {
     const propertyTypeUpdate = {
         name,
         status,
-        propertyId,
+        property:propertyId,
         description
     };
 

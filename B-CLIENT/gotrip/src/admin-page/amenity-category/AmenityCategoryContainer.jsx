@@ -1,30 +1,29 @@
 import { useEffect, useRef, useState } from 'react';
 import Modal from '../../shared/components/forms/Modal';
-import RoomTypeGrid from './component/RoomTypeGrid';
-import RoomTypeSearch from './component/RoomTypeSearch';
-import RoomTypeForm from './component/RoomTypeForm';
-
 import {
-    getRoomTypes,
-    updateRoomType,
-    createNewRoomType,
-    deleteRoomType
-} from './api/apiHandle.js';
-import { ROOM_TYPE_TEXT_CONFIG } from './constants/resources';
+    createNewAmenityCategory,
+    deleteAmenityCategory,
+    getAmenityCategories,
+    updateAmenityCategory
+} from './api/apiHandle';
+import AmenityCategoryForm from './component/AmenityCategoryForm';
+import AmenityCategoryGrid from './component/AmenityCategoryGrid';
+import AmenityCategorySearch from './component/AmenityCategorySearch';
+import { AMENITY_CATEGORY_TEXT_CONFIG } from './constants/resources';
 
-const RoomTypeContainer = () => {
+const AmenityCategoryContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetchRoomTypesRef = useRef(false);
+    const fetchAmenityCategoriesRef = useRef(false);
 
     const {
         total,
         searchParam,
         options,
         isShow,
-        roomType,
+        amenityCategory,
         dataReady,
-        roomTypes,
+        amenityCategories,
         isValid,
         isLoading
     } = state;
@@ -35,24 +34,24 @@ const RoomTypeContainer = () => {
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchRoomTypesRef.current) {
-            fetchRoomTypes();
+        if (didMountRef.current && fetchAmenityCategoriesRef.current) {
+            fetchAmenityCategories();
         }
     });
 
-    const fetchRoomTypes = () => {
-        fetchRoomTypesRef.current = false;
+    const fetchAmenityCategories = () => {
+        fetchAmenityCategoriesRef.current = false;
         const {
             searchParam = {},
             options = {}
         } = state;
 
-        getRoomTypes({ ...searchParam, ...options }, ({ total, roomTypes }) => {
+        getAmenityCategories({ ...searchParam, ...options }, ({ total, amenityCategories }) => {
             setTimeout(() => {
                 setState({
                     ...state,
                     total,
-                    roomTypes,
+                    amenityCategories,
                     dataReady: true
                 });
             }, 500);
@@ -71,7 +70,7 @@ const RoomTypeContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetchRoomTypesRef.current = true;
+        fetchAmenityCategoriesRef.current = true;
 
         setState({
             ...state,
@@ -137,85 +136,87 @@ const RoomTypeContainer = () => {
         onHandleSearch(searchParam, options);
     }
 
-    const showModal = (roomType = {}) => {
+    const showModal = (amenityCategory = {}) => {
         setState({
             ...state,
             isShow: true,
-            roomType: roomType
+            amenityCategory: amenityCategory
         });
     }
 
     const onClose = (isSearch) => {
-        fetchRoomTypesRef.current = !!isSearch;
+        fetchAmenityCategoriesRef.current = !!isSearch;
 
         setState({
             ...state,
             isShow: false,
             isValid: false,
             errorMessage: {},
-            roomType: null,
+            amenityCategory: null,
             dataReady: !isSearch,
             isLoading: false
         });
     }
 
-    const onSaveRoomType = (roomType) => {
+    const onSaveAmenityCategory = (amenityCategory) => {
         setState({ ...state, isLoading: true });
-        if (state.roomType._id) {
-            updateRoomType({ ...roomType, id: state.roomType._id },
+        if (state.amenityCategory._id) {
+            updateAmenityCategory({ ...amenityCategory, id: state.amenityCategory._id },
                 () => {
                     onClose(true);
                 },
-                () => setState({ ...state, isLoading: false }));
+                () => setState({ ...state, isLoading: false }))
         } else {
-            createNewRoomType(roomType,
+            createNewAmenityCategory(amenityCategory,
                 () => {
                     onClose(true);
                 },
-                () => setState({ ...state, isLoading: false }));
+                () => setState({ ...state, isLoading: false }))
         }
     }
 
     const onDelete = ({ _id }) => {
         const { searchParam, options } = state;
 
-        deleteRoomType(_id, () => {
+        deleteAmenityCategory(_id, () => {
             onHandleSearch(searchParam, options);
         });
     }
 
     const modalRender = () => {
         return (
-            <Modal classNames={'modal-lg'}
-                title={roomType?.id ? 'Edit Room Type' : 'Add Room Type'}
+            <Modal
+                classNames={'modal-lg'}
+                title={amenityCategory?.id ? 'Edit Amenity Category' : 'Add Amenity Category'}
                 onClose={onClose}
             >
-                <RoomTypeForm
+                <AmenityCategoryForm
                     isLoading={isLoading}
-                    roomType={roomType}
+                    amenityCategory={amenityCategory}
                     isValid={isValid}
                     onClose={onClose}
-                    onSaveRoomType={onSaveRoomType}
+                    onSaveAmenityCategory={onSaveAmenityCategory}
                 />
             </Modal>
         )
     }
+
     return (
         <>
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_PAGE_HEADER}</h3>
+                    <h3>{AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
-                    <RoomTypeSearch
+                    <AmenityCategorySearch
                         searchParam={searchParam}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <RoomTypeGrid
-                        data={roomTypes}
+                    <AmenityCategoryGrid
+                        data={amenityCategories}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
@@ -231,4 +232,4 @@ const RoomTypeContainer = () => {
     )
 }
 
-export default RoomTypeContainer;
+export default AmenityCategoryContainer;

@@ -1,11 +1,11 @@
-import alertNotify from '../../../shared/ultils/alertNotify';
-import { cleanObject } from '../../shared/ultils/ultils';
-import { API } from '../constants/api';
-import { ROOM_TYPE_TEXT_CONFIG } from '../constants/resources';
+import alertNotify from "../../../shared/ultils/alertNotify";
+import { cleanObject } from "../../shared/ultils/ultils";
+import { API } from "../constants/api";
+import { AMENITY_CATEGORY_TEXT_CONFIG } from "../constants/resources";
 
-const getRoomTypes = async (params, onSuccess, onError) => {
+const getAmenityCategories = async (params, onSuccess, onError) => {
     try {
-        const url = new URL(API.SEARCH_ROOM_TYPE);
+        const url = new URL(API.SEARCH_AMENITY_CATEGORY);
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
@@ -27,19 +27,19 @@ const getRoomTypes = async (params, onSuccess, onError) => {
     }
 }
 
-const createNewRoomType = async (roomType, onSuccess, onError) => {
+const createNewAmenityCategory = async (amenityCategory, onSuccess, onError) => {
     try {
-        const res = await fetch(API.CREATE_ROOM_TYPE, {
+        const res = await fetch(API.CREATE_AMENITY_CATEGORY, {
             method: "POST",
-            body: JSON.stringify(roomType),
+            body: JSON.stringify(amenityCategory),
             headers: { "Content-type": "application/json;charset=UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw ROOM_TYPE_TEXT_CONFIG.CREATE_ROOM_TYPE_DUPLICATE_MSG;
+            throw AMENITY_CATEGORY_TEXT_CONFIG.CREATE_AMENITY_CATEGORY_DUPLICATE_MSG;
         }
 
-        alertNotify.success(ROOM_TYPE_TEXT_CONFIG.CREATE_ROOM_TYPE_SUCCESS_MSG);
+        alertNotify.success(AMENITY_CATEGORY_TEXT_CONFIG.CREATE_AMENITY_CATEGORY_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -52,19 +52,19 @@ const createNewRoomType = async (roomType, onSuccess, onError) => {
     }
 }
 
-const updateRoomType = async (roomType, onSuccess, onError) => {
+const updateAmenityCategory = async (amenityCategory, onSuccess, onError) => {
     try {
-        const res = await fetch(API.UPDATE_ROOM_TYPE, {
+        const res = await fetch(API.UPDATE_AMENITY_CATEGORY, {
             method: "PUT",
-            body: JSON.stringify(roomType),
+            body: JSON.stringify(amenityCategory),
             headers: { "Content-type": "application/json;charset=UTF-8" }
         });
 
         if (!res.ok) {
-            throw ROOM_TYPE_TEXT_CONFIG.UPDATE_ROOM_TYPE_FAILED_MSG;
+            throw AMENITY_CATEGORY_TEXT_CONFIG.UPDATE_AMENITY_CATEGORY_FAILED_MSG;
         }
 
-        alertNotify.success(ROOM_TYPE_TEXT_CONFIG.UPDATE_ROOM_TYPE_SUCCESS_MSG);
+        alertNotify.success(AMENITY_CATEGORY_TEXT_CONFIG.UPDATE_AMENITY_CATEGORY_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -77,18 +77,18 @@ const updateRoomType = async (roomType, onSuccess, onError) => {
     }
 }
 
-const deleteRoomType = async (id, onSuccess) => {
+const deleteAmenityCategory = async (id, onSuccess) => {
     try {
-        const res = await fetch(`${API.DELETE_ROOM_TYPE}${id}`, {
+        const res = await fetch(`${API.DELETE_AMENITY_CATEGORY}${id}`, {
             method: "DELETE",
             header: { "Content-type": "application/json;charset=UTF-8" }
         });
 
         if (!res.ok) {
-            throw ROOM_TYPE_TEXT_CONFIG.DELETE_ROOM_TYPE_FAILED_MSG;
+            throw AMENITY_CATEGORY_TEXT_CONFIG.DELETE_AMENITY_CATEGORY_FAILED_MSG;
         }
 
-        alertNotify.error(ROOM_TYPE_TEXT_CONFIG.DELETE_ROOM_TYPE_SUCCESS_MSG);
+        alertNotify.error(AMENITY_CATEGORY_TEXT_CONFIG.DELETE_AMENITY_CATEGORY_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -99,8 +99,8 @@ const deleteRoomType = async (id, onSuccess) => {
 }
 
 export {
-    getRoomTypes,
-    createNewRoomType,
-    updateRoomType,
-    deleteRoomType
+    getAmenityCategories,
+    createNewAmenityCategory,
+    updateAmenityCategory,
+    deleteAmenityCategory
 }

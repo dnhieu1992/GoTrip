@@ -1,22 +1,22 @@
 import PropTypes from 'prop-types';
 import Grid from '../../../shared/components/grid/Grid';
-import { ROOM_TYPE_TEXT_CONFIG } from '../constants/resources';
+import { ROOM_NAME_TEXT_CONFIG } from '../constants/resources';
 
-const RoomTypeGrid = ({
+const RoomNameGrid = ({
     data,
     options,
     totalItems,
     onHandlePageChange,
     onHandlePageSizeChange,
-    showModal,
     onDelete,
+    showModal,
     dataReady,
     onHandleSortChange
 }) => {
     const columns = [
         {
             fieldName: 'Id',
-            dataField: '_id',
+            dataField: 'id',
             isHidden: true
         },
         {
@@ -25,8 +25,8 @@ const RoomTypeGrid = ({
             isSort: true
         },
         {
-            fieldName: 'Description',
-            dataField: 'description',
+            fieldName: 'RoomType',
+            dataField: 'roomTypeName',
             isSort: true
         },
         {
@@ -37,7 +37,7 @@ const RoomTypeGrid = ({
             fieldName: 'Action',
             type: 'action',
             onEdit: showModal,
-            onDelete: onDelete,
+            onDelete: onDelete
         }
     ];
 
@@ -53,7 +53,7 @@ const RoomTypeGrid = ({
             <div className="card-body">
                 <div className="row mb-2">
                     <div className="col-sm-8">
-                        <h4>{ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_TOTAL_LBL}:{totalItems}</h4>
+                        <h4>{ROOM_NAME_TEXT_CONFIG.ROOM_NAME_TOTAL_LBL}:{totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
                         <button
@@ -61,31 +61,30 @@ const RoomTypeGrid = ({
                             className="btn btn-info"
                             onClick={() => showModal()}
                         >
-                            {ROOM_TYPE_TEXT_CONFIG.ROOM_TYPE_ADD_BTN}
+                            {ROOM_NAME_TEXT_CONFIG.ROOM_NAME_ADD_BTN}
                         </button>
                     </div>
                 </div>
                 <Grid
+                    data={data}
                     columns={columns}
+                    dataReady={dataReady}
                     currentPage={pageNumber}
                     pageSize={pageSize}
                     sortField={sortField}
                     sortDirection={sortDirection}
                     total={totalItems}
-                    data={data}
-                    dataReady={dataReady}
                     onPageNumberChange={onHandlePageChange}
                     onPageSizeChange={onHandlePageSizeChange}
                     onSortFieldChange={onHandleSortChange}
                 />
             </div>
         </div>
-    )
+    );
 }
+export default RoomNameGrid;
 
-export default RoomTypeGrid;
-
-RoomTypeGrid.propTypes = {
+RoomNameGrid.propTypes = {
     data: PropTypes.array,
     totalItems: PropTypes.number,
     options: PropTypes.object,
@@ -93,10 +92,10 @@ RoomTypeGrid.propTypes = {
     onDelete: PropTypes.func,
     onHandlePageChange: PropTypes.func,
     onHandlePageSizeChange: PropTypes.func,
-    onHandleSortChange: PropTypes.func
+    onHandelSortChange: PropTypes.func
 }
 
-RoomTypeGrid.defaultProps = {
+RoomNameGrid.defaultProps = {
     data: [],
     totalItems: 0,
     options: {}
