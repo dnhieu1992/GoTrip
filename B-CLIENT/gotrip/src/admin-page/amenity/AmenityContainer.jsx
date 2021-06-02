@@ -1,59 +1,79 @@
 import { useState, useRef, useEffect } from 'react';
 import Modal from '../../shared/components/forms/Modal';
-import BedGrid from './component/BedGrid';
-import BedSearch from './component/BedSearch';
-import BedForm from './component/BedForm';
-
+import AmenityGrid from './component/AmenityGrid';
+import AmenitySearch from './component/AmenitySearch';
+import AmenityForm from './component/AmenityForm';
 import {
-    getBeds,
-    updateBed,
-    createNewBed,
-    deleteBed
+    getAmenities,
+    updateAmenity,
+    createNewAmenity,
+    deleteAmenity,
+    getAmenityCategories
 } from './api/apiHandle.js';
-import { BED_TEXT_CONFIG } from './constants/resources';
+import { AMENITY_TEXT_CONFIG } from './constants/resources';
 
-const BedContainer = () => {
+const AmenityContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetchBedsRef = useRef(false);
+    const fetchAmenitiesRef = useRef(false);
 
     const {
         total,
-        beds,
+        data,
         options,
         isValid,
-        bed,
+        amenity,
+        amenityCategories = [],
         isShow,
         dataReady,
         isLoading,
         searchParam,
     } = state;
 
-    useEffect(() => {
+    useEffect(async() => {
         if (!didMountRef.current) {
+            await getAllAmenityCategories();
             onHandleSearch({});
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchBedsRef.current) {
-            fetchBeds();
+        if (didMountRef.current && fetchAmenitiesRef.current) {
+            fetchAmenities();
         }
     });
 
-    const fetchBeds = () => {
-        fetchBedsRef.current = false;
+    const getAllAmenityCategories = async() => {
+        await getAmenityCategories().then((amenityCategories) => {
+            setState({
+                ...state,
+                amenityCategories: amenityCategories
+            });
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    const fetchAmenities = () => {
+        fetchAmenitiesRef.current = false;
 
         const {
             searchParam = {},
             options = {}
         } = state;
 
-        getBeds({ ...searchParam, ...options }, ({ total, beds }) => {
+        getAmenities({ ...searchParam, ...options }, ({ total, amenities }) => {
+            const data = amenities.map(amenity => {
+                return {
+                    ...amenity,
+                    amenityCategoryName: amenity?.amenityCategory?.name
+                }
+            });
+            
             setTimeout(() => {
                 setState({
                     ...state,
                     total,
-                    beds,
+                    data,
                     dataReady: true
                 });
             }, 500);
@@ -72,8 +92,7 @@ const BedContainer = () => {
             sortDirection: optionParams.sortDirection || null
         };
 
-        fetchBedsRef.current = true;
-
+        fetchAmenitiesRef.current = true;
         setState({
             ...state,
             searchParam: searchParam,
@@ -127,7 +146,7 @@ const BedContainer = () => {
     const onHandleResetForm = () => {
         const searchParam = {
             name: '',
-            description: '',
+            amenityCategoryId: '',
             status: ''
         };
 
@@ -139,38 +158,37 @@ const BedContainer = () => {
         onHandleSearch(searchParam, options);
     };
 
-    const showModal = (bed = {}) => {
+    const showModal = (amenity = {}) => {
         setState({
             ...state,
             isShow: true,
-            bed: bed
+            amenity: amenity
         });
     };
 
     const onClose = (isSearch) => {
-        fetchBedsRef.current = !!isSearch;
-
+        fetchAmenitiesRef.current = !!isSearch;
         setState({
             ...state,
             isShow: false,
             isValid: false,
             errorMessage: {},
-            bed: null,
+            amenity: null,
             dataReady: !isSearch,
             isLoading: false
         });
     };
 
-    const onSaveBed = (bed) => {
+    const onSaveAmenity = (amenity) => {
         setState({ ...state, isLoading: true })
-        if (state.bed._id) {
-            updateBed({ ...bed, id: state.bed._id },
+        if (state.amenity._id) {
+            updateAmenity({ ...amenity, id: state.amenity._id },
                 () => {
                     onClose(true);
                 },
                 () => setState({ ...state, isLoading: false }));
         } else {
-            createNewBed(bed,
+            createNewAmenity(amenity,
                 () => {
                     onClose(true);
                 },
@@ -181,24 +199,25 @@ const BedContainer = () => {
     const onDelete = ({ _id }) => {
         const { searchParam, options } = state;
 
-        deleteBed(_id, () => {
+        deleteAmenity(_id, () => {
             onHandleSearch(searchParam, options);
         });
     };
 
     const modalRender = () => {
         return (
-            <Modal
+            <Modal 
                 classNames={'modal-lg'}
-                title={bed?._id ? BED_TEXT_CONFIG.BED_UPDATE_HEADER_LBL : BED_TEXT_CONFIG.BED_CREATE_HEADER_LBL}
+                title={amenity?._id ? AMENITY_TEXT_CONFIG.AMENITY_UPDATE_HEADER_LBL : AMENITY_TEXT_CONFIG.AMENITY_CREATE_HEADER_LBL}
                 onClose={onClose}
             >
-                <BedForm
+                <AmenityForm
                     isLoading={isLoading}
-                    bed={bed}
+                    amenity={amenity}
+                    amenityCategories={amenityCategories}
                     isValid={isValid}
                     onClose={onClose}
-                    onSaveBed={onSaveBed}
+                    onSaveAmenity={onSaveAmenity}
                 />
             </Modal>
         );
@@ -209,17 +228,18 @@ const BedContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{BED_TEXT_CONFIG.BED_PAGE_HEADER}</h3>
+                    <h3>{AMENITY_TEXT_CONFIG.AMENITY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
-                    <BedSearch
+                    <AmenitySearch
                         searchParam={searchParam}
+                        amenityCategories={amenityCategories}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <BedGrid
-                        data={beds}
+                    <AmenityGrid
+                        data={data}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
@@ -235,4 +255,4 @@ const BedContainer = () => {
     )
 }
 
-export default BedContainer;
+export default AmenityContainer;

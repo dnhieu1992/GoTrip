@@ -1,28 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
 import Modal from '../../shared/components/forms/Modal';
-import BedGrid from './component/BedGrid';
-import BedSearch from './component/BedSearch';
-import BedForm from './component/BedForm';
+import BreakfastGrid from './component/BreakfastGrid';
+import BreakfastSearch from './component/BreakfastSearch';
+import BreakfastForm from './component/BreakfastForm';
 
 import {
-    getBeds,
-    updateBed,
-    createNewBed,
-    deleteBed
+    getBreakfasts,
+    updateBreakfast,
+    createNewBreakfast,
+    deleteBreakfast
 } from './api/apiHandle.js';
-import { BED_TEXT_CONFIG } from './constants/resources';
+import { BREAKFAST_TEXT_CONFIG } from './constants/resources';
 
-const BedContainer = () => {
+const BreakfastContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetchBedsRef = useRef(false);
+    const fetchBreakfastsRef = useRef(false);
 
     const {
         total,
-        beds,
+        breakfasts,
         options,
         isValid,
-        bed,
+        breakfast,
         isShow,
         dataReady,
         isLoading,
@@ -35,25 +35,25 @@ const BedContainer = () => {
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchBedsRef.current) {
-            fetchBeds();
+        if (didMountRef.current && fetchBreakfastsRef.current) {
+            fetchBreakfasts();
         }
     });
 
-    const fetchBeds = () => {
-        fetchBedsRef.current = false;
+    const fetchBreakfasts = () => {
+        fetchBreakfastsRef.current = false;
 
         const {
             searchParam = {},
             options = {}
         } = state;
 
-        getBeds({ ...searchParam, ...options }, ({ total, beds }) => {
+        getBreakfasts({ ...searchParam, ...options }, ({ total, breakfasts }) => {
             setTimeout(() => {
                 setState({
                     ...state,
                     total,
-                    beds,
+                    breakfasts,
                     dataReady: true
                 });
             }, 500);
@@ -72,7 +72,7 @@ const BedContainer = () => {
             sortDirection: optionParams.sortDirection || null
         };
 
-        fetchBedsRef.current = true;
+        fetchBreakfastsRef.current = true;
 
         setState({
             ...state,
@@ -139,16 +139,16 @@ const BedContainer = () => {
         onHandleSearch(searchParam, options);
     };
 
-    const showModal = (bed = {}) => {
+    const showModal = (breakfast = {}) => {
         setState({
             ...state,
             isShow: true,
-            bed: bed
+            breakfast: breakfast
         });
     };
 
     const onClose = (isSearch) => {
-        fetchBedsRef.current = !!isSearch;
+        fetchBreakfastsRef.current = !!isSearch;
 
         setState({
             ...state,
@@ -161,16 +161,16 @@ const BedContainer = () => {
         });
     };
 
-    const onSaveBed = (bed) => {
+    const onSaveBreakfast = (breakfast) => {
         setState({ ...state, isLoading: true })
-        if (state.bed._id) {
-            updateBed({ ...bed, id: state.bed._id },
+        if (state.breakfast._id) {
+            updateBreakfast({ ...breakfast, id: state.breakfast._id },
                 () => {
                     onClose(true);
                 },
                 () => setState({ ...state, isLoading: false }));
         } else {
-            createNewBed(bed,
+            createNewBreakfast(breakfast,
                 () => {
                     onClose(true);
                 },
@@ -181,7 +181,7 @@ const BedContainer = () => {
     const onDelete = ({ _id }) => {
         const { searchParam, options } = state;
 
-        deleteBed(_id, () => {
+        deleteBreakfast(_id, () => {
             onHandleSearch(searchParam, options);
         });
     };
@@ -190,15 +190,15 @@ const BedContainer = () => {
         return (
             <Modal
                 classNames={'modal-lg'}
-                title={bed?._id ? BED_TEXT_CONFIG.BED_UPDATE_HEADER_LBL : BED_TEXT_CONFIG.BED_CREATE_HEADER_LBL}
+                title={breakfast?._id ? 'Edit Breakfast' : 'Add New Breakfast'}
                 onClose={onClose}
             >
-                <BedForm
+                <BreakfastForm
                     isLoading={isLoading}
-                    bed={bed}
+                    breakfast={breakfast}
                     isValid={isValid}
                     onClose={onClose}
-                    onSaveBed={onSaveBed}
+                    onSaveBreakfast={onSaveBreakfast}
                 />
             </Modal>
         );
@@ -209,17 +209,17 @@ const BedContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{BED_TEXT_CONFIG.BED_PAGE_HEADER}</h3>
+                    <h3>{BREAKFAST_TEXT_CONFIG.BREAKFAST_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
-                    <BedSearch
+                    <BreakfastSearch
                         searchParam={searchParam}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <BedGrid
-                        data={beds}
+                    <BreakfastGrid
+                        data={breakfasts}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
@@ -235,4 +235,4 @@ const BedContainer = () => {
     )
 }
 
-export default BedContainer;
+export default BreakfastContainer;

@@ -1,41 +1,29 @@
 import { useState } from 'react';
 import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
-import { STATUSES } from '../constants/city';
-import { CITY_TEXT_CONFIG } from '../constants/resources';
+import { STATUSES } from '../constants/breakfast';
+import { BREAKFAST_TEXT_CONFIG } from '../constants/resources';
 const {
     FormsyInput,
     FormsySelect
 } = FormsyElement
 
-const CityForm = ({
-    city,
-    countries,
+const BreakfastForm = ({
+    breakfast,
     isLoading,
     onClose,
-    onSaveCity
+    onSaveBreakfast
 }) => {
     const [isValid, setIsValid] = useState(true);
 
     const {
         name,
+        description,
         status
-    } = city;
-
-    const data = countries.map(country => {
-        return {
-            value: country._id,
-            label: country.name
-        }
-    })
-
-    data.unshift({
-        value: '',
-        label: 'Choose the country...'
-    })
+    } = breakfast;
 
     const onSubmit = (modal) => {
-        onSaveCity(modal);
+        onSaveBreakfast(modal);
     }
 
     const onValid = () => {
@@ -54,33 +42,46 @@ const CityForm = ({
                         inputProps={{
                             id: 'name',
                             type: 'text',
-                            placeholder: CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL,
+                            placeholder: BREAKFAST_TEXT_CONFIG.BREAKFAST_NAME_FIELD_LBL,
                         }}
                         name="name"
-                        label={CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
+                        label={BREAKFAST_TEXT_CONFIG.BREAKFAST_NAME_FIELD_LBL}
                         value={name}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={BREAKFAST_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
-                    <FormsySelect
-                        name='countryId'
-                        value={city?.country?._id}
-                        dataSource={data}
-                        label={CITY_TEXT_CONFIG.CITY_COUNTRYID_FIELD_LBL}
+                    <FormsyInput
+                        inputProps={{
+                            id: 'description',
+                            type: 'text',
+                            placeholder: BREAKFAST_TEXT_CONFIG.BREAKFAST_DESCRIPTION_FIELD_LBL,
+                        }}
+                        name="description"
+                        label={BREAKFAST_TEXT_CONFIG.BREAKFAST_DESCRIPTION_FIELD_LBL}
+                        value={description}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={BREAKFAST_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
+                    {/* <label>Description</label>
+                    <textarea
+                        className="form-control"
+                        name="description"
+                        value={description}
+                        label={BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
+                        required
+                    >
+                    </textarea> */}
                 </div>
                 <div className="form-group">
                     <FormsySelect
                         name='status'
                         value={status}
                         dataSource={STATUSES}
-                        label={CITY_TEXT_CONFIG.CITY_STATUS_FIELD_LBL}
+                        label={BREAKFAST_TEXT_CONFIG.BREAKFAST_STATUS_FIELD_LBL}
                         required
-                        validationError={CITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={BREAKFAST_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -90,14 +91,14 @@ const CityForm = ({
                             className="btn btn-danger mr-5"
                             onClick={() => onClose(false)}
                         >
-                            {CITY_TEXT_CONFIG.CITY_CLOSE_BTN}
+                            {BREAKFAST_TEXT_CONFIG.BREAKFAST_CLOSE_BTN}
                         </LoaderButton>
                         <LoaderButton
                             type="submit"
                             disabled={!isValid}
                             isLoading={isLoading}
                         >
-                            {CITY_TEXT_CONFIG.CITY_SUBMIT_BTN}
+                            {BREAKFAST_TEXT_CONFIG.BREAKFAST_SUBMIT_BTN}
                         </LoaderButton>
                     </div>
                 </div>
@@ -106,4 +107,5 @@ const CityForm = ({
     );
 };
 
-export default CityForm;
+export default BreakfastForm;
+
