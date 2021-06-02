@@ -1,11 +1,11 @@
 import alertNotify from "../../../shared/ultils/alertNotify";
 import { cleanObject } from "../../shared/ultils/ultils";
 import { API } from "../constants/api";
-import { PROPERTYTYPE_TEXT_CONFIG } from "../constants/resources";
+import { PROPERTY_TYPE_TEXT_CONFIG } from "../constants/resources";
 
 const getPropertyTypes = async (params, onSuccess, onError) => {
     try {
-        const url = new URL(API.SEARCH_PROPERTYTYPE);
+        const url = new URL(API.SEARCH_PROPERTY_TYPE);
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -29,17 +29,17 @@ const getPropertyTypes = async (params, onSuccess, onError) => {
 
 const createPropertyType = async (propertyType, onSuccess, onError) => {
     try {
-        const res = await fetch(API.CREATE_PROPERTYTYPE, {
+        const res = await fetch(API.CREATE_PROPERTY_TYPE, {
             method: "POST",
             body: JSON.stringify(propertyType),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw PROPERTYTYPE_TEXT_CONFIG.CREATE_PROPERTYTYPE_DUPLICATE_MSG;
+            throw PROPERTY_TYPE_TEXT_CONFIG.CREATE_PROPERTY_TYPE_DUPLICATE_MSG;
         }
 
-        alertNotify.success(PROPERTYTYPE_TEXT_CONFIG.CREATE_PROPERTYTYPE_SUCCESS_MSG);
+        alertNotify.success(PROPERTY_TYPE_TEXT_CONFIG.CREATE_PROPERTY_TYPE_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -54,17 +54,17 @@ const createPropertyType = async (propertyType, onSuccess, onError) => {
 
 const updatePropertyType = async (propertyType, onSuccess, onError) => {
     try {
-        const res = await fetch(API.UPDATE_PROPERTYTYPE, {
+        const res = await fetch(API.UPDATE_PROPERTY_TYPE, {
             method: "PUT",
             body: JSON.stringify(propertyType),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok) {
-            throw PROPERTYTYPE_TEXT_CONFIG.UPDATE_PROPERTYTYPE_FAILED_MSG;
+            throw PROPERTY_TYPE_TEXT_CONFIG.UPDATE_PROPERTY_TYPE_FAILED_MSG;
         }
 
-        alertNotify.success(PROPERTYTYPE_TEXT_CONFIG.UPDATE_PROPERTYTYPE_SUCCESS_MSG);
+        alertNotify.success(PROPERTY_TYPE_TEXT_CONFIG.UPDATE_PROPERTY_TYPE_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();
@@ -79,16 +79,16 @@ const updatePropertyType = async (propertyType, onSuccess, onError) => {
 
 const deletePropertyType = async (id, onSuccess, onError) => {
     try {
-        const res = await fetch(`${API.DELETE_PROPERTYTYPE}${id}`, {
+        const res = await fetch(`${API.DELETE_PROPERTY_TYPE}${id}`, {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok) {
-            throw PROPERTYTYPE_TEXT_CONFIG.DELETE_PROPERTYTYPE_FAILED_MSG;
+            throw PROPERTY_TYPE_TEXT_CONFIG.DELETE_PROPERTY_TYPE_FAILED_MSG;
         }
 
-        alertNotify.error(PROPERTYTYPE_TEXT_CONFIG.DELETE_PROPERTYTYPE_SUCCESS_MSG);
+        alertNotify.error(PROPERTY_TYPE_TEXT_CONFIG.DELETE_PROPERTY_TYPE_SUCCESS_MSG);
 
         if (onSuccess) {
             return onSuccess();

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Button, FormGroup, Input, Label, Row, Select } from '../../../shared/components';
 import { STATUSES } from '../constants/propertyType';
-import { PROPERTYTYPE_TEXT_CONFIG } from '../constants/resources';
+import { PROPERTY_TYPE_TEXT_CONFIG } from '../constants/resources';
 
 const PropertyTypeSearch = ({
     searchParam,
@@ -40,7 +40,7 @@ const PropertyTypeSearch = ({
     return (
         <div className="card card-info">
             <div className="card-header">
-                <h3 className="card-title">{PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_SEARCH_HEADER_LBL}</h3>
+                <h3 className="card-title">{PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_SEARCH_HEADER_LBL}</h3>
             </div>
             <form className="form-horizontal" autoComplete="off">
                 <div className="card-body">
@@ -48,14 +48,14 @@ const PropertyTypeSearch = ({
                         <div className="col-sm-6">
                             <FormGroup as={Row}>
                                 <Label className="col-sm-2">
-                                    {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_NAME_FIELD_LBL}
+                                    {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
                                     <Input
                                         type="text"
                                         id="name"
                                         name="name"
-                                        placeholder={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_NAME_FIELD_LBL}
+                                        placeholder={PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_NAME_FIELD_LBL}
                                         value={name}
                                         onChange={onHandleFieldChange}
                                     />
@@ -65,7 +65,7 @@ const PropertyTypeSearch = ({
                         <div className="col-sm-6">
                             <FormGroup as={Row}>
                                 <Label className="col-sm-2">
-                                    {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_PROPERTY_FIELD_LBL}
+                                    {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_PROPERTY_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
                                     <Select
@@ -82,7 +82,7 @@ const PropertyTypeSearch = ({
                         <div className="col-sm-6">
                             <FormGroup as={Row}>
                                 <Label className="col-sm-2" >
-                                    {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_STATUS_FIELD_LBL}
+                                    {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
                                     <Select
@@ -102,13 +102,13 @@ const PropertyTypeSearch = ({
                                 className="mr-3"
                                 onClick={() => onHandleSearch(searchParam)}
                             >
-                                {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_SEARCH_BTN}
+                                {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_SEARCH_BTN}
                             </Button>
                             <Button
                                 variant="info"
                                 onClick={onHandleResetForm}
                             >
-                                {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_RESET_BTN}
+                                {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_RESET_BTN}
                             </Button>
                         </div>
                     </div>

@@ -11,13 +11,13 @@ import {
     deletePropertyType,
     getProperties
 } from './api/apiHandle.js';
-import { PROPERTYTYPE_TEXT_CONFIG } from './constants/resources';
+import { PROPERTY_TYPE_TEXT_CONFIG } from './constants/resources';
 
 const PropertyTypeContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
     const fetchPropertyTypesRef = useRef(false);
-    const [properties, setProperties] = useState([]);
+    //const [properties, setProperties] = useState([]);
 
     const {
         total,
@@ -28,11 +28,12 @@ const PropertyTypeContainer = () => {
         isShow,
         dataReady,
         isLoading,
-        searchParam
+        searchParam,
+        properties=[]
     } = state;
-    useEffect(() => {
+    useEffect(async() => {
         if (!didMountRef.current) {
-            getAllProperties();
+            await getAllProperties();
             onHandleSearch({});
             didMountRef.current = true;
         }
@@ -42,9 +43,12 @@ const PropertyTypeContainer = () => {
         }
     });
 
-    const getAllProperties = () => {
-        getProperties().then((properties) => {
-            setProperties(properties);
+    const getAllProperties = async() => {
+        await getProperties().then((properties) => {
+            setState({
+                ...state,
+                properties:properties
+            })
         }).catch(error => {
             console.log(error);
         })
@@ -63,7 +67,8 @@ const PropertyTypeContainer = () => {
             const data = propertyTypes.map(propertyType => {
                 return {
                     ...propertyType,
-                    propertyName: propertyType.property.name
+                    propertyID:propertyType.property._id,
+                    propertyName: propertyType?.property?.name
                 }
             })
             setTimeout(() => {
@@ -217,7 +222,7 @@ const PropertyTypeContainer = () => {
             >
 
                 <PropertyTypeForm
-                    isloading={isLoading}
+                    isLoading={isLoading}
                     propertyType={propertyType}
                     properties={properties}
                     isValid={isValid}
@@ -233,7 +238,7 @@ const PropertyTypeContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_PAGE_HEADER}</h3>
+                    <h3>{PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <PropertyTypeSearch

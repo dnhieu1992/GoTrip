@@ -2,7 +2,7 @@ import Formsy from 'formsy-react';
 import { useState } from 'react';
 import { FormsyElement, LoaderButton } from '../../../shared/components';
 import { STATUSES } from '../constants/propertyType';
-import { PROPERTYTYPE_TEXT_CONFIG } from '../constants/resources';
+import { PROPERTY_TYPE_TEXT_CONFIG } from '../constants/resources';
 
 const {
     FormsyInput,
@@ -20,7 +20,6 @@ const PropertyTypeForm = ({
 
     const {
         name,
-        property,
         description,
         status
     } = propertyType;
@@ -62,13 +61,13 @@ const PropertyTypeForm = ({
                         inputProps={{
                             id: 'name',
                             type: 'text',
-                            placeholder: PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_NAME_FIELD_LBL,
+                            placeholder: PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_NAME_FIELD_LBL,
                         }}
                         name="name"
-                        label={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_NAME_FIELD_LBL}
+                        label={PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_NAME_FIELD_LBL}
                         value={name}
                         required
-                        validationError={PROPERTYTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={PROPERTY_TYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -76,57 +75,34 @@ const PropertyTypeForm = ({
                         inputProps={{
                             id: 'description',
                             type: 'text',
-                            placeholder: PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_DESCRIPTION_FIELD_LBL
+                            placeholder: PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_DESCRIPTION_FIELD_LBL
                         }}
                         name="description"
-                        label={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_DESCRIPTION_FIELD_LBL}
+                        label={PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_DESCRIPTION_FIELD_LBL}
                         value={description}
                         required
-                        validationError={PROPERTYTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={PROPERTY_TYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
                     <FormsySelect
                         name='propertyId'
-                        value={property}
+                        value={propertyType?.property?._id}
                         dataSource={data}
-                        label={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_PROPERTY_FIELD_LBL}
+                        label={PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_PROPERTY_FIELD_LBL}
                         required
-                        validationError={PROPERTYTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={PROPERTY_TYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
 
                     />
-
-                    {/* <label>Property</label>
-                    <select
-                        className={classNames("form-control", { "is-invalid": propertyTypePropertyErrorMsg })}
-                        aria-label="Default select example"
-                        name="propertyId"
-                        value={property._id}
-                        onChange={onHandlePropertyChange}>
-                        <option value=""></option>
-                        {
-                            properties.map(property => {
-                                console.log(property)
-                                return (
-                                    <option key={property._id} value={property._id}>{property.name}</option>
-                                )
-                            })
-                        }
-                    </select>
-                    {propertyTypePropertyErrorMsg && (
-                        <div className="invalid-feedback">
-                            {propertyTypePropertyErrorMsg}
-                        </div>
-                    )} */}
                 </div>
                 <div className="form-group">
                     <FormsySelect
                         name='status'
                         value={status}
                         dataSource={STATUSES}
-                        label={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_STATUS_FIELD_LBL}
+                        label={PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_STATUS_FIELD_LBL}
                         required
-                        validationError={PROPERTYTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        validationError={PROPERTY_TYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
                 </div>
                 <div className="form-group">
@@ -136,7 +112,7 @@ const PropertyTypeForm = ({
                             className="btn btn-danger mr-5"
                             onClick={() => onClose(false)}
                         >
-                            {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_CLOSE_BTN}
+                            {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_CLOSE_BTN}
                         </LoaderButton>
                         <LoaderButton
                             type="submit"
@@ -144,7 +120,7 @@ const PropertyTypeForm = ({
                             disabled={!isValid}
                             isLoading={isLoading}
                         >
-                            {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_SUBMIT_BTN}
+                            {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_SUBMIT_BTN}
                         </LoaderButton>
                     </div>
                 </div>
