@@ -1,11 +1,9 @@
-import alertNotify from '../../../shared/ultils/alertNotify';
+import alertNotify from '../../../shared/ultils/alertNotify.js';
 import { cleanObject } from '../../shared/ultils/ultils';
-import { API } from '../constants/api';
-import { ROOMTYPE_TEXT_CONFIG } from '../constants/resources';
 
 const getRoomTypes = async (params, onSuccess, onError) => {
     try {
-        const url = new URL(API.SEARCH_ROOMTYPE);
+        const url = new URL("http://localhost:5000/api/roomType/search");
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
@@ -27,68 +25,54 @@ const getRoomTypes = async (params, onSuccess, onError) => {
     }
 }
 
-const createNewRoomType = async (roomType, onSuccess, onError) => {
+const createNewRoomType = async (roomType, onSuccess) => {
     try {
-        const res = await fetch(API.CREATE_ROOMTYPE, {
+        const res = await fetch("http://localhost:5000/api/roomType/create", {
             method: "POST",
             body: JSON.stringify(roomType),
             headers: { "Content-type": "application/json;charset=UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw ROOMTYPE_TEXT_CONFIG.CREATE_ROOMTYPE_DUPLICATE_MSG;
+            throw "The item exists.";
         }
 
-        alertNotify.success(ROOMTYPE_TEXT_CONFIG.CREATE_ROOMTYPE_SUCCESS_MSG);
+        alertNotify.success("Create new a Room Type success.");
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
-        if (onError) {
-            return onError();
-        }
     }
 }
 
-const updateRoomType = async (roomType, onSuccess, onError) => {
+const updateRoomType = async (roomType, onSuccess) => {
     try {
-        const res = await fetch(API.UPDATE_ROOMTYPE, {
+        await fetch("http://localhost:5000/api/roomType/update", {
             method: "PUT",
             body: JSON.stringify(roomType),
             headers: { "Content-type": "application/json;charset=UTF-8" }
         });
 
-        if (!res.ok) {
-            throw ROOMTYPE_TEXT_CONFIG.UPDATE_ROOMTYPE_FAILED_MSG;
-        }
-
-        alertNotify.success(ROOMTYPE_TEXT_CONFIG.UPDATE_ROOMTYPE_SUCCESS_MSG);
+        alertNotify.success("Update the Room Type success.");
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
-        if (onError) {
-            return onError();
-        }
     }
 }
 
 const deleteRoomType = async (id, onSuccess) => {
     try {
-        const res = await fetch(`${API.DELETE_ROOMTYPE}${id}`, {
+        await fetch(`http://localhost:5000/api/roomType/delete/${id}`, {
             method: "DELETE",
             header: { "Content-type": "application/json;charset=UTF-8" }
         });
 
-        if (!res.ok) {
-            throw ROOMTYPE_TEXT_CONFIG.DELETE_ROOMTYPE_FAILED_MSG;
-        }
-
-        alertNotify.error(ROOMTYPE_TEXT_CONFIG.DELETE_ROOMTYPE_SUCCESS_MSG);
+        alertNotify.error("Delete the Room Type success.");
 
         if (onSuccess) {
             return onSuccess();

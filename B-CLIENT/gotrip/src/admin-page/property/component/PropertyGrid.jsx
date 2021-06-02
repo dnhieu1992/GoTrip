@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import Grid from '../../../shared/components/grid/Grid';
-import { PROPERTY_TEXT_CONFIG } from '../constants/resources';
 
 const PropertyGrid = ({
     data,
@@ -53,7 +52,7 @@ const PropertyGrid = ({
             <div className="card-body">
                 <div className="row mb-2">
                     <div className="col-sm-8">
-                        <h4>{PROPERTY_TEXT_CONFIG.PROPERTY_TOTAL_LBL}: {totalItems}</h4>
+                        <h4>Property: {totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
                         <button
@@ -61,7 +60,7 @@ const PropertyGrid = ({
                             className="btn btn-info"
                             onClick={() => showModal()}
                         >
-                            {PROPERTY_TEXT_CONFIG.PROPERTY_ADD_BTN}
+                            Add New
                         </button>
                     </div>
                 </div>

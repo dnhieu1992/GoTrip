@@ -1,36 +1,42 @@
 import PropTypes from 'prop-types';
 import Grid from '../../../shared/components/grid/Grid';
+import { AMENITY_TEXT_CONFIG } from '../constants/resources';
 
-const RoomTypeGrid = ({
+const AmenityGrid = ({
     data,
     options,
     totalItems,
-    onHandlePageChange,
-    onHandlePageSizeChange,
+    dataReady,
     showModal,
     onDelete,
-    dataReady,
+    onHandlePageChange,
+    onHandlePageSizeChange,
     onHandleSortChange
+
 }) => {
     const columns = [
         {
             fieldName: 'Id',
-            dataField: '_id',
-            isHidden: true
+            dataField: 'id',
+            isHidden: true,
         },
         {
             fieldName: 'Name',
             dataField: 'name',
-            isSort: true
+            isSort: true,
         },
         {
             fieldName: 'Description',
             dataField: 'description',
-            isSort: true
+        },
+        {
+            fieldName: 'Amenity Category',
+            dataField: 'amenityCategoryName',
+            isSort: true,
         },
         {
             fieldName: 'Status',
-            dataField: 'status'
+            dataField: 'status',
         },
         {
             fieldName: 'Action',
@@ -52,37 +58,34 @@ const RoomTypeGrid = ({
             <div className="card-body">
                 <div className="row mb-2">
                     <div className="col-sm-8">
-                        <h4>RoomType:{totalItems}</h4>
+                        <h4>{AMENITY_TEXT_CONFIG.AMENITY_TOTAL_LBL}: {totalItems}</h4>
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
-                        <button
-                            type="button"
-                            className="btn btn-info"
-                            onClick={() => showModal()}
-                        >Add New</button>
+                        <button type="button" className="btn btn-info" onClick={() => showModal()}>
+                            {AMENITY_TEXT_CONFIG.AMENITY_ADD_BTN}
+                        </button>
                     </div>
                 </div>
                 <Grid
+                    total={totalItems}
+                    data={data}
+                    dataReady={dataReady}
                     columns={columns}
                     currentPage={pageNumber}
                     pageSize={pageSize}
                     sortField={sortField}
                     sortDirection={sortDirection}
-                    total={totalItems}
-                    data={data}
-                    dataReady={dataReady}
                     onPageNumberChange={onHandlePageChange}
                     onPageSizeChange={onHandlePageSizeChange}
                     onSortFieldChange={onHandleSortChange}
                 />
             </div>
         </div>
-    )
-}
+    );
+};
+export default AmenityGrid;
 
-export default RoomTypeGrid;
-
-RoomTypeGrid.propTypes = {
+AmenityGrid.propTypes = {
     data: PropTypes.array,
     totalItems: PropTypes.number,
     options: PropTypes.object,
@@ -91,10 +94,10 @@ RoomTypeGrid.propTypes = {
     onHandlePageChange: PropTypes.func,
     onHandlePageSizeChange: PropTypes.func,
     onHandleSortChange: PropTypes.func
-}
+};
 
-RoomTypeGrid.defaultProps = {
+AmenityGrid.defaultProps = {
     data: [],
     totalItems: 0,
     options: {}
-}
+};

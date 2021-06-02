@@ -14,7 +14,6 @@ import { CITY_TEXT_CONFIG } from './constants/resources';
 
 const CityContainer = () => {
     const [state, setState] = useState({});
-    const [countries, setCountries] = useState([]);
     const didMountRef = useRef(false);
     const fetchCitiesRef = useRef(false);
 
@@ -24,15 +23,16 @@ const CityContainer = () => {
         options,
         isValid,
         city,
+        countries = [],
         isShow,
         dataReady,
         isLoading,
         searchParam,
     } = state;
 
-    useEffect(() => {
+    useEffect(async () => {
         if (!didMountRef.current) {
-            getAllCountries();
+            await getAllCountries();
             onHandleSearch({});
             didMountRef.current = true;
         }
@@ -42,9 +42,12 @@ const CityContainer = () => {
         }
     });
 
-    const getAllCountries = () => {
-        getCountries().then((countries) => {
-            setCountries(countries);
+    const getAllCountries = async () => {
+        await getCountries().then((countries) => {
+            setState({
+                ...state,
+                countries: countries
+            });
         }).catch(error => {
             console.log(error);
         });
@@ -194,7 +197,6 @@ const CityContainer = () => {
     };
 
     const onDelete = ({ _id }) => {
-        debugger
         const { searchParam, options } = state;
 
         deleteCity(_id, () => {
@@ -205,7 +207,7 @@ const CityContainer = () => {
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
-                title={city?._id ? 'Edit City' : 'Add New City'}
+                title={city?._id ? CITY_TEXT_CONFIG.CITY_UPDATE_HEADER_LBL : CITY_TEXT_CONFIG.CITY_CREATE_HEADER_LBL}
                 onClose={onClose}
             >
                 <CityForm

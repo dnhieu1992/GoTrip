@@ -1,11 +1,9 @@
 import alertNotify from "../../../shared/ultils/alertNotify";
 import { cleanObject } from "../../shared/ultils/ultils";
-import { API } from "../constants/api";
-import { PROPERTY_TEXT_CONFIG } from "../constants/resources";
 
 const getProperties = async (params, onSuccess, onError) => {
     try {
-        const url = new URL(API.SEARCH_PROPERTY);
+        const url = new URL("http://localhost:5000/api/property/search");
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -27,68 +25,54 @@ const getProperties = async (params, onSuccess, onError) => {
     }
 }
 
-const createNewProperty = async (property, onSuccess, onError) => {
+const createNewProperty = async (property, onSuccess) => {
     try {
-        const res = await fetch(API.CREATE_PROPERTY, {
+        const res = await fetch("http://localhost:5000/api/property/create", {
             method: "POST",
             body: JSON.stringify(property),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw PROPERTY_TEXT_CONFIG.CREATE_PROPERTY_DUPLICATE_MSG;
+            throw "The item exists.";
         }
 
-        alertNotify.success(PROPERTY_TEXT_CONFIG.CREATE_PROPERTY_SUCCESS_MSG);
+        alertNotify.success("Create new a property seccess");
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
-        if (onError) {
-            return onError();
-        }
     }
 }
 
-const updateProperty = async (property, onSuccess, onError) => {
+const updateProperty = async (property, onSuccess) => {
     try {
-        const res = await fetch(API.UPDATE_PROPERTY, {
+        await fetch("http://localhost:5000/api/property/update", {
             method: "PUT",
             body: JSON.stringify(property),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
-        if (!res.ok) {
-            throw PROPERTY_TEXT_CONFIG.UPDATE_PROPERTY_FAILED_MSG;
-        }
-
-        alertNotify.success(PROPERTY_TEXT_CONFIG.UPDATE_PROPERTY_SUCCESS_MSG);
+        alertNotify.success("Update the property success");
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
-        if (onError) {
-            return onError();
-        }
     }
 }
 
-const deleteProperty = async (id, onSuccess, onError) => {
+const deleteProperty = async (id, onSuccess) => {
     try {
-        const res =await fetch(`${API.DELETE_PROPERTY}${id}`, {
+        await fetch(`http://localhost:5000/api/property/delete/${id}`, {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
-        if (!res.ok) {
-            throw PROPERTY_TEXT_CONFIG.DELETE_PROPERTY_FAILED_MSG;
-        }
-
-        alertNotify.error(PROPERTY_TEXT_CONFIG.DELETE_PROPERTY_SUCCESS_MSG);
+        alertNotify.error("Delete the property success");
 
         if (onSuccess) {
             return onSuccess();

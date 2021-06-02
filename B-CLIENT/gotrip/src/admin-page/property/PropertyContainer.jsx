@@ -9,24 +9,23 @@ import {
     createNewProperty,
     deleteProperty
 } from './api/apiHandle.js';
-import { PROPERTY_TEXT_CONFIG } from './constants/resources';
 
 const PropertyContainer = () => {
 
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetchPropertiesRef = useRef(false);
+    const fetPropertiesRef = useRef(false);
 
     const {
         total,
         searchParam,
         options,
         isShow,
-        isLoading,
         property,
         dataReady,
         properties,
-        isValid
+        isValid,
+        errorMessage
     } = state;
 
     useEffect(() => {
@@ -35,13 +34,13 @@ const PropertyContainer = () => {
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchPropertiesRef.current) {
-            fetchProperties();
+        if (didMountRef.current && fetPropertiesRef.current) {
+            fetProperties();
         }
     });
 
-    const fetchProperties = () => {
-        fetchPropertiesRef.current = false;
+    const fetProperties = () => {
+        fetPropertiesRef.current = false;
         const {
             searchParam = {},
             options = {}
@@ -71,7 +70,7 @@ const PropertyContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetchPropertiesRef.current = true;
+        fetPropertiesRef.current = true;
 
         setState({
             ...state,
@@ -124,7 +123,7 @@ const PropertyContainer = () => {
 
     const onHandleResetForm = () => {
         const searchParam = {
-            name: '',
+            propertyName: '',
             status: ''
         }
 
@@ -140,12 +139,14 @@ const PropertyContainer = () => {
         setState({
             ...state,
             isShow: true,
-            property: property
+            isValid: !!property._id,
+            property: property,
+            errorMessage: {}
         });
     }
 
     const onClose = (isSearch) => {
-        fetchPropertiesRef.current = !!isSearch;
+        fetPropertiesRef.current = !!isSearch;
 
         setState({
             ...state,
@@ -153,36 +154,20 @@ const PropertyContainer = () => {
             isValid: false,
             errorMessage: {},
             property: null,
-            dataReady: !isSearch,
-            isLoading: false
+            dataReady: !isSearch
         });
     }
 
     const onSaveProperty = (property) => {
-        // const propertyID = {...property,id:property._id}
-        // if (property._id) {
-        //     updateProperty(propertyID, () => {
-        //         onClose(true);
-        //     });
-        // } else {
-        //     createNewProperty(property, () => {
-        //         onClose(true);
-        //     });
-        // }
-
-        setState({ ...state, isLoading: true })
-        if (state.property._id) {
-            updateProperty({ ...property, id: state.property._id },
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+        const propertyID = {...property,id:property._id}
+        if (property._id) {
+            updateProperty(propertyID, () => {
+                onClose(true);
+            });
         } else {
-            createNewProperty(property,
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+            createNewProperty(property, () => {
+                onClose(true);
+            });
         }
     }
 
@@ -194,6 +179,40 @@ const PropertyContainer = () => {
         });
     }
 
+    const onSaveFormChange = (property) => {
+        let isValid = true;
+        let errorMessage = {};
+
+        if (!property.name || !property.description || !property.status) {
+            isValid = false;
+        }
+
+        if (!property.name && property.name !== undefined) {
+            const propertyNameErrorMsg = "The property name is required.";
+            errorMessage = { ...errorMessage, propertyNameErrorMsg }
+            isValid = false;
+        }
+
+        if (!property.description && property.description !== undefined) {
+            const propertyDescriptionErrorMsg = "The property description is required.";
+            errorMessage = { ...errorMessage, propertyDescriptionErrorMsg }
+            isValid = false;
+        }
+
+        if (!property.status && property.status !== undefined) {
+            const propertyStatusErrorMsg = "The property Status is required.";
+            errorMessage = { ...errorMessage, propertyStatusErrorMsg }
+            isValid = false;
+        }
+
+        setState({
+            ...state,
+            property,
+            isValid,
+            errorMessage
+        });
+    }
+
     const modalRender = () => {
         return (
             <Modal classNames={'modal-lg'}
@@ -201,9 +220,10 @@ const PropertyContainer = () => {
                 onClose={onClose}
             >
                 <PropertyForm
-                    isLoading={isLoading}
                     property={property}
                     isValid={isValid}
+                    errorMessage={errorMessage}
+                    onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSaveProperty={onSaveProperty}
                 />
@@ -216,7 +236,7 @@ const PropertyContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{PROPERTY_TEXT_CONFIG.PROPERTY_PAGE_HEADER}</h3>
+                    <h3>Property</h3>
                 </div>
                 <div className="card-body">
                     <PropertySearch

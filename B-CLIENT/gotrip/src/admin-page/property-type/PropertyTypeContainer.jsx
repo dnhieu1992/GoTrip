@@ -11,12 +11,11 @@ import {
     deletePropertyType,
     getProperties
 } from './api/apiHandle.js';
-import { PROPERTYTYPE_TEXT_CONFIG } from './constants/resources';
 
 const PropertyTypeContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetchPropertyTypesRef = useRef(false);
+    const fetPropertyTypesRef = useRef(false);
     const [properties, setProperties] = useState([]);
 
     const {
@@ -27,7 +26,7 @@ const PropertyTypeContainer = () => {
         propertyType,
         isShow,
         dataReady,
-        isLoading,
+        errorMessage,
         searchParam
     } = state;
     useEffect(() => {
@@ -37,8 +36,8 @@ const PropertyTypeContainer = () => {
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetchPropertyTypesRef.current) {
-            fetchPropertyTypes();
+        if (didMountRef.current && fetPropertyTypesRef.current) {
+            fetPropertyTypes();
         }
     });
 
@@ -50,9 +49,9 @@ const PropertyTypeContainer = () => {
         })
     }
 
-    const fetchPropertyTypes = () => {
+    const fetPropertyTypes = () => {
 
-        fetchPropertyTypesRef.current = false;
+        fetPropertyTypesRef.current = false;
 
         const {
             searchParam = {},
@@ -60,10 +59,10 @@ const PropertyTypeContainer = () => {
         } = state;
 
         getPropertyTypes({ ...searchParam, ...options }, ({ total, propertyTypes }) => {
-            const data = propertyTypes.map(propertyType => {
+            const data=propertyTypes.map(propertyType=>{
                 return {
                     ...propertyType,
-                    propertyName: propertyType.property.name
+                    propertyName:propertyType.property.name
                 }
             })
             setTimeout(() => {
@@ -90,7 +89,7 @@ const PropertyTypeContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetchPropertyTypesRef.current = true;
+        fetPropertyTypesRef.current = true;
 
         setState({
             ...state,
@@ -111,10 +110,10 @@ const PropertyTypeContainer = () => {
         onHandleSearch(searchParam, optionsUpdate);
     }
 
-    const onHandleSearchChange = (param) => {
+    const onHandleSearchChange = (param)=>{
         setState({
             ...state,
-            searchParam: param
+            searchParam:param
         });
     }
 
@@ -169,7 +168,7 @@ const PropertyTypeContainer = () => {
     }
 
     const onClose = (isSearch) => {
-        fetchPropertyTypesRef.current = !!isSearch;
+        fetPropertyTypesRef.current = !!isSearch;
 
         setState({
             ...state,
@@ -177,27 +176,61 @@ const PropertyTypeContainer = () => {
             isValid: false,
             errorMessage: {},
             propertyType: null,
-            dataReady: !isSearch,
-            isLoading: false
+            dataReady: !isSearch
         });
 
     }
 
     const onSavePropertyType = (propertyType) => {
-        setState({ ...state, isLoading: true })
-        if (state.propertyType._id) {
-            updatePropertyType({ ...propertyType, id: state.propertyType._id },
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+        if (propertyType._id) {
+            updatePropertyType(propertyType, () => {
+                onClose(true);
+            });
         } else {
-            createPropertyType(propertyType,
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+            createPropertyType(propertyType, () => {
+                onClose(true);
+            });
         }
+    }
+
+    const onSaveFormChange = (propertyType) => {
+        let isValid = true;
+        let errorMessage = {};
+
+        if (!propertyType.name || !propertyType.description || !propertyType.propertyId || !propertyType.status) {
+            isValid = false;
+        }
+
+        if (!propertyType.name && propertyType.name !== undefined) {
+            const propertyTypeNameErrorMsg = "The property type name is required.";
+            errorMessage = { ...errorMessage, propertyTypeNameErrorMsg }
+            isValid = false;
+        }
+
+        if (!propertyType.description && propertyType.description !== undefined) {
+            const propertyTypeDescriptionErrorMsg = "The property type description is required.";
+            errorMessage = { ...errorMessage, propertyTypeDescriptionErrorMsg }
+            isValid = false;
+        }
+
+        if (!propertyType.propertyId && propertyType.propertyId !== undefined) {
+            const propertyTypePropertyErrorMsg = "The property is required.";
+            errorMessage = { ...errorMessage, propertyTypePropertyErrorMsg }
+            isValid = false;
+        }
+
+        if (!propertyType.status && propertyType.status !== undefined) {
+            const propertyTypeStatusErrorMsg = "The property type status is required.";
+            errorMessage = { ...errorMessage, propertyTypeStatusErrorMsg }
+            isValid = false;
+        }
+
+        setState({
+            ...state,
+            propertyType,
+            isValid,
+            errorMessage
+        });
     }
 
     const onDelete = ({ _id }) => {
@@ -217,10 +250,11 @@ const PropertyTypeContainer = () => {
             >
 
                 <PropertyTypeForm
-                    isloading={isLoading}
                     propertyType={propertyType}
                     properties={properties}
                     isValid={isValid}
+                    errorMessage={errorMessage}
+                    onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
                     onSavePropertyType={onSavePropertyType}
                 />
@@ -233,7 +267,7 @@ const PropertyTypeContainer = () => {
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>{PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_PAGE_HEADER}</h3>
+                    <h3>Property Type</h3>
                 </div>
                 <div className="card-body">
                     <PropertyTypeSearch

@@ -1,7 +1,4 @@
 import PropTypes from 'prop-types';
-import { Button, FormGroup, Input, Label, Row, Select } from '../../../shared/components';
-import { STATUSES } from '../constants/propertyType';
-import { PROPERTYTYPE_TEXT_CONFIG } from '../constants/resources';
 
 const PropertyTypeSearch = ({
     searchParam,
@@ -11,9 +8,9 @@ const PropertyTypeSearch = ({
     properties
 }) => {
     const {
-        name = '',
-        propertyId = '',
-        status = ''
+        propertyTypeName,
+        propertyId,
+        status
     } = searchParam;
 
     const onHandleFieldChange = (e) => {
@@ -25,91 +22,75 @@ const PropertyTypeSearch = ({
         }
     }
 
-    const data = properties.map(property => {
-        return {
-            value: property._id,
-            label: property.name
-        }
-    })
-
-    data.unshift({
-        value: '',
-        label: ''
-    })
+    const onSearch = (searchParam) => {
+        onHandleSearch(searchParam);
+    }
 
     return (
         <div className="card card-info">
             <div className="card-header">
-                <h3 className="card-title">{PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_SEARCH_HEADER_LBL}</h3>
+                <h3 className="card-title">Search</h3>
             </div>
             <form className="form-horizontal" autoComplete="off">
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
-                            <FormGroup as={Row}>
-                                <Label className="col-sm-2">
-                                    {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_NAME_FIELD_LBL}
-                                </Label>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">Name</label>
                                 <div className="col-sm-10">
-                                    <Input
-                                        type="text"
-                                        id="name"
+                                    <input type="text"
+                                        className="form-control"
+                                        id="propertyTypeName"
                                         name="name"
-                                        placeholder={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_NAME_FIELD_LBL}
-                                        value={name}
+                                        placeholder="Property Type Name"
+                                        value={propertyTypeName}
                                         onChange={onHandleFieldChange}
                                     />
                                 </div>
-                            </FormGroup>
+                            </div>
                         </div>
                         <div className="col-sm-6">
-                            <FormGroup as={Row}>
-                                <Label className="col-sm-2">
-                                    {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_PROPERTY_FIELD_LBL}
-                                </Label>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">Property</label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'propertyId' }}
+                                    <select
+                                        className="form-control"
+                                        id="propertyId"
+                                        name="propertyId"
                                         value={propertyId}
-                                        onChange={onHandleFieldChange}
-                                        dataSource={data}
-                                    />
+                                        onChange={onHandleFieldChange} >
+
+                                        <option value="">Choose the property</option>
+                                        {
+                                            properties.map(property => {
+                                                return (
+                                                    <option key={property._id} value={property._id}> {property.name} </option>
+                                                )
+                                            })
+                                        }
+                                    </select>.
                                 </div>
-                            </FormGroup>
+                            </div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
-                            <FormGroup as={Row}>
-                                <Label className="col-sm-2" >
-                                    {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_STATUS_FIELD_LBL}
-                                </Label>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label" >Status</label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'status' }}
-                                        value={status}
-                                        onChange={onHandleFieldChange}
-                                        dataSource={STATUSES}
-                                    />
+                                    <select name="status" className="form-control" value={status} onChange={onHandleFieldChange}>
+                                        <option value=""></option>
+                                        <option value="Actived">Actived</option>
+                                        <option value="Disabled">Disabled</option>
+                                    </select>
                                 </div>
-                            </FormGroup>
+                            </div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
-                            <Button
-                                variant="info"
-                                className="mr-3"
-                                onClick={() => onHandleSearch(searchParam)}
-                            >
-                                {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_SEARCH_BTN}
-                            </Button>
-                            <Button
-                                variant="info"
-                                onClick={onHandleResetForm}
-                            >
-                                {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_RESET_BTN}
-                            </Button>
+                            <button type="button" className="btn btn-info mr-5" onClick={() => onHandleSearch(searchParam)} >Search</button>
+                            <button type="button" className="btn btn-info" onClick={onHandleResetForm}>Reset</button>
                         </div>
                     </div>
                 </div>

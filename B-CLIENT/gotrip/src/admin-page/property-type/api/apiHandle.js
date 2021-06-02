@@ -1,11 +1,9 @@
 import alertNotify from "../../../shared/ultils/alertNotify";
 import { cleanObject } from "../../shared/ultils/ultils";
-import { API } from "../constants/api";
-import { PROPERTYTYPE_TEXT_CONFIG } from "../constants/resources";
 
 const getPropertyTypes = async (params, onSuccess, onError) => {
     try {
-        const url = new URL(API.SEARCH_PROPERTYTYPE);
+        const url = new URL("http://localhost:5000/api/propertyType/search");
 
         params = cleanObject(params);
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -27,83 +25,66 @@ const getPropertyTypes = async (params, onSuccess, onError) => {
     }
 }
 
-const createPropertyType = async (propertyType, onSuccess, onError) => {
+const createPropertyType = async (propertyType, onSuccess) => {
     try {
-        const res = await fetch(API.CREATE_PROPERTYTYPE, {
+        await fetch("http://localhost:5000/api/propertyType/create", {
             method: "POST",
             body: JSON.stringify(propertyType),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
         if (!res.ok && res.status === 409) {
-            throw PROPERTYTYPE_TEXT_CONFIG.CREATE_PROPERTYTYPE_DUPLICATE_MSG;
+            throw "The item exists";
         }
 
-        alertNotify.success(PROPERTYTYPE_TEXT_CONFIG.CREATE_PROPERTYTYPE_SUCCESS_MSG);
+        alertNotify.success("create property type success");
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
-        if (onError) {
-            return onError();
-        }
     }
 }
 
-const updatePropertyType = async (propertyType, onSuccess, onError) => {
+const updatePropertyType = async (propertyType, onSuccess) => {
     try {
-        const res = await fetch(API.UPDATE_PROPERTYTYPE, {
+        await fetch("http://localhost:5000/api/propertyType/update", {
             method: "PUT",
             body: JSON.stringify(propertyType),
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
-        if (!res.ok) {
-            throw PROPERTYTYPE_TEXT_CONFIG.UPDATE_PROPERTYTYPE_FAILED_MSG;
-        }
-
-        alertNotify.success(PROPERTYTYPE_TEXT_CONFIG.UPDATE_PROPERTYTYPE_SUCCESS_MSG);
+        alertNotify.success("Update property type success");
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
-        if (onError) {
-            return onError();
-        }
     }
 }
 
-const deletePropertyType = async (id, onSuccess, onError) => {
+const deletePropertyType = async (id, onSuccess) => {
     try {
-        const res = await fetch(`${API.DELETE_PROPERTYTYPE}${id}`, {
+        await fetch(`http://localhost:5000/api/propertyType/delete/${id}`, {
             method: "DELETE",
             headers: { "Content-type": "application/json; charset=UTF-8" }
         });
 
-        if (!res.ok) {
-            throw PROPERTYTYPE_TEXT_CONFIG.DELETE_PROPERTYTYPE_FAILED_MSG;
-        }
-
-        alertNotify.error(PROPERTYTYPE_TEXT_CONFIG.DELETE_PROPERTYTYPE_SUCCESS_MSG);
+        alertNotify.error("Delete property type success");
 
         if (onSuccess) {
             return onSuccess();
         }
     } catch (error) {
         alertNotify.error(error);
-        if (onError) {
-            return onError();
-        }
     }
 }
 
 const getProperties = async () => {
     try {
-        const url = new URL(API.GET_PROPERTIES);
+        const url = new URL("http:localhost:5000/api/property/getAll");
         const res = await fetch(url);
         if (!res.ok) {
             throw new Error(res.status);

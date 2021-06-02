@@ -190,7 +190,7 @@ const BedContainer = () => {
         return (
             <Modal
                 classNames={'modal-lg'}
-                title={bed?._id ? 'Edit Bed' : 'Add New Bed'}
+                title={bed?._id ? BED_TEXT_CONFIG.BED_UPDATE_HEADER_LBL : BED_TEXT_CONFIG.BED_CREATE_HEADER_LBL}
                 onClose={onClose}
             >
                 <BedForm

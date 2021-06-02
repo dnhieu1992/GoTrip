@@ -12,8 +12,7 @@ const Select = (props) => {
         return (
             <option key={`${item?.value}_${index}`} value={item.value}>
                 {item?.label}
-            </option>
-            );
+            </option>)
     });
 
     return (

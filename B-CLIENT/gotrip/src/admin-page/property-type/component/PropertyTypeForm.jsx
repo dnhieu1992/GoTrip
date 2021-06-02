@@ -1,23 +1,14 @@
-import Formsy from 'formsy-react';
-import { useState } from 'react';
-import { FormsyElement, LoaderButton } from '../../../shared/components';
-import { STATUSES } from '../constants/propertyType';
-import { PROPERTYTYPE_TEXT_CONFIG } from '../constants/resources';
-
-const {
-    FormsyInput,
-    FormsySelect
-} = FormsyElement
+import classNames from "classnames";
 
 const PropertyTypeForm = ({
     propertyType,
+    onSaveFormChange,
     onClose,
     onSavePropertyType,
     properties,
-    isLoading
+    isValid,
+    errorMessage
 }) => {
-    const [isValid, setIsValid] = useState(true);
-
     const {
         name,
         property,
@@ -25,78 +16,60 @@ const PropertyTypeForm = ({
         status
     } = propertyType;
 
-    const submit = (modal) => {
-        onSavePropertyType(modal);
-    }
+    const {
+        propertyTypeNameErrorMsg,
+        propertyTypeDescriptionErrorMsg,
+        propertyTypePropertyErrorMsg,
+        propertyTypeStatusErrorMsg
+    } = errorMessage
 
-    const enableButton = () => {
-        setIsValid(true);
-    }
-
-    const disableButton = () => {
-        setIsValid(false);
-    }
-
-    const data = properties.map(property => {
-        return {
-            value: property._id,
-            label: property.name
+    const onHandlePropertyChange = (e) => {
+        if (e?.target) {
+            onSaveFormChange({
+                ...propertyType,
+                [e.target.name]: e.target.value
+            });
         }
-    })
-
-    data.unshift({
-        value: '',
-        label: ''
-    })
+    }
 
     return (
-        <Formsy
-            id="addNew"
-            onSubmit={submit}
-            onValid={enableButton}
-            onInvalid={disableButton}
-        >
+        <form id="addNew">
             <div className="card-body">
                 <div className="form-group">
-                    <FormsyInput
-                        inputProps={{
-                            id: 'name',
-                            type: 'text',
-                            placeholder: PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_NAME_FIELD_LBL,
-                        }}
+                    <label>Name</label>
+                    <input type="text"
+                        className={classNames("form-control", { "is-invalid": propertyTypeNameErrorMsg })}
                         name="name"
-                        label={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_NAME_FIELD_LBL}
+                        id="name"
+                        placeholder="Name"
                         value={name}
-                        required
-                        validationError={PROPERTYTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
-                    />
+                        onChange={onHandlePropertyChange} />
+
+                    {propertyTypeNameErrorMsg && (
+                        <div className="invalid-feedback">
+                            {propertyTypeNameErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
-                    <FormsyInput
-                        inputProps={{
-                            id: 'description',
-                            type: 'text',
-                            placeholder: PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_DESCRIPTION_FIELD_LBL
-                        }}
+                    <label>Description</label>
+                    <textarea
+                        type="text"
                         name="description"
-                        label={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_DESCRIPTION_FIELD_LBL}
+                        className={classNames("form-control", { "is-invalid": propertyTypeDescriptionErrorMsg })}
+                        id="description"
+                        placeholder="Description"
                         value={description}
-                        required
-                        validationError={PROPERTYTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
-                    />
+                        onChange={onHandlePropertyChange} />
+
+                    {propertyTypeDescriptionErrorMsg && (
+                        <div className="invalid-feedback">
+                            {propertyTypeDescriptionErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
-                    <FormsySelect
-                        name='propertyId'
-                        value={property}
-                        dataSource={data}
-                        label={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_PROPERTY_FIELD_LBL}
-                        required
-                        validationError={PROPERTYTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
-
-                    />
-
-                    {/* <label>Property</label>
+                    <label>Property</label>
                     <select
                         className={classNames("form-control", { "is-invalid": propertyTypePropertyErrorMsg })}
                         aria-label="Default select example"
@@ -117,39 +90,47 @@ const PropertyTypeForm = ({
                         <div className="invalid-feedback">
                             {propertyTypePropertyErrorMsg}
                         </div>
-                    )} */}
+                    )}
                 </div>
                 <div className="form-group">
-                    <FormsySelect
-                        name='status'
+                    <label>Status</label>
+                    <select
+                        className={classNames("form-control", { "is-invalid": propertyTypeStatusErrorMsg })}
+                        name="status"
                         value={status}
-                        dataSource={STATUSES}
-                        label={PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_STATUS_FIELD_LBL}
-                        required
-                        validationError={PROPERTYTYPE_TEXT_CONFIG.REQUIRED_FIELD_MSG}
-                    />
+                        onChange={onHandlePropertyChange} >
+
+                        <option value=""></option>
+                        <option value="Actived">Actived</option>
+                        <option value="Disabled">Disabled</option>
+                    </select>
+
+                    {propertyTypeStatusErrorMsg && (
+                        <div className="invalid-feedback">
+                            {propertyTypeStatusErrorMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">
-                        <LoaderButton
+                        <button
                             type="button"
                             className="btn btn-danger mr-5"
                             onClick={() => onClose(false)}
-                        >
-                            {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_CLOSE_BTN}
-                        </LoaderButton>
-                        <LoaderButton
-                            type="submit"
+                        >Close
+                        </button>
+                        <button
+                            type="button"
                             className="btn btn-info"
                             disabled={!isValid}
-                            isLoading={isLoading}
+                            onClick={() => onSavePropertyType(propertyType)}
                         >
-                            {PROPERTYTYPE_TEXT_CONFIG.PROPERTYTYPE_SUBMIT_BTN}
-                        </LoaderButton>
+                            Submit
+                        </button>
                     </div>
                 </div>
             </div>
-        </Formsy>
+        </form>
     );
 }
 

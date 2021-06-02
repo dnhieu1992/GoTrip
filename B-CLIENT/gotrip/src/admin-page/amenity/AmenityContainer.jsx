@@ -1,66 +1,88 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Modal from '../../shared/components/forms/Modal';
-import RoomTypeGrid from './component/RoomTypeGrid';
-import RoomTypeSearch from './component/RoomTypeSearch';
-import RoomTypeForm from './component/RoomTypeForm';
-
+import AmenityGrid from './component/AmenityGrid';
+import AmenitySearch from './component/AmenitySearch';
+import AmenityForm from './component/AmenityForm';
 import {
-    getRoomTypes,
-    updateRoomType,
-    createNewRoomType,
-    deleteRoomType
+    getAmenities,
+    updateAmenity,
+    createNewAmenity,
+    deleteAmenity,
+    getAmenityCategories
 } from './api/apiHandle.js';
+import { AMENITY_TEXT_CONFIG } from './constants/resources';
 
-const RoomTypeContainer = () => {
+const AmenityContainer = () => {
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
-    const fetRoomTypesRef = useRef(false);
+    const fetchAmenitiesRef = useRef(false);
 
     const {
         total,
-        searchParam,
+        data,
         options,
-        isShow,
-        roomType,
-        dataReady,
-        roomTypes,
         isValid,
-        errorMessage
+        amenity,
+        amenityCategories = [],
+        isShow,
+        dataReady,
+        isLoading,
+        searchParam,
     } = state;
 
-    useEffect(() => {
+    useEffect(async() => {
         if (!didMountRef.current) {
+            await getAllAmenityCategories();
             onHandleSearch({});
             didMountRef.current = true;
         }
 
-        if (didMountRef.current && fetRoomTypesRef.current) {
-            fetRoomTypes();
+        if (didMountRef.current && fetchAmenitiesRef.current) {
+            fetchAmenities();
         }
     });
 
-    const fetRoomTypes = () => {
-        fetRoomTypesRef.current = false;
+    const getAllAmenityCategories = async() => {
+        await getAmenityCategories().then((amenityCategories) => {
+            setState({
+                ...state,
+                amenityCategories: amenityCategories
+            });
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    const fetchAmenities = () => {
+        fetchAmenitiesRef.current = false;
+
         const {
             searchParam = {},
             options = {}
         } = state;
 
-        getRoomTypes({ ...searchParam, ...options }, ({ total, roomTypes }) => {
+        getAmenities({ ...searchParam, ...options }, ({ total, amenities }) => {
+            const data = amenities.map(amenity => {
+                return {
+                    ...amenity,
+                    amenityCategoryName: amenity?.amenityCategory?.name
+                }
+            });
+            
             setTimeout(() => {
                 setState({
                     ...state,
                     total,
-                    roomTypes,
+                    data,
                     dataReady: true
                 });
             }, 500);
         }, () => {
             setTimeout(() => {
-                setState({ ...state, dataReady: true });
+                setState({ ...state, dataReady: true })
             }, 500);
         });
-    }
+    };
 
     const onHandleSearch = (searchParam = {}, optionParams = {}) => {
         const options = {
@@ -68,24 +90,23 @@ const RoomTypeContainer = () => {
             pageSize: optionParams.pageSize || 50,
             sortField: optionParams.sortField || null,
             sortDirection: optionParams.sortDirection || null
-        }
+        };
 
-        fetRoomTypesRef.current = true;
-
+        fetchAmenitiesRef.current = true;
         setState({
             ...state,
             searchParam: searchParam,
             options: options,
             dataReady: false
         });
-    }
+    };
 
     const onHandleSearchChange = (param) => {
         setState({
             ...state,
             searchParam: param
         });
-    }
+    };
 
     const onHandlePageChange = (pageNumber) => {
         const { searchParam, options } = state;
@@ -93,10 +114,10 @@ const RoomTypeContainer = () => {
         const optionsUpdate = {
             ...options,
             pageNumber
-        }
+        };
 
         onHandleSearch(searchParam, optionsUpdate);
-    }
+    };
 
     const onHandlePageSizeChange = (pageSize) => {
         const { searchParam, options } = state;
@@ -105,149 +126,120 @@ const RoomTypeContainer = () => {
             ...options,
             pageSize,
             pageNumber: 1
-        }
+        };
 
         onHandleSearch(searchParam, optionsUpdate);
-    }
+    };
 
     const onHandleSortChange = (sortField, sortDirection) => {
         const { searchParam, options } = state;
+
         const optionsUpdate = {
             ...options,
             sortField,
             sortDirection
-        }
+        };
 
         onHandleSearch(searchParam, optionsUpdate);
-    }
+    };
 
     const onHandleResetForm = () => {
         const searchParam = {
             name: '',
-            description:'',
+            amenityCategoryId: '',
             status: ''
-        }
+        };
 
         const options = {
             ...state.options,
             pageNumber: 1
-        }
+        };
 
         onHandleSearch(searchParam, options);
-    }
+    };
 
-    const showModal = (roomType = {}) => {
+    const showModal = (amenity = {}) => {
         setState({
             ...state,
             isShow: true,
-            isValid: !!roomType._id,
-            roomType: roomType,
-            errorMessage: {}
+            amenity: amenity
         });
-    }
+    };
 
     const onClose = (isSearch) => {
-        fetRoomTypesRef.current = !!isSearch;
-
+        fetchAmenitiesRef.current = !!isSearch;
         setState({
             ...state,
             isShow: false,
             isValid: false,
             errorMessage: {},
-            roomType: null,
-            dataReady: !isSearch
+            amenity: null,
+            dataReady: !isSearch,
+            isLoading: false
         });
-    }
+    };
 
-    const onSaveRoomType = (roomType) => {
-        console.log(roomType)
-        const roomTypeId={...roomType,id:roomType._id}
-        if (roomType._id) {
-            updateRoomType(roomTypeId, () => {
-                onClose(true);
-            });
+    const onSaveAmenity = (amenity) => {
+        setState({ ...state, isLoading: true })
+        if (state.amenity._id) {
+            updateAmenity({ ...amenity, id: state.amenity._id },
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         } else {
-            createNewRoomType(roomType, () => {
-                onClose(true);
-            });
+            createNewAmenity(amenity,
+                () => {
+                    onClose(true);
+                },
+                () => setState({ ...state, isLoading: false }));
         }
-    }
+    };
 
     const onDelete = ({ _id }) => {
         const { searchParam, options } = state;
 
-        deleteRoomType(_id, () => {
+        deleteAmenity(_id, () => {
             onHandleSearch(searchParam, options);
         });
-    }
-
-    const onSaveFormChange = (roomType) => {
-        let isValid = true;
-        let errorMessage = {};
-
-        if (!roomType.name || !roomType.description || !roomType.status) {
-            isValid = false;
-        }
-
-        if (!roomType.name && roomType.name !== undefined) {
-            const roomTypeNameErrorMsg = "The room type name is required.";
-            errorMessage = { ...errorMessage, roomTypeNameErrorMsg }
-            isValid = false;
-        }
-
-        if (!roomType.description && roomType.description !== undefined) {
-            const roomTypeDescriptionErrorMsg = "The room type description is required.";
-            errorMessage = { ...errorMessage, roomTypeDescriptionErrorMsg }
-            isValid = false;
-        }
-
-        if (!roomType.status && roomType.status !== undefined) {
-            const roomTypeStatusErrorMsg = "The room type status is required.";
-            errorMessage = { ...errorMessage, roomTypeStatusErrorMsg }
-            isValid = false;
-        }
-
-        setState({
-            ...state,
-            roomType,
-            isValid,
-            errorMessage
-        });
-    }
+    };
 
     const modalRender = () => {
         return (
-            <Modal classNames={'modal-lg'}
-                title={roomType?.id ? 'Edit Room Type' : 'Add Room Type'}
+            <Modal 
+                classNames={'modal-lg'}
+                title={amenity?._id ? AMENITY_TEXT_CONFIG.AMENITY_UPDATE_HEADER_LBL : AMENITY_TEXT_CONFIG.AMENITY_CREATE_HEADER_LBL}
                 onClose={onClose}
             >
-                <RoomTypeForm
-                    roomType={roomType}
+                <AmenityForm
+                    isLoading={isLoading}
+                    amenity={amenity}
+                    amenityCategories={amenityCategories}
                     isValid={isValid}
-                    errorMessage={errorMessage}
-                    onSaveFormChange={onSaveFormChange}
                     onClose={onClose}
-                    onSaveRoomType={onSaveRoomType}
+                    onSaveAmenity={onSaveAmenity}
                 />
             </Modal>
-        )
-    }
+        );
+    };
+
     return (
         <>
             {isShow && modalRender()}
             <div className="card">
                 <div className="card-header text-uppercase">
-                    <h3>Room Type</h3>
+                    <h3>{AMENITY_TEXT_CONFIG.AMENITY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
-                    <RoomTypeSearch
+                    <AmenitySearch
                         searchParam={searchParam}
+                        amenityCategories={amenityCategories}
                         onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
-                    <RoomTypeGrid
-                        data={roomTypes}
+                    <AmenityGrid
+                        data={data}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
@@ -263,4 +255,4 @@ const RoomTypeContainer = () => {
     )
 }
 
-export default RoomTypeContainer;
+export default AmenityContainer;
