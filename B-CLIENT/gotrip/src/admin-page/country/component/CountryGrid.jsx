@@ -48,6 +48,7 @@ const CountryGrid = ({
         sortDirection
     } = options
 
+    console.log("data is ", data)
     return (
         <div className="card card-info">
             <div className="card-body">

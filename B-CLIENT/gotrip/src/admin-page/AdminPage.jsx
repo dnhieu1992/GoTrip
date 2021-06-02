@@ -1,4 +1,5 @@
 import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import Navbar from './shared/components/Navbar';
 import MainSidebar from './shared/components/MainSidebar';
@@ -18,11 +19,11 @@ const AdminPage = () => {
       <div className="content-wrapper">
         <Route path="/admin/country" component={CountryContainer} />
         <Route path="/admin/city" component={CityContainer} />
-        <Route path="/admin/property" component={PropertyContainer}/>
-        <Route path="/admin/property-type" component={PropertyTypeContainer}/>
+        <Route path="/admin/property" component={PropertyContainer} />
+        <Route path="/admin/property-type" component={PropertyTypeContainer} />
       </div>
       <Footer />
     </div>
   );
 };
-export default AdminPage;
+export default connect(null)(AdminPage);

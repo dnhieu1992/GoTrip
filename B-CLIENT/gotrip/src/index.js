@@ -11,7 +11,9 @@ import store from './store/index';
 window.store = store;
 
 ReactDOM.render(
-        <App />,
+    <Provider store={store}>
+        <App />
+    </Provider>,
     document.getElementById('root')
 );
 
