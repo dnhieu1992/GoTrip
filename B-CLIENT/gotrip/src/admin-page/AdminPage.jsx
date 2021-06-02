@@ -10,6 +10,8 @@ import BedContainer from './bed/BedContainer';
 import PropertyContainer from './property/PropertyContainer'
 import PropertyTypeContainer from './property-type/PropertyTypeContainer';
 import RoomTypeContainer from './room-type/RoomTypeContainer';
+import RoomNameContainer from './room-name/RoomNameContainer';
+import AmenityCategoryContainer from './amenity-category/AmenityCategoryContainer';
 const AdminPage = () => {
   return (
     <div className="wrapper">
@@ -21,9 +23,11 @@ const AdminPage = () => {
         <Route path="/admin/country" component={CountryContainer} />
         <Route path="/admin/city" component={CityContainer} />
         <Route path="/admin/bed" component={BedContainer} />
-        <Route path="/admin/property" component={PropertyContainer}/>
-        <Route path="/admin/property-type" component={PropertyTypeContainer}/>
+        <Route path="/admin/property" component={PropertyContainer} />
+        <Route path="/admin/property-type" component={PropertyTypeContainer} />
         <Route path="/admin/room-type" component={RoomTypeContainer} />
+        <Route path="/admin/room-name" component={RoomNameContainer} />
+        <Route path="/admin/amenity-category" component={AmenityCategoryContainer} />
       </div>
       <Footer />
     </div>
