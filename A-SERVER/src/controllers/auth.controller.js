@@ -1,41 +1,71 @@
-import db from '../models/index.js';
-import { unauthorizedResponse, successResponse, errorResponse } from '../shared/response.js'
-import { ERROR_MSG } from '../constants/messages.js';
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import AUTH_CONFIG from '../config/auth.config.js';
 import bcrypt from 'bcryptjs';
-import loginService from '../services/auth.service.js';
+import { validationResult } from 'express-validator';
+import db from '../models/index.js';
+import AUTH_CONFIG from '../config/auth.config.js';
+import { ERROR_MSG } from '../constants/messages.js';
+import { unauthorizedResponse, successResponse, errorResponse } from '../shared/response.js'
 
 async function login(req, res) {
-    const test = await loginService.login(req.body.username, req.body.password);
-    // if (!isValid) {
-    //     return unauthorizedResponse(res, errorMessage)
-    // }
-    // return successResponse(res, { success: true, token: token });
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    const {
+        username,
+        password
+    } = req.body;
+
+    const user = await db.User.findOne({ username: username });
+
+    if (!user) {
+        return unauthorizedResponse(res, { isValid: false, errorMessage: ERROR_MSG.USERNAME_OR_PASSWORD_INVALID });
+    }
+    var passwordIsValid = bcrypt.compareSync(password, user.password);
+
+    if (!passwordIsValid) {
+        return unauthorizedResponse(res, { isValid: false, errorMessage: ERROR_MSG.USERNAME_OR_PASSWORD_INVALID });
+    }
+
+    const currentUser = {
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+    }
+
+    const token = jwt.sign(currentUser, AUTH_CONFIG.SECRET_KEY, { expiresIn: 30 * 60 })
+
+    return successResponse(res, { isValid: true, token: token })
 }
 
 function register(req, res) {
-    db.User.findOne({ email: req.body.email }).then((user) => {
+    const {
+        username,
+        email,
+        password
+    } = req.body;
+
+    db.User.findOne({ username: username }).then((user) => {
         if (user) {
             return duplicatedResponse(res, ERROR_MSG.USER_EXISTS); f
         }
-        const hashPassword = bcrypt.hashSync(req.body.password, AUTH_CONFIG.SALT);
-        const username = req.body.email.split('@')[0];
+        const hashPassword = bcrypt.hashSync(password, AUTH_CONFIG.SALT);
 
-        const token = jwt.sign({ username: username }, AUTH_CONFIG.SECRET_KEY, { expiresIn: 30 * 60 });
+        const token = jwt.sign({ username: username, email: email }, AUTH_CONFIG.SECRET_KEY, { expiresIn: 30 * 60 });
 
         const newUser = new db.User({
             _id: mongoose.Types.ObjectId(),
-            userName: username,
+            username: username,
             email: req.body.email,
             password: hashPassword
         });
 
-        newUser.save().then((user) => {
-            return successResponse(res, { token: token });
-        }).catch((error) => {
-            return errorResponse(res, error);
-        })
+        newUser.save()
+            .then(() => successResponse(res, { token: token }))
+            .catch(error => errorResponse(res, error))
     })
 }
 

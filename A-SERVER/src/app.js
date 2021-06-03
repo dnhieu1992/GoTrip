@@ -35,7 +35,9 @@ app.use(logger('dev'));
 
 // set up mongoose
 mongoose.Promise = global.Promise;
-mongoose.connect(`${DB_CONFIG.HOST}:${DB_CONFIG.PORT}/${DB_CONFIG.DB}`, { useNewUrlParser: true, useUnifiedTopology: true })
+//const uri = `${DB_CONFIG.HOST}:${DB_CONFIG.PORT}/${DB_CONFIG.DB}`;
+const uri = DB_CONFIG.MONGO_URI;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('Database connected');
     })
