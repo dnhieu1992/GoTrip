@@ -5,7 +5,7 @@ import { validationResult } from 'express-validator';
 import db from '../models/index.js';
 import AUTH_CONFIG from '../config/auth.config.js';
 import { ERROR_MSG } from '../constants/messages.js';
-import { unauthorizedResponse, successResponse, errorResponse } from '../shared/response.js'
+import { unauthorizedResponse, successResponse, errorResponse, duplicatedResponse } from '../shared/response.js'
 
 async function login(req, res) {
     const errors = validationResult(req)
