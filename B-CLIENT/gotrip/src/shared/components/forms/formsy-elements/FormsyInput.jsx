@@ -10,6 +10,7 @@ const FormsyInput = (props) => {
 
     const {
         inputProps,
+        type,
         value,
         isPristine,
         label
@@ -24,14 +25,14 @@ const FormsyInput = (props) => {
             <Form.Control
                 {...inputProps}
                 className={classNames({ 'is-invalid': !isValid })}
-                type="text"
+                type={type}
                 value={value || ''}
                 onChange={changeValue}
             />
             {!_.isEmpty(errorMessages) && (
                 errorMessages.map((error, index) => {
                     return (
-                        <Form.Text className="invalid-feedback" key={index} style={{ display: 'block', fontSize:'100%' }}>
+                        <Form.Text className="invalid-feedback" key={index} style={{ display: 'block', fontSize: '100%' }}>
                             {error}
                         </Form.Text>
                     )
