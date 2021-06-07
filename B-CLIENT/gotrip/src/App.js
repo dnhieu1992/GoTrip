@@ -4,8 +4,7 @@ import './login.scss';
 import { BrowserRouter, Switch, Route, Link, Router } from 'react-router-dom';
 import AdminPage from './admin-page/AdminPage';
 import login from './auth/login/login';
-import register from './auth/registration/register';
-import resetpass from './auth/login/resetpass';
+import reset from './auth/login/reset';
 
 function App() {
   return (
@@ -15,8 +14,7 @@ function App() {
         <Route path="/" exact component={AdminPage} />
         <Route path="/admin" component={AdminPage} />
         <Route path="/login" component={login} />
-        <Route path="/register" component={register} />
-        <Route path="/login/resetpass" component={resetpass} />
+        <Route path="/login/reset" component={reset} />
       </div>
     </BrowserRouter>
   );
