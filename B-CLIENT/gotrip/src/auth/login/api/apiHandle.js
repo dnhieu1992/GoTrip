@@ -10,6 +10,8 @@ const loginUser = async (account, onSuccess, onError) => {
 
         const data = await res.json();
 
+        localStorage.setItem('User', JSON.stringify(data.token));
+        
         if (!res.ok && res.status === 401) {
             throw data.error
         }

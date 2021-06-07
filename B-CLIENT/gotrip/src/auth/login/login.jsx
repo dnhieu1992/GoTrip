@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect, Route } from 'react-router-dom';
 import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../shared/components/index.js';
 import { LOGIN_TEXT_CONFIG } from './constant/resources.js';
+import { useHistory } from "react-router-dom";
 
 import {
     loginUser
@@ -14,14 +15,16 @@ const {
 
 const login = () => {
     const [isValid, setIsValid] = useState(true);
+    const [error, setError] = useState(null);
+    const history = useHistory();
 
     const onLogin = (account) => {
         loginUser(account,
             () => {
-
+                history.push("/admin");
             },
-            () => {
-
+            (error) => {
+                setError(error);
             });
     };
 
@@ -36,6 +39,7 @@ const login = () => {
     const onInvalid = () => {
         setIsValid(false);
     }
+
     return (
         <div className="login-container">
             <div className="container">
@@ -44,6 +48,11 @@ const login = () => {
                         <div className="card card-signin my-5">
                             <div className="card-body">
                                 <h5 className="card-title text-center ">{LOGIN_TEXT_CONFIG.LOGIN_PAGE_HEADER}</h5>
+                                {error && (
+                                    <div className="alert alert-danger" role="alert">
+                                        {error}
+                                    </div>
+                                )}
                                 <Formsy className="form-signin" onSubmit={onSubmit} onValid={onValid} onInvalid={onInvalid}>
                                     <div className="form-label-group">
                                         <FormsyInput
@@ -91,7 +100,7 @@ const login = () => {
                                     </div>
 
                                     <div className="custom-control custom-checkbox mb-3">
-                                        <NavLink to="/login/resetpass" className="nav-link float-right">
+                                        <NavLink to="/login/resetpass" className="float-right">
                                             {LOGIN_TEXT_CONFIG.LOGIN_FORGOT_FIELD_LBL}
                                         </NavLink>
                                     </div>
@@ -105,7 +114,7 @@ const login = () => {
                                             {LOGIN_TEXT_CONFIG.LOGIN_SIGNIN_BTN}
                                         </LoaderButton>
                                         <p className="mt-3">OR</p>
-                                        <NavLink to="/register" className="nav-link">
+                                        <NavLink to="/register">
                                             {LOGIN_TEXT_CONFIG.LOGIN_REGISTER_FIELD_LBL}
                                         </NavLink>
                                     </div>
@@ -117,5 +126,5 @@ const login = () => {
             </div>
         </div>
     );
-};
+}
 export default login;
