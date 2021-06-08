@@ -1,33 +1,27 @@
 :root {
-    --input-padding-x: 1.5rem;
-    --input-padding-y: 0.75rem;
-    --font-family-sans-serif: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-      Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-  }
-  html,
-  body {
-    height: 100%;
-    margin: 0;
-  }
-  
-  #root{
-    height: 100%;
-    margin: 0;
-  }
-  
-  .login-container {
-    background: url("../../../2.jpg") no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    height: 46.7em;
-    .card-signin {
-      border: 0;
-      border-radius: 1rem;
-      box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-    }
-  
-    .card-signin .card-title {
+  --input-padding-x: 1.5rem;
+  --input-padding-y: 0.75rem;
+  height: 100%;
+  margin: 0;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.login {
+  background: url("../../../2.jpg") no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 46.7em;
+  .card__signin {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+
+    .card__title {
       float: none;
       color: #666 !important;
       margin-bottom: 2rem;
@@ -35,16 +29,16 @@
       font-size: 2rem;
       letter-spacing: 0.5px;
     }
-  
-    .card-signin .card-body {
+
+    .card__body {
       padding: 2rem;
     }
-  
-    .form-signin {
-      width: 100%;
-    }
-  
-    .form-signin .btn {
+  }
+
+  .form__signin {
+    width: 100%;
+
+    .btn {
       font-size: 1.5rem;
       border-radius: 0.5rem;
       letter-spacing: 0.1rem;
@@ -52,42 +46,42 @@
       padding: 0.5rem 1.5rem;
       transition: all 0.2s;
     }
-  
-    .form-label-group {
+
+    .form__label--group {
       position: relative;
       margin-bottom: 1rem;
     }
-  
-    .form-label-group input {
+
+    .form__label--group input {
       height: 2.8em;
       border-radius: 0.5rem;
     }
-  
+
     label {
       color: #666;
       font-size: 18px;
       font-weight: 600 !important;
     }
-  
+
     @supports (-ms-ime-align: auto) {
-      .form-label-group > label {
+      .form__label--group > label {
         display: none;
       }
-      .form-label-group input::-ms-input-placeholder {
+      .form__label--group input::-ms-input-placeholder {
         color: #777;
       }
     }
-  
+
     /* Fallback for IE
       -------------------------------------------------- */
-  
+
     @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-      .form-label-group > label {
+      .form__label--group > label {
         display: none;
       }
-      .form-label-group input:-ms-input-placeholder {
+      .form__label--group input:-ms-input-placeholder {
         color: #777;
       }
     }
   }
-  
+}

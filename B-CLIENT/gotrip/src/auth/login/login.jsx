@@ -41,20 +41,20 @@ const Login = () => {
     }
 
     return (
-        <div className="login-container">
+        <div className="login">
             <div className="container">
                 <div className="row">
                     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                        <div className="card card-signin my-5">
-                            <div className="card-body">
-                                <h5 className="card-title text-center ">{LOGIN_TEXT_CONFIG.LOGIN_PAGE_HEADER}</h5>
+                        <div className="card card__signin my-5">
+                            <div className="card__body">
+                                <h5 className="card__title text-center ">{LOGIN_TEXT_CONFIG.LOGIN_PAGE_HEADER}</h5>
                                 {error && (
                                     <div className="alert alert-danger" role="alert">
                                         {error}
                                     </div>
                                 )}
-                                <Formsy className="form-signin" autoComplete="off" onSubmit={onSubmit} onValid={onValid} onInvalid={onInvalid}>
-                                    <div className="form-label-group">
+                                <Formsy className="form__signin" autoComplete="off" onSubmit={onSubmit} onValid={onValid} onInvalid={onInvalid}>
+                                    <div className="form__label--group">
                                         <FormsyInput
                                             inputProps={{
                                                 id: 'username',
@@ -62,7 +62,6 @@ const Login = () => {
                                             }}
                                             type="text"
                                             name="username"
-                                            autofocus
                                             label={LOGIN_TEXT_CONFIG.LOGIN_USERNAME_FIELD_LBL}
                                             validations={{
                                                 minLength: 3,
@@ -77,7 +76,7 @@ const Login = () => {
                                         />
                                     </div>
 
-                                    <div className="form-label-group">
+                                    <div className="form__label--group">
                                         <FormsyInput
                                             inputProps={{
                                                 id: 'password',
