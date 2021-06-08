@@ -65,15 +65,6 @@ const BedForm = ({
                         validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     >
                     </FormsyElement.FormsyTextarea>
-                    {/* <label>Description</label>
-                    <textarea
-                        className="form-control"
-                        name="description"
-                        value={description}
-                        label={BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
-                        required
-                    >
-                    </textarea> */}
                 </div>
                 <div className="form-group">
                     <FormsySelect

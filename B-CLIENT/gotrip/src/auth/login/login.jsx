@@ -13,7 +13,7 @@ const {
     FormsyInput
 } = FormsyElement
 
-const login = () => {
+const Login = () => {
     const [isValid, setIsValid] = useState(true);
     const [error, setError] = useState(null);
     const history = useHistory();
@@ -53,7 +53,7 @@ const login = () => {
                                         {error}
                                     </div>
                                 )}
-                                <Formsy className="form-signin" onSubmit={onSubmit} onValid={onValid} onInvalid={onInvalid}>
+                                <Formsy className="form-signin" autoComplete="off" onSubmit={onSubmit} onValid={onValid} onInvalid={onInvalid}>
                                     <div className="form-label-group">
                                         <FormsyInput
                                             inputProps={{
@@ -100,7 +100,7 @@ const login = () => {
                                     </div>
 
                                     <div className="custom-control custom-checkbox mb-3">
-                                        <NavLink to="/login/resetpass" className="float-right">
+                                        <NavLink to="/reset" className="float-right">
                                             {LOGIN_TEXT_CONFIG.LOGIN_FORGOT_FIELD_LBL}
                                         </NavLink>
                                     </div>
@@ -127,4 +127,4 @@ const login = () => {
         </div>
     );
 }
-export default login;
+export default Login;

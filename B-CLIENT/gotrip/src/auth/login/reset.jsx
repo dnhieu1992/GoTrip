@@ -1,4 +1,4 @@
-const reset = () => {
+const Reset = () => {
 
 }
-export default reset;
+export default Reset;
