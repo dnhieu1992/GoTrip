@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 import { FormsyElement, Input, LoaderButton } from "../../shared/components";
 import { REGISTER_TEXT_CONFIG } from "./constants/resources";
 
-const register = () => {
+const Register = () => {
 
     const [state, setState] = useState([]);
     const [isValid, setIsValid] = useState(true);
@@ -16,7 +16,7 @@ const register = () => {
         username,
         email,
         password,
-        confirm_password
+        confirmPassword
     } = state;
 
     const createAccount = async (account, onSuccess, onError) => {
@@ -60,25 +60,25 @@ const register = () => {
 
     return (
         <div className="main">
-            <h1>account register form</h1>
+            <h1>{REGISTER_TEXT_CONFIG.REGISTER_PAGE_HEADER}</h1>
             <Formsy className="form form-horizontal" onSubmit={onSubmit} onValid={onValid} onInvalid={onInValid}>
-                <h2>Create account</h2>
+                <h2>{REGISTER_TEXT_CONFIG.REGISTER_FORM_HEADER}</h2>
                 <div className="form__input">
                     <FormsyInput
                         inputProps={{
                             id: 'username',
                             type: 'text',
-                            placeholder: 'Enter your username',
+                            placeholder: REGISTER_TEXT_CONFIG.REGISTER_USERNAME_FIELD_LBL,
                         }}
                         name="username"
-                        label="Username"
+                        label={REGISTER_TEXT_CONFIG.REGISTER_USERNAME_FIELD_LBL}
                         value={username}
                         required
                         validations={{ minLength: 3, maxLength: 20 }}
                         validationError={REGISTER_TEXT_CONFIG.USERNAME_REQUIRED_MSG}
                         validationErrors={{
-                            minLength: REGISTER_TEXT_CONFIG.USERNAME_MIN_LENGTH,
-                            maxLength: REGISTER_TEXT_CONFIG.USERNAME_MAX_LENGTH
+                            minLength: REGISTER_TEXT_CONFIG.USERNAME_MIN_LENGTH_MSG,
+                            maxLength: REGISTER_TEXT_CONFIG.USERNAME_MAX_LENGTH_MSG
                         }}
                     />
 
@@ -88,15 +88,15 @@ const register = () => {
                         inputProps={{
                             type: 'email',
                             id: "email",
-                            placeholder: 'Enter your email'
+                            placeholder: REGISTER_TEXT_CONFIG.REGISTER_EMAIL_FIELD_LBL
                         }}
                         name="email"
-                        label="Email"
+                        label={REGISTER_TEXT_CONFIG.REGISTER_EMAIL_FIELD_LBL}
                         value={email}
                         required
                         validations={{ isEmail: true }}
                         validationErrors={{
-                            isEmail: REGISTER_TEXT_CONFIG.EMAIL_TYPE
+                            isEmail: REGISTER_TEXT_CONFIG.EMAIL_INVALID_MSG
                         }}
                         validationError={REGISTER_TEXT_CONFIG.EMAIL_REQUIRED_MSG}
                     />
@@ -106,18 +106,18 @@ const register = () => {
                         inputProps={{
                             type: "password",
                             className: "form-input",
-                            placeholder: "Enter your password"
+                            placeholder: REGISTER_TEXT_CONFIG.REGISTER_PASSWORD_FIELD_LBL
                         }}
                         name="password"
-                        label="Password"
+                        label={REGISTER_TEXT_CONFIG.REGISTER_PASSWORD_FIELD_LBL}
                         value={password}
                         required
                         validationError={REGISTER_TEXT_CONFIG.PASSWORD_REQUIRED_MSG}
                         validations={{ matchRegexp: /^(?=.*[~!@#$%^&*?()])(?=.*[a-z])(?=.*[A-Z])/, minLength: 8, maxLength: 30 }}
                         validationErrors={{
-                            matchRegexp: REGISTER_TEXT_CONFIG.PASSWORD_TYPE,
-                            minLength: REGISTER_TEXT_CONFIG.PASSWORD_MIN_LENGTH,
-                            maxLength: REGISTER_TEXT_CONFIG.PASSWORD_MAX_LENGTH
+                            matchRegexp: REGISTER_TEXT_CONFIG.PASSWORD_INVALID_MSG,
+                            minLength: REGISTER_TEXT_CONFIG.PASSWORD_MIN_LENGTH_MSG,
+                            maxLength: REGISTER_TEXT_CONFIG.PASSWORD_MAX_LENGTH_MSG
                         }}
                     />
                 </div>
@@ -126,16 +126,16 @@ const register = () => {
                         inputProps={{
                             type: "password",
                             className: "form-input",
-                            placeholder: "Enter your confirm password"
+                            placeholder: REGISTER_TEXT_CONFIG.REGISTER_CONFIRM_PASSWORD_FIELD_LBL
                         }}
                         name="confirm_password"
-                        label="Confirm Password"
-                        value={confirm_password}
+                        label={REGISTER_TEXT_CONFIG.REGISTER_CONFIRM_PASSWORD_FIELD_LBL}
+                        value={confirmPassword}
                         required
                         validationError={REGISTER_TEXT_CONFIG.CONFIRM_PASSWORD_REQUIRED_MSG}
                         validations="equalsField:password"
                         validationErrors={{
-                            equalsField: REGISTER_TEXT_CONFIG.CONFIRM_PASSWORD_TYPE,
+                            equalsField: REGISTER_TEXT_CONFIG.CONFIRM_PASSWORD_INVALID_MSG,
                         }}
                     />
                 </div>
@@ -166,4 +166,4 @@ const register = () => {
         </div>
     )
 }
-export default register;
+export default Register;
