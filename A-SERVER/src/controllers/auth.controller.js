@@ -21,12 +21,12 @@ async function login(req, res) {
     const user = await db.User.findOne({ username: username });
 
     if (!user) {
-        return unauthorizedResponse(res, { isValid: false, errorMessage: ERROR_MSG.USERNAME_OR_PASSWORD_INVALID });
+        return unauthorizedResponse(res, ERROR_MSG.USERNAME_OR_PASSWORD_INVALID);
     }
     var passwordIsValid = bcrypt.compareSync(password, user.password);
 
     if (!passwordIsValid) {
-        return unauthorizedResponse(res, { isValid: false, errorMessage: ERROR_MSG.USERNAME_OR_PASSWORD_INVALID });
+        return unauthorizedResponse(res, ERROR_MSG.USERNAME_OR_PASSWORD_INVALID);
     }
 
     const currentUser = {

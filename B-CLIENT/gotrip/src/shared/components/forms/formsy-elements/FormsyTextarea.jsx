@@ -2,14 +2,14 @@ import { Form } from 'react-bootstrap';
 import { withFormsy } from 'formsy-react';
 import classNames from 'classnames';
 
-const FormsyInput = (props) => {
+const FormsyTextarea = (props) => {
 
     const changeValue = (event) => {
         props.setValue(event.currentTarget.value);
     }
 
     const {
-        inputProps,
+        textareaProps,
         type,
         value,
         isPristine,
@@ -22,17 +22,23 @@ const FormsyInput = (props) => {
     return (
         <Form.Group className='mb-3'>
             <Form.Label>{label}</Form.Label>
-            <Form.Control
-                {...inputProps}
+            <Form.Control as="textarea"
+                {...textareaProps}
                 className={classNames({ 'is-invalid': !isValid })}
                 type={type}
                 value={value || ''}
                 onChange={changeValue}
-            />
+            >
+
+            </Form.Control>
             {!_.isEmpty(errorMessages) && (
                 errorMessages.map((error, index) => {
                     return (
-                        <Form.Text className="invalid-feedback" key={index} style={{ display: 'block', fontSize: '100%' }}>
+                        <Form.Text
+                            className="invalid-feedback"
+                            key={index}
+                            style={{ display: 'block', fontSize: '100%' }}
+                        >
                             {error}
                         </Form.Text>
                     )
@@ -42,4 +48,4 @@ const FormsyInput = (props) => {
     )
 }
 
-export default withFormsy(FormsyInput);
+export default withFormsy(FormsyTextarea);

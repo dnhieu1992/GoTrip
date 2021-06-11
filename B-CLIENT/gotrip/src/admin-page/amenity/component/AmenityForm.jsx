@@ -65,8 +65,8 @@ const AmenityForm = ({
                     />
                 </div>
                 <div className="form-group">
-                    <FormsyInput
-                        inputProps={{
+                    <FormsyElement.FormsyTextarea
+                        textareaProps={{
                             id: 'description',
                             type: 'text',
                             placeholder: AMENITY_TEXT_CONFIG.AMENITY_DESCRIPTION_FIELD_LBL,
@@ -76,7 +76,8 @@ const AmenityForm = ({
                         value={description}
                         required
                         validationError={AMENITY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
-                    />
+                    >
+                    </FormsyElement.FormsyTextarea>
                 </div>
                 <div className="form-group">
                     <FormsySelect
