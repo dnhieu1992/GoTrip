@@ -1,7 +1,7 @@
 export const CITY_TEXT_CONFIG = {
     CITY_PAGE_HEADER: 'City management',
     CITY_NAME_FIELD_LBL: 'Name',
-    CITY_COUNTRYID_FIELD_LBL: 'CountryId',
+    CITY_COUNTRYID_FIELD_LBL: 'Country',
     CITY_STATUS_FIELD_LBL: 'Status',
     CITY_SEARCH_HEADER_LBL: 'Search Criteria',
     CITY_TOTAL_LBL: 'Cities',

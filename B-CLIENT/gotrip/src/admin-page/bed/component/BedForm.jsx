@@ -52,8 +52,8 @@ const BedForm = ({
                     />
                 </div>
                 <div className="form-group">
-                    <FormsyInput
-                        inputProps={{
+                    <FormsyElement.FormsyTextarea
+                        textareaProps={{
                             id: 'description',
                             type: 'text',
                             placeholder: BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL,
@@ -63,16 +63,8 @@ const BedForm = ({
                         value={description}
                         required
                         validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
-                    />
-                    {/* <label>Description</label>
-                    <textarea
-                        className="form-control"
-                        name="description"
-                        value={description}
-                        label={BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
-                        required
                     >
-                    </textarea> */}
+                    </FormsyElement.FormsyTextarea>
                 </div>
                 <div className="form-group">
                     <FormsySelect

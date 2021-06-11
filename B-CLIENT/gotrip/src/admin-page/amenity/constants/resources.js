@@ -2,7 +2,7 @@ export const AMENITY_TEXT_CONFIG = {
     AMENITY_PAGE_HEADER: 'Amenity management',
     AMENITY_NAME_FIELD_LBL: 'Name',
     AMENITY_DESCRIPTION_FIELD_LBL: 'Description',
-    AMENITY_AMENITYCATEGORYID_FIELD_LBL: 'Amenity Category Id',
+    AMENITY_AMENITYCATEGORYID_FIELD_LBL: 'Amenity Category',
     AMENITY_STATUS_FIELD_LBL: 'Status',
     AMENITY_SEARCH_HEADER_LBL: 'Search Criteria',
     AMENITY_TOTAL_LBL: 'Amenities',

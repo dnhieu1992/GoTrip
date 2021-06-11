@@ -9,6 +9,7 @@ import Modal from './forms/Modal';
 import Select from './forms/Select';
 import FormsyInput from './forms/formsy-elements/FormsyInput';
 import FormsySelect from './forms/formsy-elements/FormsySelect';
+import FormsyTextarea from './forms/formsy-elements/FormsyTextarea';
 
 const {
     Group,
@@ -20,7 +21,7 @@ const {
     Col
 } = Form;
 
-const FormsyElement = { FormsyInput, FormsySelect }
+const FormsyElement = { FormsyInput, FormsySelect, FormsyTextarea }
 
 export {
     Group as FormGroup,
