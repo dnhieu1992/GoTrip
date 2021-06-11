@@ -16,5 +16,6 @@ export const REGISTER_TEXT_CONFIG={
     PASSWORD_INVALID_MSG:'Pass word have to Upper/Lower case, at least one special character, and one number.',
     CONFIRM_PASSWORD_REQUIRED_MSG:'Confirm password required.',
     CONFIRM_PASSWORD_INVALID_MSG:'Confirm password must match password.',
+    MATCH_REGEXP:/^(?=.*[~!@#$%^&*?()])(?=.*[a-z])(?=.*[A-Z])/
 
 }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useHistory } from "react-router";
 import { FormsyElement, Input, LoaderButton } from "../../shared/components";
 import { REGISTER_TEXT_CONFIG } from "./constants/resources";
+import {REGEXP} from '../constant/regula';
 
 const Register = () => {
 
@@ -113,7 +114,7 @@ const Register = () => {
                         value={password}
                         required
                         validationError={REGISTER_TEXT_CONFIG.PASSWORD_REQUIRED_MSG}
-                        validations={{ matchRegexp: /^(?=.*[~!@#$%^&*?()])(?=.*[a-z])(?=.*[A-Z])/, minLength: 8, maxLength: 30 }}
+                        validations={{ matchRegexp:REGISTER_TEXT_CONFIG.MATCH_REGEXP, minLength: 8, maxLength: 30 }}
                         validationErrors={{
                             matchRegexp: REGISTER_TEXT_CONFIG.PASSWORD_INVALID_MSG,
                             minLength: REGISTER_TEXT_CONFIG.PASSWORD_MIN_LENGTH_MSG,
