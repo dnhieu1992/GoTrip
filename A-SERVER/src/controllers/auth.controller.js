@@ -79,7 +79,7 @@ function register(req, res) {
                 username: username,
                 email: email,
                 password: hashPassword,
-                tokens: [{ token }]
+                //tokens: [{ token }]
             });
 
             newUser.save()
