@@ -6,7 +6,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    email: String,
+    email: {
+        type: String,
+        require: true
+    },
     password: {
         type: String,
         require: true
@@ -18,6 +21,14 @@ const userSchema = new mongoose.Schema({
     roles: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Role'
-    }]
+    }],
+    // tokens: [
+    //     {
+    //         token: {
+    //             type: String,
+    //             require: true
+    //         }
+    //     }
+    // ]
 });
 export default mongoose.model('User', userSchema);

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useHistory } from "react-router";
 import { FormsyElement, Input, LoaderButton } from "../../shared/components";
 import { REGISTER_TEXT_CONFIG } from "./constants/resources";
-import {REGEXP} from '../constant/regula';
 
 const Register = () => {
 

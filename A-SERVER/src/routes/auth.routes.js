@@ -1,7 +1,6 @@
 import express from 'express';
-import { check } from 'express-validator';
 import { login, register } from '../controllers/auth.controller.js';
-import { registerUserValidationRules, validate } from '../validations/validationRules.js';
+import { loginUserValidationRules, registerUserValidationRules, validate } from '../validations/validationRules.js';
 
 const router = express.Router();
 /**
@@ -69,7 +68,7 @@ const router = express.Router();
  *       401:
  *         description: Authentication failed.
  */
-router.post('/login', login);
+router.post('/login', loginUserValidationRules(), validate, login);
 /**
  * @swagger
  * /api/register:

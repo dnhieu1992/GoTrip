@@ -21,6 +21,7 @@ const Login = () => {
     const onLogin = (account) => {
         loginUser(account,
             () => {
+                debugger
                 history.push("/admin");
             },
             (error) => {

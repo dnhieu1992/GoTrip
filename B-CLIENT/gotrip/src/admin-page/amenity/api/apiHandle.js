@@ -45,7 +45,7 @@ const createNewAmenity = async (amenity, onSuccess, onError) => {
         if (onSuccess) {
             return onSuccess();
         }
-    } catch (error) {
+    } catch (exp) {
         alertNotify.error(error);
         if (onError) {
             return onError();
@@ -116,6 +116,14 @@ const getAmenityCategories = async () => {
         return data;
     } catch (error) {
         console.log(error);
+    }
+}
+
+function showError(exp) {
+    const { error } = exp.data;
+    
+    if (error) {
+        alertNotify.error(error);
     }
 }
 

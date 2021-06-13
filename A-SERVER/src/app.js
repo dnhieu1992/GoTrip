@@ -9,6 +9,7 @@ import swaggerUi from "swagger-ui-express";
 
 import DB_CONFIG from './config/db.config.js';
 import appConfig from './config/app.config.js';
+import { verifyToken } from './shared/middleware/VerifyToken.js'
 
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
@@ -79,14 +80,14 @@ app.listen(appConfig.PORT, (request, respond) => {
 
 // set up route
 app.use('/api/', authRoutes);
-app.use('/api/user/', userRoutes);
-app.use('/api/country/', countryRoutes);
-app.use('/api/city/', cityRoutes);
-app.use('/api/property/', propertyRoutes);
-app.use('/api/propertyType/', propertyTypeRoutes);
-app.use('/api/roomType/', roomTypeRoutes);
-app.use('/api/bed/', bedRoutes);
-app.use('/api/breakfast/', breakfastRoutes);
-app.use('/api/roomName/', roomNameRoutes);
-app.use('/api/amenityCategory/', amenityCategoryRoutes);
-app.use('/api/amenity/', amenityRoutes);
+app.use('/api/user/', verifyToken, userRoutes);
+app.use('/api/country/', verifyToken, countryRoutes);
+app.use('/api/city/', verifyToken, cityRoutes);
+app.use('/api/property/', verifyToken, propertyRoutes);
+app.use('/api/propertyType/', verifyToken, propertyTypeRoutes);
+app.use('/api/roomType/', verifyToken, roomTypeRoutes);
+app.use('/api/bed/', verifyToken, bedRoutes);
+app.use('/api/breakfast/', verifyToken, breakfastRoutes);
+app.use('/api/roomName/', verifyToken, roomNameRoutes);
+app.use('/api/amenityCategory/', verifyToken, amenityCategoryRoutes);
+app.use('/api/amenity/', verifyToken, amenityRoutes);
