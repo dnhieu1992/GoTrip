@@ -28,7 +28,7 @@ export {
     Control as Input,
     Label,
     Text,
-    Check,
+    Check as Checkbox,
     Select,
     Row,
     Col,

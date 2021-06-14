@@ -1,139 +1,64 @@
-import { useState, useRef, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { getCountries } from './actions/country';
 import Modal from '../../shared/components/forms/Modal';
 import CountryGrid from './component/CountryGrid';
 import CountrySearch from './component/CountrySearch';
 import CountryForm from './component/CountryForm';
-import {
-    //getCountries,
-    updateCountry,
-    createNewCountry,
-    deleteCountry
-} from './api/apiHandle.js';
 import { COUNTRY_TEXT_CONFIG } from './constants/resources';
-
+import { getCountries, createNewCountry, updateCountry, deleteCountry, showModal, closeModal } from './actions/country';
 
 const CountryContainer = () => {
     const { countryPageData } = useSelector(state => ({ countryPageData: state.country }));
-
-    const [state, setState] = useState({});
-    const didMountRef = useRef(false);
-    const fetchCountriesRef = useRef(false);
     const dispatch = useDispatch();
 
     const {
         total,
         countries,
         options,
-        isValid,
-        country,
-        isShow,
         dataReady,
-        isLoading,
-        searchParam,
+        searchParams,
+        modal,
     } = countryPageData;
 
     useEffect(() => {
-        if (!didMountRef.current) {
-            dispatch(getCountries({}));
-            didMountRef.current = true;
-        }
+        dispatch(getCountries({}));
+    }, []);
 
-        if (didMountRef.current && fetchCountriesRef.current) {
-            fetchCountries();
-        }
-    });
-
-    const fetchCountries = () => {
-        dispatch(getCountries());
-        //fetchCountriesRef.current = false;
-        //getCountries();
-        // const {
-        //     searchParam = {},
-        //     options = {}
-        // } = state;
-
-        // getCountries({ ...searchParam, ...options }, ({ total, countries }) => {
-        //     setTimeout(() => {
-        //         setState({
-        //             ...state,
-        //             total,
-        //             countries,
-        //             dataReady: true
-        //         });
-        //     }, 500);
-        // }, () => {
-        //     setTimeout(() => {
-        //         setState({ ...state, dataReady: true });
-        //     }, 500);
-        // });
-    }
-
-    const onHandleSearch = (searchParam, optionParams = {}) => {
-        const options = {
-            pageNumber: optionParams.pageNumber || 1,
-            pageSize: optionParams.pageSize || 50,
-            sortField: optionParams.sortField || null,
-            sortDirection: optionParams.sortDirection || null
-        }
-
-        //fetchCountriesRef.current = true;
-
-        // setState({
-        //     ...state,
-        //     searchParam: searchParam,
-        //     options: options,
-        //     dataReady: false
-        // });
-        dispatch(getCountries(searchParam, options));
-    };
-
-    const onHandleSearchChange = (param) => {
-        setState({
-            ...state,
-            searchParam: param
-        });
+    const onHandleSearch = (searchParams, options) => {
+        dispatch(getCountries(searchParams, options));
     };
 
     const onHandlePageChange = (pageNumber) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageNumber
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     };
 
     const onHandlePageSizeChange = (pageSize) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageSize,
             pageNumber: 1
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     };
 
     const onHandleSortChange = (sortField, sortDirection) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             sortField,
             sortDirection
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     };
 
     const onHandleResetForm = () => {
-        const searchParam = {
+        const searchParams = {
             name: '',
             code: '',
             status: ''
@@ -144,57 +69,30 @@ const CountryContainer = () => {
             pageNumber: 1
         };
 
-        onHandleSearch({}, options);
-    };
-
-    const showModal = (country = {}) => {
-        setState({
-            ...state,
-            isShow: true,
-            country: country
-        });
-    }
-
-    const onClose = (isSearch) => {
-        fetchCountriesRef.current = !!isSearch;
-
-        setState({
-            ...state,
-            isShow: false,
-            isValid: false,
-            errorMessage: {},
-            country: null,
-            dataReady: !isSearch,
-            isLoading: false
-        });
+        onHandleSearch(searchParams, options);
     };
 
     const onSaveCountry = (country) => {
-        setState({ ...state, isLoading: true })
-        if (state.country._id) {
-            updateCountry({ ...country, id: state.country._id },
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+        if (modal.country._id) {
+            dispatch(updateCountry({ ...country, id: modal.country._id }));
         } else {
-            createNewCountry(country,
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+            dispatch(createNewCountry(country));
         }
     };
 
     const onDelete = ({ _id }) => {
-        const { searchParam, options } = state;
-
-        deleteCountry(_id, () => {
-            onHandleSearch(searchParam, options);
-        });
+        dispatch(deleteCountry(_id));
     };
 
-    const modalRender = () => {
+    const onShow = (country = {}) => {
+        dispatch(showModal(country));
+    }
+
+    const onClose = () => {
+        dispatch(closeModal());
+    };
+
+    const modalRender = ({ isLoading, country, isValid }) => {
         return (
             <Modal
                 classNames={'modal-lg'}
@@ -214,15 +112,14 @@ const CountryContainer = () => {
 
     return (
         <>
-            {isShow && modalRender()}
+            {modal && modalRender(modal)}
             <div className="card">
                 <div className="card-header text-uppercase">
                     <h3>{COUNTRY_TEXT_CONFIG.COUNTRY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <CountrySearch
-                        searchParam={searchParam}
-                        onHandleSearchChange={onHandleSearchChange}
+                        searchParams={searchParams}
                         onHandleSearch={onHandleSearch}
                         onHandleResetForm={onHandleResetForm}
                     />
@@ -231,7 +128,7 @@ const CountryContainer = () => {
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
-                        showModal={showModal}
+                        showModal={onShow}
                         onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}

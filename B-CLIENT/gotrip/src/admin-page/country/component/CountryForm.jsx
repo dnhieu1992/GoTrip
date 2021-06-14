@@ -35,7 +35,7 @@ const CountryForm = ({
     }
 
     return (
-        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
+        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton} autoComplete="off">
             <div className="card-body">
                 <div className="form-group">
                     <FormsyInput

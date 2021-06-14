@@ -1,11 +1,12 @@
 import Formsy, { addValidationRule } from "formsy-react";
+import { Link } from 'react-router-dom';
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { FormsyElement, Input, LoaderButton } from "../../shared/components";
 import { REGISTER_TEXT_CONFIG } from "./constants/resources";
+import { Checkbox } from "../../shared/components/index";
 
 const Register = () => {
-
     const [state, setState] = useState([]);
     const [isValid, setIsValid] = useState(true);
     const history = useHistory();
@@ -59,11 +60,10 @@ const Register = () => {
     }
 
     return (
-        <div className="main">
-            <h1>{REGISTER_TEXT_CONFIG.REGISTER_PAGE_HEADER}</h1>
-            <Formsy className="form form-horizontal" onSubmit={onSubmit} onValid={onValid} onInvalid={onInValid}>
-                <h2>{REGISTER_TEXT_CONFIG.REGISTER_FORM_HEADER}</h2>
-                <div className="form__input">
+        <div className="register-container">
+            <Formsy className="form form-horizontal register-container__form" onSubmit={onSubmit} onValid={onValid} onInvalid={onInValid}>
+                <h3 className="register-container__form-title">{REGISTER_TEXT_CONFIG.REGISTER_FORM_HEADER}</h3>
+                <div className="register-container__form-element">
                     <FormsyInput
                         inputProps={{
                             id: 'username',
@@ -81,9 +81,6 @@ const Register = () => {
                             maxLength: REGISTER_TEXT_CONFIG.USERNAME_MAX_LENGTH_MSG
                         }}
                     />
-
-                </div>
-                <div className="form__input">
                     <FormsyInput
                         inputProps={{
                             type: 'email',
@@ -100,12 +97,9 @@ const Register = () => {
                         }}
                         validationError={REGISTER_TEXT_CONFIG.EMAIL_REQUIRED_MSG}
                     />
-                </div>
-                <div className="form__input">
                     <FormsyInput
                         inputProps={{
                             type: "password",
-                            className: "form-input",
                             placeholder: REGISTER_TEXT_CONFIG.REGISTER_PASSWORD_FIELD_LBL
                         }}
                         name="password"
@@ -113,19 +107,16 @@ const Register = () => {
                         value={password}
                         required
                         validationError={REGISTER_TEXT_CONFIG.PASSWORD_REQUIRED_MSG}
-                        validations={{ matchRegexp:REGISTER_TEXT_CONFIG.MATCH_REGEXP, minLength: 8, maxLength: 30 }}
+                        validations={{ matchRegexp: REGISTER_TEXT_CONFIG.MATCH_REGEXP, minLength: 8, maxLength: 30 }}
                         validationErrors={{
                             matchRegexp: REGISTER_TEXT_CONFIG.PASSWORD_INVALID_MSG,
                             minLength: REGISTER_TEXT_CONFIG.PASSWORD_MIN_LENGTH_MSG,
                             maxLength: REGISTER_TEXT_CONFIG.PASSWORD_MAX_LENGTH_MSG
                         }}
                     />
-                </div>
-                <div className="form__input">
                     <FormsyInput
                         inputProps={{
                             type: "password",
-                            className: "form-input",
                             placeholder: REGISTER_TEXT_CONFIG.REGISTER_CONFIRM_PASSWORD_FIELD_LBL
                         }}
                         name="confirm_password"
@@ -138,30 +129,32 @@ const Register = () => {
                             equalsField: REGISTER_TEXT_CONFIG.CONFIRM_PASSWORD_INVALID_MSG,
                         }}
                     />
-                </div>
-                <div className="form__checkbox">
-                    <Input
+                    <Checkbox
                         type="checkbox"
-                        className="form__checkbox -checkbox-size"
+                        className="register-container__checkbox"
+                        label="I Accept to the Term & Conditions"
                         required
-                        disabled={!isValid}
                     />
-                        I Accept to the Term & Conditions
-                </div>
-                <div className="form__button d-grid gap-2 ">
-                    <LoaderButton
-                        className="form__button btn-lg "
-                        type="submit"
-                        disabled={!isValid}
-                    >
-                        Sign In
-                    </LoaderButton>
-                </div>
 
-                <span className="form__login">
-                    Already a remember ?
-                    <a href="./login">Sign In</a>
-                </span>
+                    <div className="col-xs-12 mt-3">
+                        <LoaderButton
+                            className="register-container__register-btn"
+                            type="submit"
+                            disabled={!isValid}
+                            size="lg"
+                            variant="primary"
+                        >
+                            Sign In
+                        </LoaderButton>
+                    </div>
+
+                    <div className="mt-3 d-flex justify-content-center">
+                        <span>Already a remember ?</span> &nbsp;
+                        <Link to="/login">
+                            Sign In
+                        </Link>
+                    </div>
+                </div>
             </Formsy>
         </div>
     )

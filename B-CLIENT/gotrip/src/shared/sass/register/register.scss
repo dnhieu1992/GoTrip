@@ -1,67 +1,38 @@
-.main {
+.register-container {
     width: 100%;
-    height: 700px;
-    background-image: url("../../../upload/images/img.jpg");
+    height: 100vh;
+    background-image: url("../../../upload/images/register_background.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    position: relative;
 
-    h1{
-        color: white;
-        font-size: 45px;
-        text-align: center;
-        padding: 20px 0;
-        text-transform: uppercase;
+    &__form {
+        padding-top: 50px;
+        background-color: white;
+        border: 1px solid #ccc;
+        height: 100%;
+        width: 50%;
+        float: right;
     }
-}
-
-.form{
-    background-color: white;
-    padding:32px 48px;
-    margin: 0 auto;
-    height: 560px;
-    width: 400px;
-    position: relative;
-
-    h2{
+    &__checkbox {
+        input {
+            width: 15px;
+            height: 15px;
+        }
+    }
+    &__form-element {
+        width: 70%;
+        margin: 0 auto;
+    }
+    &__form-title {
         font-size: 2em;
-        color: #17A2B8;
+        color: #17a2b8;
         text-transform: uppercase;
         text-align: center;
-    }
-    
-    &__input{
-        height: min-content;
-        margin-bottom: 20px;
-    }
-
-    &__checkbox{
-        display: inline-flex;
-        background-size: 10px;
-        font-size: 13px;
-        &.-checkbox-size{
-            height: 14px;
-            width: 14px;
-            margin-right: 2px;
-            margin-top: 1px;
-        }
-    }
-
-    &__button{
-        outline: none;
-        text-align: center;
         display: block;
-        padding-top: 10px;
-        
+        margin-bottom: 30px;
     }
-
-    &__login {
-        display: block;
-        text-align: center;
-        padding-top: 10px;
-        a{
-        color: black;
-        }
+    &__register-btn {
+        width: 100%;
+        background-color: #5191fa;
     }
-
 }

@@ -1,8 +1,9 @@
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { STATUSES } from '../constants/country';
-import { Input, Label, FormGroup, Button, Select, Row } from '../../../shared/components/index';
+import { Label, FormGroup, Button, Row } from '../../../shared/components/index';
 import Formsy from 'formsy-react';
-import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { FormsyElement } from '../../../shared/components/index.js';
 import { COUNTRY_TEXT_CONFIG } from '../constants/resources';
 
 const {
@@ -11,23 +12,26 @@ const {
 } = FormsyElement
 
 const CountrySearch = ({
-    searchParam,
-    onHandleSearchChange,
     onHandleSearch,
     onHandleResetForm,
 }) => {
-    const {
-        name,
-        code,
-        status
-    } = searchParam;
+    const formRef = useRef();
+
+    const onReset = () => {
+        formRef.current.updateInputsWithValue({
+            name: '',
+            code: '',
+            status: ''
+        });
+        onHandleResetForm();
+    }
 
     return (
         <div className="card card-info">
             <div className="card-header">
                 <h3 className="card-title">{COUNTRY_TEXT_CONFIG.COUNTRY_SEARCH_HEADER_LBL}</h3>
             </div>
-            <Formsy className="form-horizontal" autoComplete="off" onSubmit={onHandleSearch}>
+            <Formsy className="form-horizontal" autoComplete="off" onSubmit={onHandleSearch} ref={formRef}>
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
@@ -43,7 +47,6 @@ const CountrySearch = ({
                                             placeholder: COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL,
                                         }}
                                         name="name"
-                                        value={name}
                                     />
                                 </div>
                             </FormGroup>
@@ -61,7 +64,6 @@ const CountrySearch = ({
                                             placeholder: COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL,
                                         }}
                                         name="code"
-                                        value={code}
                                     />
                                 </div>
                             </FormGroup>
@@ -76,7 +78,6 @@ const CountrySearch = ({
                                 <div className="col-sm-10">
                                     <FormsySelect
                                         name='status'
-                                        value={status}
                                         dataSource={STATUSES}
                                     />
                                 </div>
@@ -95,7 +96,7 @@ const CountrySearch = ({
                             </Button>
                             <Button
                                 variant="info"
-                                onClick={onHandleResetForm}
+                                onClick={onReset}
                             >
                                 {COUNTRY_TEXT_CONFIG.COUNTRY_RESET_BTN}
                             </Button>
@@ -108,22 +109,12 @@ const CountrySearch = ({
 };
 
 CountrySearch.propTypes = {
-    searchParam: PropTypes.shape({
-        name: PropTypes.string,
-        code: PropTypes.string,
-        status: PropTypes.string,
-    }),
-    onHandleSearchChange: PropTypes.func.isRequired,
     onHandleSearch: PropTypes.func.isRequired,
     onHandleResetForm: PropTypes.func.isRequired,
 };
 
 CountrySearch.defaultProps = {
-    searchParam: {
-        name: '',
-        code: '',
-        status: ''
-    },
+
 };
 
 export default CountrySearch;
