@@ -27,7 +27,7 @@ const FormsySelect = (props) => {
 
     return (
         <Form.Group className='mb-3 form-select'>
-            <Form.Label>{label}</Form.Label>
+            {label && (<Form.Label>{label}</Form.Label>)}
             <Form.Control as="select"
                 value={value}
                 className={classNames('form-select', { 'is-invalid': !isValid })}

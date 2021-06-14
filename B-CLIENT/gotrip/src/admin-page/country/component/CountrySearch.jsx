@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import { STATUSES } from '../constants/country';
 import { Input, Label, FormGroup, Button, Select, Row } from '../../../shared/components/index';
+import Formsy from 'formsy-react';
+import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
 import { COUNTRY_TEXT_CONFIG } from '../constants/resources';
+
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement
 
 const CountrySearch = ({
     searchParam,
@@ -15,21 +22,12 @@ const CountrySearch = ({
         status
     } = searchParam;
 
-    const onHandleFieldChange = (e) => {
-        if (e?.target) {
-            onHandleSearchChange({
-                ...searchParam,
-                [e.target.name]: e.target.value
-            });
-        }
-    };
-
     return (
         <div className="card card-info">
             <div className="card-header">
                 <h3 className="card-title">{COUNTRY_TEXT_CONFIG.COUNTRY_SEARCH_HEADER_LBL}</h3>
             </div>
-            <form className="form-horizontal" autoComplete="off">
+            <Formsy className="form-horizontal" autoComplete="off" onSubmit={onHandleSearch}>
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
@@ -38,13 +36,14 @@ const CountrySearch = ({
                                     {COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Input
-                                        type="text"
-                                        id="name"
+                                    <FormsyInput
+                                        inputProps={{
+                                            id: 'name',
+                                            type: 'text',
+                                            placeholder: COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL,
+                                        }}
                                         name="name"
-                                        placeholder={COUNTRY_TEXT_CONFIG.COUNTRY_NAME_FIELD_LBL}
                                         value={name}
-                                        onChange={onHandleFieldChange}
                                     />
                                 </div>
                             </FormGroup>
@@ -55,13 +54,14 @@ const CountrySearch = ({
                                     {COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Input
-                                        type="text"
-                                        id="countryCode"
+                                    <FormsyInput
+                                        inputProps={{
+                                            id: 'countryCode',
+                                            type: 'text',
+                                            placeholder: COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL,
+                                        }}
                                         name="code"
-                                        placeholder={COUNTRY_TEXT_CONFIG.COUNTRY_CODE_FIELD_LBL}
                                         value={code}
-                                        onChange={onHandleFieldChange}
                                     />
                                 </div>
                             </FormGroup>
@@ -74,10 +74,9 @@ const CountrySearch = ({
                                     {COUNTRY_TEXT_CONFIG.COUNTRY_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'status' }}
+                                    <FormsySelect
+                                        name='status'
                                         value={status}
-                                        onChange={onHandleFieldChange}
                                         dataSource={STATUSES}
                                     />
                                 </div>
@@ -88,9 +87,9 @@ const CountrySearch = ({
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
                             <Button
+                                type="submit"
                                 variant="info"
                                 className='mr-3'
-                                onClick={() => onHandleSearch(searchParam)}
                             >
                                 {COUNTRY_TEXT_CONFIG.COUNTRY_SEARCH_BTN}
                             </Button>
@@ -103,20 +102,28 @@ const CountrySearch = ({
                         </div>
                     </div>
                 </div>
-            </form>
+            </Formsy>
         </div>
     );
 };
 
-export default CountrySearch;
-
 CountrySearch.propTypes = {
-    searchParam: PropTypes.object,
+    searchParam: PropTypes.shape({
+        name: PropTypes.string,
+        code: PropTypes.string,
+        status: PropTypes.string,
+    }),
     onHandleSearchChange: PropTypes.func.isRequired,
     onHandleSearch: PropTypes.func.isRequired,
     onHandleResetForm: PropTypes.func.isRequired,
 };
 
 CountrySearch.defaultProps = {
-    searchParam: {},
+    searchParam: {
+        name: '',
+        code: '',
+        status: ''
+    },
 };
+
+export default CountrySearch;

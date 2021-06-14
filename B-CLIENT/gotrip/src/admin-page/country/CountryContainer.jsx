@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
+import { getCountries } from './actions/country';
 import Modal from '../../shared/components/forms/Modal';
 import CountryGrid from './component/CountryGrid';
 import CountrySearch from './component/CountrySearch';
 import CountryForm from './component/CountryForm';
 import {
-    getCountries,
+    //getCountries,
     updateCountry,
     createNewCountry,
     deleteCountry
@@ -13,9 +16,12 @@ import { COUNTRY_TEXT_CONFIG } from './constants/resources';
 
 
 const CountryContainer = () => {
+    const { countryPageData } = useSelector(state => ({ countryPageData: state.country }));
+
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
     const fetchCountriesRef = useRef(false);
+    const dispatch = useDispatch();
 
     const {
         total,
@@ -27,11 +33,11 @@ const CountryContainer = () => {
         dataReady,
         isLoading,
         searchParam,
-    } = state;
+    } = countryPageData;
 
     useEffect(() => {
         if (!didMountRef.current) {
-            onHandleSearch({});
+            dispatch(getCountries({}));
             didMountRef.current = true;
         }
 
@@ -41,30 +47,31 @@ const CountryContainer = () => {
     });
 
     const fetchCountries = () => {
-        fetchCountriesRef.current = false;
+        dispatch(getCountries());
+        //fetchCountriesRef.current = false;
+        //getCountries();
+        // const {
+        //     searchParam = {},
+        //     options = {}
+        // } = state;
 
-        const {
-            searchParam = {},
-            options = {}
-        } = state;
-
-        getCountries({ ...searchParam, ...options }, ({ total, countries }) => {
-            setTimeout(() => {
-                setState({
-                    ...state,
-                    total,
-                    countries,
-                    dataReady: true
-                });
-            }, 500);
-        }, () => {
-            setTimeout(() => {
-                setState({ ...state, dataReady: true });
-            }, 500);
-        });
+        // getCountries({ ...searchParam, ...options }, ({ total, countries }) => {
+        //     setTimeout(() => {
+        //         setState({
+        //             ...state,
+        //             total,
+        //             countries,
+        //             dataReady: true
+        //         });
+        //     }, 500);
+        // }, () => {
+        //     setTimeout(() => {
+        //         setState({ ...state, dataReady: true });
+        //     }, 500);
+        // });
     }
 
-    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
+    const onHandleSearch = (searchParam, optionParams = {}) => {
         const options = {
             pageNumber: optionParams.pageNumber || 1,
             pageSize: optionParams.pageSize || 50,
@@ -72,14 +79,15 @@ const CountryContainer = () => {
             sortDirection: optionParams.sortDirection || null
         }
 
-        fetchCountriesRef.current = true;
+        //fetchCountriesRef.current = true;
 
-        setState({
-            ...state,
-            searchParam: searchParam,
-            options: options,
-            dataReady: false
-        });
+        // setState({
+        //     ...state,
+        //     searchParam: searchParam,
+        //     options: options,
+        //     dataReady: false
+        // });
+        dispatch(getCountries(searchParam, options));
     };
 
     const onHandleSearchChange = (param) => {
@@ -136,7 +144,7 @@ const CountryContainer = () => {
             pageNumber: 1
         };
 
-        onHandleSearch(searchParam, options);
+        onHandleSearch({}, options);
     };
 
     const showModal = (country = {}) => {
@@ -234,5 +242,11 @@ const CountryContainer = () => {
         </>
     );
 };
+
+// const mapStateToProps = state => {
+//     return { ...state.country }
+// }
+
+// const mapDispatchToProps = { getCountries };
 
 export default CountryContainer;

@@ -21,7 +21,7 @@ const FormsyInput = (props) => {
 
     return (
         <Form.Group className='mb-3'>
-            <Form.Label>{label}</Form.Label>
+            {label && (<Form.Label>{label}</Form.Label>)}
             <Form.Control
                 {...inputProps}
                 className={classNames({ 'is-invalid': !isValid })}

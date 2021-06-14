@@ -1,4 +1,5 @@
 import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import Navbar from './shared/components/Navbar';
 import MainSidebar from './shared/components/MainSidebar';
@@ -32,8 +33,6 @@ const AdminPage = () => {
         <Route path="/admin/room-name" component={RoomNameContainer} />
         <Route path="/admin/amenity-category" component={AmenityCategoryContainer} />
         <Route path="/admin/breakfast" component={BreakfastContainer} />
-        <Route path="/admin/property" component={PropertyContainer} />
-        <Route path="/admin/property-type" component={PropertyTypeContainer} />
       </div>
       <Footer />
     </div>
