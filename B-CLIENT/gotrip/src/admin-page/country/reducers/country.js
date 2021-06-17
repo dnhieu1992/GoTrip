@@ -36,7 +36,8 @@ function countryReducer(state = initialState, action) {
                 ...state,
                 total: payload.total,
                 countries: payload.countries,
-                dataReady: true
+                dataReady: true,
+                isFetch: false
             };
         case COUNTRY_FETCH_ERROR:
             return {
@@ -52,6 +53,7 @@ function countryReducer(state = initialState, action) {
             return {
                 ...state,
                 modal: null,
+                isFetch: true
             };
         case COUNTRY_SAVE_FAILED:
             return {
@@ -61,9 +63,7 @@ function countryReducer(state = initialState, action) {
         case COUNTRY_DELETED_SUCCESS:
             return {
                 ...state,
-                total: payload.total,
-                countries: payload.countries,
-                dataReady: true
+                isFetch: true
             };
         case COUNTRY_MODAL_SHOW:
             return {

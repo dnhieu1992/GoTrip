@@ -28,7 +28,7 @@ export const getCountries = (searchParams = {}, options = {}) => async dispatch 
             }
         });
 
-        const data = await fetCountries(params);
+        const data = await fetchCountries(params);
 
         dispatch({
             type: COUNTRY_FETCH_SUCCESS,
@@ -64,7 +64,6 @@ export const updateCountry = (country, options = {}) => async dispatch => {
         dispatch({ type: COUNTRY_SAVING, payload: null });
 
         await httpClient.put(API.UPDATE_COUNTRY, country);
-        //const data = fetchCountries
 
         alertNotify.success(COUNTRY_TEXT_CONFIG.UPDATE_COUNTRY_SUCCESS_MSG);
         dispatch({ type: COUNTRY_SAVE_SUCCESS, payload: null });
@@ -83,9 +82,7 @@ export const deleteCountry = (id) => async dispatch => {
     try {
         await httpClient.delete(`${API.DELETE_COUNTRY}/${id}`);
 
-        const data = await fetCountries();
-
-        dispatch({ type: COUNTRY_DELETED_SUCCESS, payload: data });
+        dispatch({ type: COUNTRY_DELETED_SUCCESS, payload: null });
 
         alertNotify.error(COUNTRY_TEXT_CONFIG.DELETE_COUNTRY_SUCCESS_MSG);
     } catch (exp) {
@@ -110,7 +107,7 @@ export const closeModal = () => async dispatch => {
     });
 }
 
-async function fetCountries(params) {
+async function fetchCountries(params) {
     try {
         const { searchParams, options } = store.getState()?.country;
         params = params || { ...searchParams, ...options };
