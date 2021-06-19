@@ -5,7 +5,7 @@ import AdminPage from './admin-page/AdminPage';
 import Register from './auth/registration/Register'
 import Login from './auth/login/Login';
 import Reset from './auth/reset/Reset';
-import UploadImage from './auth/upload-image/UploadImage';
+import UploadImage from './shared/components/forms/upload-image/UploadImage';
 function App() {
   return (
     <BrowserRouter>
