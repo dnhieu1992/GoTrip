@@ -23,9 +23,18 @@ import breakfastRoutes from './routes/breakfast.routes.js';
 import roomNameRoutes from './routes/roomName.routes.js';
 import amenityCategoryRoutes from './routes/amenityCategory.routes.js';
 import amenityRoutes from './routes/amenity.routes.js';
+import attachmentRoutes from './routes/attachment.routes.js';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+global.__basedir = __dirname;
+console.log(__basedir);
 // set up express app
 const app = express();
+app.use(express.static(__dirname + '/assets/uploads/'));
 
 //const swaggerDocument = YAML.load('./swagger.yaml');
 app.use(cors())
@@ -68,16 +77,16 @@ const options = {
         ],
         components: {
             securitySchemes: {
-              bearerAuth: {
-                type: 'http',
-                scheme: 'bearer',
-                bearerFormat: 'JWT',
-              }
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                }
             }
-          },
-          security: [{
+        },
+        security: [{
             bearerAuth: []
-          }]
+        }]
     },
     apis: ["./routes/*.js"],
 };
@@ -103,3 +112,4 @@ app.use('/api/breakfast/', verifyToken, breakfastRoutes);
 app.use('/api/roomName/', verifyToken, roomNameRoutes);
 app.use('/api/amenityCategory/', verifyToken, amenityCategoryRoutes);
 app.use('/api/amenity/', verifyToken, amenityRoutes);
+app.use('/api/attachment/', verifyToken, attachmentRoutes);
