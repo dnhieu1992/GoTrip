@@ -3,9 +3,10 @@ import { useState, useRef } from "react";
 const UploadImage = () => {
     const [state, setState] = useState({});
     const fileRef = useRef();
+
     const {
+        file,
         imagePreviewUrl,
-        file
     } = state;
 
     const onHandleImageChange = (image) => {
@@ -15,14 +16,12 @@ const UploadImage = () => {
         reader.onloadend = () => {
             setState({
                 ...state,
+                file,
                 imagePreviewUrl: reader.result,
-                file
             })
         }
-
         reader.readAsDataURL(file);
     }
-
 
     const removeImage = () => {
         fileRef.current.value = "";
@@ -31,7 +30,6 @@ const UploadImage = () => {
             imagePreviewUrl: null,
             file: null
         });
-
     }
 
     return (
@@ -46,9 +44,9 @@ const UploadImage = () => {
                     )}
                 </div>
                 <div className="image-preview__form-button mb-3">
-                    <span class="btn btn-default btn-file">
-                        Choose File <input ref={fileRef} type="file" id="imgInp" onChange={onHandleImageChange} />
-                    </span>
+                <span class="btn btn-default btn-file">
+                    Choose File <input ref={fileRef} type="file" id="imgInp" onChange={onHandleImageChange} />
+                </span>
                 </div>
             </div>
         </div>
