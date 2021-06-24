@@ -10,6 +10,7 @@ import Select from './forms/Select';
 import FormsyInput from './forms/formsy-elements/FormsyInput';
 import FormsySelect from './forms/formsy-elements/FormsySelect';
 import FormsyTextarea from './forms/formsy-elements/FormsyTextarea';
+import UploadImage from './forms/upload-image/UploadImage';
 
 const {
     Group,
@@ -37,5 +38,6 @@ export {
     Button,
     CloseButton,
     LoaderButton,
-    FormsyElement
+    FormsyElement,
+    UploadImage
 };
