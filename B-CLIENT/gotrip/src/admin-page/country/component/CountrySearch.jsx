@@ -13,17 +13,14 @@ const {
 
 const CountrySearch = ({
     onHandleSearch,
-    onHandleResetForm,
+    options,
 }) => {
     const formRef = useRef();
 
     const onReset = () => {
-        formRef.current.updateInputsWithValue({
-            name: '',
-            code: '',
-            status: ''
-        });
-        onHandleResetForm();
+        const resetParamsValue = { name: '', code: '', status: '' };
+        formRef.current.updateInputsWithValue(resetParamsValue);
+        onHandleSearch(resetParamsValue, { ...options, pageNumber: 1 });
     }
 
     return (
@@ -110,11 +107,11 @@ const CountrySearch = ({
 
 CountrySearch.propTypes = {
     onHandleSearch: PropTypes.func.isRequired,
-    onHandleResetForm: PropTypes.func.isRequired,
+    options: PropTypes.object,
 };
 
 CountrySearch.defaultProps = {
-
+    options: {}
 };
 
 export default CountrySearch;
