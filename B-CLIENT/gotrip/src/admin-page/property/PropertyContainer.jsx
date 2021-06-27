@@ -1,92 +1,47 @@
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../shared/components/forms/Modal';
 import PropertyGrid from './component/PropertyGrid';
 import PropertySearch from './component/PropertySearch';
 import PropertyForm from './component/PropertyForm';
 import {
-    getProperties,
+    // getProperties,
     updateProperty,
     createNewProperty,
     deleteProperty
 } from './api/apiHandle.js';
+import { getProperties } from './actions/property';
 import { PROPERTY_TEXT_CONFIG } from './constants/resources';
 
 const PropertyContainer = () => {
+    const { propertyPageData } = useSelector(state => ({ propertyPageData: state.property }));
+    const dispatch = useDispatch();
 
     const [state, setState] = useState({});
-    const didMountRef = useRef(false);
     const fetchPropertiesRef = useRef(false);
 
     const {
-        total,
-        searchParam,
-        options,
         isShow,
         isLoading,
         property,
-        dataReady,
-        properties,
         isValid
     } = state;
 
+    const {
+        total,
+        searchParams,
+        options,
+        dataReady,
+        properties,
+    } = propertyPageData;
+
     useEffect(() => {
-        if (!didMountRef.current) {
-            onHandleSearch({});
-            didMountRef.current = true;
-        }
+        dispatch(getProperties());
+    }, []);
 
-        if (didMountRef.current && fetchPropertiesRef.current) {
-            fetchProperties();
-        }
-    });
-
-    const fetchProperties = () => {
-        fetchPropertiesRef.current = false;
-        const {
-            searchParam = {},
-            options = {}
-        } = state;
-
-        getProperties({ ...searchParam, ...options }, ({ total, properties }) => {
-            setTimeout(() => {
-                setState({
-                    ...state,
-                    total,
-                    properties,
-                    dataReady: true
-                });
-            }, 500);
-        }, () => {
-            setTimeout(() => {
-                setState({ ...state, dataReady: true });
-            }, 500);
-        });
-    }
-
-    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
-        const options = {
-            pageNumber: optionParams.pageNumber || 1,
-            pageSize: optionParams.pageSize || 50,
-            sortField: optionParams.sortField || null,
-            sortDirection: optionParams.sortDirection || null
-        }
-
-        fetchPropertiesRef.current = true;
-
-        setState({
-            ...state,
-            searchParam: searchParam,
-            options: options,
-            dataReady: false
-        });
-    }
-
-    const onHandleSearchChange = (param) => {
-        setState({
-            ...state,
-            searchParam: param
-        });
-    }
+    const onHandleSearch = (searchParams, options) => {
+        dispatch(getProperties(searchParams, options));
+    };
 
     const onHandlePageChange = (pageNumber) => {
         const { searchParam, options } = state;
@@ -122,20 +77,6 @@ const PropertyContainer = () => {
         onHandleSearch(searchParam, optionsUpdate);
     }
 
-    const onHandleResetForm = () => {
-        const searchParam = {
-            name: '',
-            status: ''
-        }
-
-        const options = {
-            ...state.options,
-            pageNumber: 1
-        }
-
-        onHandleSearch(searchParam, options);
-    }
-
     const showModal = (property = {}) => {
         setState({
             ...state,
@@ -159,17 +100,6 @@ const PropertyContainer = () => {
     }
 
     const onSaveProperty = (property) => {
-        // const propertyID = {...property,id:property._id}
-        // if (property._id) {
-        //     updateProperty(propertyID, () => {
-        //         onClose(true);
-        //     });
-        // } else {
-        //     createNewProperty(property, () => {
-        //         onClose(true);
-        //     });
-        // }
-
         setState({ ...state, isLoading: true })
         if (state.property._id) {
             updateProperty({ ...property, id: state.property._id },
@@ -220,10 +150,8 @@ const PropertyContainer = () => {
                 </div>
                 <div className="card-body">
                     <PropertySearch
-                        searchParam={searchParam}
-                        onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
-                        onHandleResetForm={onHandleResetForm}
+                        options={options}
                     />
                     <PropertyGrid
                         data={properties}

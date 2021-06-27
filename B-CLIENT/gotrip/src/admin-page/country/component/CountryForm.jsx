@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import Formsy from 'formsy-react';
-import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { FormsyElement, LoaderButton,UploadImage } from '../../../shared/components/index.js';
 import { STATUSES } from '../constants/country';
 import { COUNTRY_TEXT_CONFIG } from '../constants/resources';
+
 const {
     FormsyInput,
     FormsySelect
@@ -37,6 +38,11 @@ const CountryForm = ({
     return (
         <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton} autoComplete="off">
             <div className="card-body">
+                <div className="form-group">
+                    <label>Upload Image</label>
+                    <UploadImage
+                    />
+                </div>
                 <div className="form-group">
                     <FormsyInput
                         inputProps={{

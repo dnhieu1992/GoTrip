@@ -4,24 +4,14 @@ import { API } from '../constants/api';
 import httpClient from '../../../shared/ultils/Request/ApiRequest.js';
 import store from '../../../store/index.js';
 import { COUNTRY_TEXT_CONFIG } from '../constants/resources';
-import {
-    COUNTRY_FETCHING,
-    COUNTRY_FETCH_SUCCESS,
-    COUNTRY_FETCH_ERROR,
-    COUNTRY_MODAL_SHOW,
-    COUNTRY_MODAL_CLOSE,
-    COUNTRY_SAVE_SUCCESS,
-    COUNTRY_SAVING,
-    COUNTRY_SAVE_FAILED,
-    COUNTRY_DELETED_SUCCESS
-} from '../constants/types';
+import types from '../constants/types';
 
 export const getCountries = (searchParams = {}, options = {}) => async dispatch => {
     try {
         const params = cleanObject({ ...searchParams, ...options });
 
         dispatch({
-            type: COUNTRY_FETCHING,
+            type: types.COUNTRY_FETCHING,
             payload: {
                 searchParams: searchParams,
                 options: options
@@ -31,7 +21,7 @@ export const getCountries = (searchParams = {}, options = {}) => async dispatch 
         const data = await fetchCountries(params);
 
         dispatch({
-            type: COUNTRY_FETCH_SUCCESS,
+            type: types.COUNTRY_FETCH_SUCCESS,
             payload: {
                 total: data.total,
                 countries: data.countries
@@ -40,33 +30,33 @@ export const getCountries = (searchParams = {}, options = {}) => async dispatch 
 
     } catch (error) {
         console.log(error);
-        dispatch({ type: COUNTRY_FETCH_ERROR, payload: null });
+        dispatch({ type: types.COUNTRY_FETCH_ERROR, payload: null });
     }
 }
 
 export const createNewCountry = (country, options = {}) => async dispatch => {
     try {
-        dispatch({ type: COUNTRY_SAVING, payload: null });
+        dispatch({ type: types.COUNTRY_SAVING, payload: null });
 
         await httpClient.post(API.CREATE_COUNTRY, country);
 
         alertNotify.success(COUNTRY_TEXT_CONFIG.CREATE_COUNTRY_SUCCESS_MSG);
-        dispatch({ type: COUNTRY_SAVE_SUCCESS, payload: null });
+        dispatch({ type: types.COUNTRY_SAVE_SUCCESS, payload: null });
 
     } catch (errorMessage) {
-        dispatch({ type: COUNTRY_SAVE_FAILED, payload: null });
+        dispatch({ type: types.COUNTRY_SAVE_FAILED, payload: null });
         alertNotify.error(errorMessage);
     }
 }
 
 export const updateCountry = (country, options = {}) => async dispatch => {
     try {
-        dispatch({ type: COUNTRY_SAVING, payload: null });
+        dispatch({ type: types.COUNTRY_SAVING, payload: null });
 
         await httpClient.put(API.UPDATE_COUNTRY, country);
 
         alertNotify.success(COUNTRY_TEXT_CONFIG.UPDATE_COUNTRY_SUCCESS_MSG);
-        dispatch({ type: COUNTRY_SAVE_SUCCESS, payload: null });
+        dispatch({ type: types.COUNTRY_SAVE_SUCCESS, payload: null });
 
         if (options.onSuccess) {
             return options.onSuccess();
@@ -74,7 +64,7 @@ export const updateCountry = (country, options = {}) => async dispatch => {
 
     } catch (errorMessage) {
         alertNotify.error(errorMessage);
-        dispatch({ type: COUNTRY_SAVE_FAILED, payload: null });
+        dispatch({ type: types.COUNTRY_SAVE_FAILED, payload: null });
     }
 }
 
@@ -83,7 +73,7 @@ export const deleteCountry = (id) => async dispatch => {
         await httpClient.delete(`${API.DELETE_COUNTRY}/${id}`);
 
         dispatch({ type: COUNTRY_DELETED_SUCCESS, payload: null });
-
+        
         alertNotify.error(COUNTRY_TEXT_CONFIG.DELETE_COUNTRY_SUCCESS_MSG);
     } catch (exp) {
         console.log(exp);
@@ -93,7 +83,7 @@ export const deleteCountry = (id) => async dispatch => {
 
 export const showModal = (country) => async dispatch => {
     dispatch({
-        type: COUNTRY_MODAL_SHOW,
+        type: types.COUNTRY_MODAL_SHOW,
         payload: {
             country: country
         }
@@ -102,7 +92,7 @@ export const showModal = (country) => async dispatch => {
 
 export const closeModal = () => async dispatch => {
     dispatch({
-        type: COUNTRY_MODAL_CLOSE,
+        type: types.COUNTRY_MODAL_CLOSE,
         payload: null
     });
 }

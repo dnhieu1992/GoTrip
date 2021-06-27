@@ -64,21 +64,6 @@ const CountryContainer = () => {
         onHandleSearch(searchParams, optionsUpdate);
     };
 
-    const onHandleResetForm = () => {
-        const searchParams = {
-            name: '',
-            code: '',
-            status: ''
-        };
-
-        const options = {
-            ...state.options,
-            pageNumber: 1
-        };
-
-        onHandleSearch(searchParams, options);
-    };
-
     const onSaveCountry = async (country) => {
         if (modal.country._id) {
             dispatch(updateCountry({ ...country, id: modal.country._id }));
@@ -126,9 +111,8 @@ const CountryContainer = () => {
                 </div>
                 <div className="card-body">
                     <CountrySearch
-                        searchParams={searchParams}
+                        options={options}
                         onHandleSearch={onHandleSearch}
-                        onHandleResetForm={onHandleResetForm}
                     />
                     <CountryGrid
                         data={countries}
@@ -146,11 +130,5 @@ const CountryContainer = () => {
         </>
     );
 };
-
-// const mapStateToProps = state => {
-//     return { ...state.country }
-// }
-
-// const mapDispatchToProps = { getCountries };
 
 export default CountryContainer;
