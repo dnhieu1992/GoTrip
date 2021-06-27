@@ -18,11 +18,18 @@ const CountryContainer = () => {
         dataReady,
         searchParams,
         modal,
+        isFetch
     } = countryPageData;
 
     useEffect(() => {
         dispatch(getCountries({}));
     }, []);
+
+    useEffect(() => {
+        if (isFetch) {
+            dispatch(getCountries({}));
+        }
+    }, [isFetch])
 
     const onHandleSearch = (searchParams, options) => {
         dispatch(getCountries(searchParams, options));
@@ -72,7 +79,7 @@ const CountryContainer = () => {
         onHandleSearch(searchParams, options);
     };
 
-    const onSaveCountry = (country) => {
+    const onSaveCountry = async (country) => {
         if (modal.country._id) {
             dispatch(updateCountry({ ...country, id: modal.country._id }));
         } else {
