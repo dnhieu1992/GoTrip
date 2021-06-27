@@ -1,44 +1,44 @@
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../shared/components/forms/Modal';
 import PropertyGrid from './component/PropertyGrid';
 import PropertySearch from './component/PropertySearch';
 import PropertyForm from './component/PropertyForm';
 import {
-    getProperties,
+    // getProperties,
     updateProperty,
     createNewProperty,
     deleteProperty
 } from './api/apiHandle.js';
+import { getProperties } from './actions/property';
 import { PROPERTY_TEXT_CONFIG } from './constants/resources';
 
 const PropertyContainer = () => {
+    const { propertyPageData } = useSelector(state => ({ propertyPageData: state.property }));
+    const dispatch = useDispatch();
 
     const [state, setState] = useState({});
     const didMountRef = useRef(false);
     const fetchPropertiesRef = useRef(false);
 
     const {
-        total,
-        searchParam,
-        options,
         isShow,
         isLoading,
         property,
-        dataReady,
-        properties,
         isValid
     } = state;
 
-    useEffect(() => {
-        if (!didMountRef.current) {
-            onHandleSearch({});
-            didMountRef.current = true;
-        }
+    const {
+        total,
+        searchParam,
+        options,
+        dataReady,
+        properties,
+    } = propertyPageData;
 
-        if (didMountRef.current && fetchPropertiesRef.current) {
-            fetchProperties();
-        }
-    });
+    useEffect(() => {
+        dispatch(getProperties());
+    }, []);
 
     const fetchProperties = () => {
         fetchPropertiesRef.current = false;
