@@ -1,143 +1,61 @@
 import { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from '../../shared/components/forms/Modal';
+import { closeModal, createNewPropertyType, deletePropertyType, getProperties, getPropertyTypes, showModal, updatePropertyType } from './actions/propertyType';
 import PropertyTypeForm from './component/PropertyTypeForm';
 import PropertyTypeGrid from './component/PropertyTypeGrid';
 import PropertyTypeSearch from './component/PropertyTypeSearch';
-
-import {
-    getPropertyTypes,
-    createPropertyType,
-    updatePropertyType,
-    deletePropertyType,
-    getProperties
-} from './api/apiHandle.js';
 import { PROPERTY_TYPE_TEXT_CONFIG } from './constants/resources';
 
 const PropertyTypeContainer = () => {
-    const [state, setState] = useState({});
-    const didMountRef = useRef(false);
-    const fetchPropertyTypesRef = useRef(false);
-    //const [properties, setProperties] = useState([]);
-
+    const { propertyTypePageData } = useSelector(state => ({ propertyTypePageData: state.propertyType }));
+    const dispatch = useDispatch();
     const {
         total,
-        data,
+        searchParams,
         options,
-        isValid,
-        propertyType,
-        isShow,
         dataReady,
-        isLoading,
-        searchParam,
-        properties=[]
-    } = state;
-    useEffect(async() => {
-        if (!didMountRef.current) {
-            await getAllProperties();
-            onHandleSearch({});
-            didMountRef.current = true;
+        propertyTypes,
+        modal,
+        isFetch,
+        properties
+    } = propertyTypePageData;
+
+    useEffect(async () => {
+        dispatch(getProperties());
+        dispatch(getPropertyTypes());
+    }, []);
+
+    useEffect(() => {
+        if (isFetch) {
+            dispatch(getPropertyTypes({}));
         }
+    }, [isFetch]);
 
-        if (didMountRef.current && fetchPropertyTypesRef.current) {
-            fetchPropertyTypes();
-        }
-    });
-
-    const getAllProperties = async() => {
-        await getProperties().then((properties) => {
-            setState({
-                ...state,
-                properties:properties
-            })
-        }).catch(error => {
-            console.log(error);
-        })
-    }
-
-    const fetchPropertyTypes = () => {
-
-        fetchPropertyTypesRef.current = false;
-
-        const {
-            searchParam = {},
-            options = {},
-        } = state;
-
-        getPropertyTypes({ ...searchParam, ...options }, ({ total, propertyTypes }) => {
-            const data = propertyTypes.map(propertyType => {
-                return {
-                    ...propertyType,
-                    propertyID:propertyType.property._id,
-                    propertyName: propertyType?.property?.name
-                }
-            })
-            setTimeout(() => {
-                setState({
-                    ...state,
-                    total,
-                    data,
-                    dataReady: true
-                });
-            }, 500);
-
-        }, () => {
-            setTimeout(() => {
-                setState({ ...state, dataReady: true })
-            }, 500);
-        });
-    }
-
-    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
-        const options = {
-            pageNumber: optionParams.pageNumber || 1,
-            pageSize: optionParams.pageSize || 50,
-            sortField: optionParams.sortField || null,
-            sortDirection: optionParams.sortDirection || null
-        }
-
-        fetchPropertyTypesRef.current = true;
-
-        setState({
-            ...state,
-            searchParam: searchParam,
-            options: options,
-            dataReady: false
-        });
+    const onHandleSearch = (searchParams, options) => {
+        dispatch(getPropertyTypes(searchParams, options));
     }
 
     const onHandlePageChange = (pageNumber) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageNumber
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     }
-
-    const onHandleSearchChange = (param) => {
-        setState({
-            ...state,
-            searchParam: param
-        });
-    }
-
 
     const onHandlePageSizeChange = (pageSize) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageSize,
             pageNumber: 1
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     }
 
     const onHandleSortChange = (sortField, sortDirection) => {
-        const { searchParam, options } = state;
 
         const optionsUpdate = {
             ...options,
@@ -145,75 +63,31 @@ const PropertyTypeContainer = () => {
             sortDirection
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     }
 
-    const onHandleResetForm = () => {
-        const searchParam = {
-            propertyTypeName: '',
-            property: '',
-            status: ''
-        }
-
-        const options = {
-            ...state.options,
-            pageNumber: 1
-        }
-
-        onHandleSearch(searchParam, options);
+    const onShow = (propertyType = {}) => {
+        dispatch(showModal(propertyType));
     }
 
-    const showModal = (propertyType = {}) => {
-        setState({
-            ...state,
-            isShow: true,
-            isValid: !!propertyType._id,
-            propertyType: propertyType,
-            errorMessage: {}
-        });
-    }
-
-    const onClose = (isSearch) => {
-        fetchPropertyTypesRef.current = !!isSearch;
-
-        setState({
-            ...state,
-            isShow: false,
-            isValid: false,
-            errorMessage: {},
-            propertyType: null,
-            dataReady: !isSearch,
-            isLoading: false
-        });
+    const onClose = () => {
+        dispatch(closeModal());
 
     }
 
     const onSavePropertyType = (propertyType) => {
-        setState({ ...state, isLoading: true })
-        if (state.propertyType._id) {
-            updatePropertyType({ ...propertyType, id: state.propertyType._id },
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+        if (modal.propertyType._id) {
+            dispatch(updatePropertyType({ ...propertyType, id: modal.propertyType._id }));
         } else {
-            createPropertyType(propertyType,
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+            dispatch(createNewPropertyType(propertyType));
         }
     }
 
     const onDelete = ({ _id }) => {
-        const { searchParam, options } = state;
-
-        deletePropertyType(_id, () => {
-            onHandleSearch(searchParam, options);
-        });
+        dispatch(deletePropertyType(_id));
     }
 
-    const modalRender = () => {
+    const modalRender = ({ isLoading, propertyType, isValid }) => {
         return (
             <Modal
                 classNames={'modal-lg'}
@@ -235,25 +109,23 @@ const PropertyTypeContainer = () => {
 
     return (
         <>
-            {isShow && modalRender()}
+            {modal && modalRender(modal)}
             <div className="card">
                 <div className="card-header text-uppercase">
                     <h3>{PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <PropertyTypeSearch
-                        searchParam={searchParam}
+                        options={options}
                         properties={properties}
-                        onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
-                        onHandleResetForm={onHandleResetForm}
                     />
                     <PropertyTypeGrid
-                        data={data}
+                        data={propertyTypes}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
-                        showModal={showModal}
+                        showModal={onShow}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
                         onDelete={onDelete}

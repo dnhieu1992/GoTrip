@@ -1,29 +1,30 @@
+import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup, Input, Label, Row, Select } from '../../../shared/components';
+import { useRef } from 'react';
+import { Button, FormGroup, FormsyElement, Label, Row, } from '../../../shared/components';
 import { ROOM_NAME_TEXT_CONFIG } from '../constants/resources';
 import { STATUSES } from '../constants/roomName';
 
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement;
+
 const RoomNameSearch = ({
-    searchParam,
-    onHandleSearchChange,
     onHandleSearch,
-    onHandleResetForm,
+    options,
     roomTypes
 }) => {
-    console.log(roomTypes)
-    const {
-        name = '',
-        roomTypeId = '',
-        status = ''
-    } = searchParam;
+    const formRef = useRef();
 
-    const onHandleFieldChange = (e) => {
-        if (e?.target) {
-            onHandleSearchChange({
-                ...searchParam,
-                [e.target.name]: e.target.value
-            });
+    const onReset = () => {
+        const resetParamsValue = {
+            name: '',
+            roomTypeId: '',
+            status: ''
         }
+        formRef.current.updateInputsWithValue(resetParamsValue);
+        onHandleSearch(resetParamsValue, { ...options, pageNumber: 1 });
     }
 
     const data = roomTypes.map(roomType => {
@@ -42,7 +43,7 @@ const RoomNameSearch = ({
             <div className="card-header">
                 <h3 className="card-title">{ROOM_NAME_TEXT_CONFIG.ROOM_NAME_SEARCH_HEADER_LBL}</h3>
             </div>
-            <form className="form-horizontal" autoComplete="off">
+            <Formsy className="form-horizontal" autoComplete="off" onSubmit={onHandleSearch} ref={formRef}>
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
@@ -51,13 +52,14 @@ const RoomNameSearch = ({
                                     {ROOM_NAME_TEXT_CONFIG.ROOM_NAME_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Input
-                                        type="text"
-                                        id="name"
+                                    <FormsyInput
+                                        inputProps={{
+                                            type: "text",
+                                            id: "name",
+                                            placeholder: ROOM_NAME_TEXT_CONFIG.ROOM_NAME_NAME_FIELD_LBL
+
+                                        }}
                                         name="name"
-                                        placeholder={ROOM_NAME_TEXT_CONFIG.ROOM_NAME_NAME_FIELD_LBL}
-                                        value={name}
-                                        onChange={onHandleFieldChange}
                                     />
                                 </div>
                             </FormGroup>
@@ -68,10 +70,8 @@ const RoomNameSearch = ({
                                     {ROOM_NAME_TEXT_CONFIG.ROOM_NAME_ROOM_TYPE_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'roomTypeId' }}
-                                        value={roomTypeId}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='roomTypeId'
                                         dataSource={data}
                                     />
                                 </div>
@@ -85,10 +85,8 @@ const RoomNameSearch = ({
                                     {ROOM_NAME_TEXT_CONFIG.ROOM_NAME_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'status' }}
-                                        value={status}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='status'
                                         dataSource={STATUSES}
                                     />
                                 </div>
@@ -98,22 +96,22 @@ const RoomNameSearch = ({
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
                             <Button
+                                type="submit"
                                 variant="info"
                                 className="mr-3"
-                                onClick={() => onHandleSearch(searchParam)}
                             >
                                 {ROOM_NAME_TEXT_CONFIG.ROOM_NAME_SEARCH_BTN}
                             </Button>
                             <Button
                                 variant="info"
-                                onClick={onHandleResetForm}
+                                onClick={onReset}
                             >
                                 {ROOM_NAME_TEXT_CONFIG.ROOM_NAME_RESET_BTN}
                             </Button>
                         </div>
                     </div>
                 </div>
-            </form>
+            </Formsy>
         </div>
     )
 }
@@ -121,12 +119,12 @@ const RoomNameSearch = ({
 export default RoomNameSearch;
 
 RoomNameSearch.propTypes = {
-    searchParam: PropTypes.object,
-    onHandleSearchChange: PropTypes.func.isRequired,
     onHandleSearch: PropTypes.func.isRequired,
-    onHandleResetForm: PropTypes.func.isRequired
+    options: PropTypes.object,
+    roomTypes: PropTypes.array
 }
 
 RoomNameSearch.defaultProps = {
-    searchParam: {}
+    options: {},
+    roomTypes: []
 }
