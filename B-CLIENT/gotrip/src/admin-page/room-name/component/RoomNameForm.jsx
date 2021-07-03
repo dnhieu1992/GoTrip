@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FormsyElement, LoaderButton } from "../../../shared/components";
 import { ROOM_NAME_TEXT_CONFIG } from "../constants/resources";
 import { STATUSES } from "../constants/roomName";
+import PropTypes from 'prop-types';
 
 const {
     FormsyInput,
@@ -114,4 +115,12 @@ const RoomNameForm = ({
 }
 
 export default RoomNameForm;
+
+RoomNameForm.propTypes = {
+    roomTypes: PropTypes.array
+}
+
+RoomNameForm.defaulProps = {
+    roomTypes: []
+}
 

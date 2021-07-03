@@ -1,28 +1,33 @@
+import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup, Input, Label, Row, Select } from '../../../shared/components';
+import { useRef } from 'react';
+import { Button, FormGroup, FormsyElement, Label, Row } from '../../../shared/components';
 import { STATUSES } from '../constants/propertyType';
 import { PROPERTY_TYPE_TEXT_CONFIG } from '../constants/resources';
 
-const PropertyTypeSearch = ({
-    searchParam,
-    onHandleSearchChange,
-    onHandleSearch,
-    onHandleResetForm,
-    properties
-}) => {
-    const {
-        name = '',
-        propertyId = '',
-        status = ''
-    } = searchParam;
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement;
 
-    const onHandleFieldChange = (e) => {
-        if (e?.target) {
-            onHandleSearchChange({
-                ...searchParam,
-                [e.target.name]: e.target.value
-            });
-        }
+const PropertyTypeSearch = ({
+    onHandleSearch,
+    properties,
+    options
+}) => {
+    const formRef = useRef();
+
+    const onReset = () => {
+        formRef.current.updateInputsWithValue({
+            name: '',
+            status: '',
+            propertyId: ''
+        });
+        onHandleSearch({
+            name: '',
+            status: '',
+            propertyId: ''
+        }, { ...options, pageNumber: 1 })
     }
 
     const data = properties.map(property => {
@@ -42,7 +47,7 @@ const PropertyTypeSearch = ({
             <div className="card-header">
                 <h3 className="card-title">{PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_SEARCH_HEADER_LBL}</h3>
             </div>
-            <form className="form-horizontal" autoComplete="off">
+            <Formsy className="form-horizontal" autoComplete="off" onSubmit={onHandleSearch} ref={formRef}>
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
@@ -51,13 +56,14 @@ const PropertyTypeSearch = ({
                                     {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Input
-                                        type="text"
-                                        id="name"
+                                    <FormsyInput
+                                        inputProps={{
+                                            type: "text",
+                                            id: "name",
+                                            placeholder: PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_NAME_FIELD_LBL
+
+                                        }}
                                         name="name"
-                                        placeholder={PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_NAME_FIELD_LBL}
-                                        value={name}
-                                        onChange={onHandleFieldChange}
                                     />
                                 </div>
                             </FormGroup>
@@ -68,10 +74,8 @@ const PropertyTypeSearch = ({
                                     {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_PROPERTY_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'propertyId' }}
-                                        value={propertyId}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='propertyId'
                                         dataSource={data}
                                     />
                                 </div>
@@ -85,10 +89,8 @@ const PropertyTypeSearch = ({
                                     {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'status' }}
-                                        value={status}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='status'
                                         dataSource={STATUSES}
                                     />
                                 </div>
@@ -100,32 +102,31 @@ const PropertyTypeSearch = ({
                             <Button
                                 variant="info"
                                 className="mr-3"
-                                onClick={() => onHandleSearch(searchParam)}
+                                type="submit"
                             >
                                 {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_SEARCH_BTN}
                             </Button>
                             <Button
                                 variant="info"
-                                onClick={onHandleResetForm}
+                                onClick={onReset}
                             >
                                 {PROPERTY_TYPE_TEXT_CONFIG.PROPERTY_TYPE_RESET_BTN}
                             </Button>
                         </div>
                     </div>
                 </div>
-            </form>
+            </Formsy>
         </div>
     )
 }
 export default PropertyTypeSearch;
 
 PropertyTypeSearch.propTypes = {
-    searchParam: PropTypes.object,
-    onHandleSearchChange: PropTypes.func.isRequired,
     onHandleSearch: PropTypes.func.isRequired,
-    onHandleResetForm: PropTypes.func.isRequired
+    options: PropTypes.object
 }
 
 PropertyTypeSearch.defaultProps = {
-    searchParam: {}
+    options: {},
+    properties: []
 }

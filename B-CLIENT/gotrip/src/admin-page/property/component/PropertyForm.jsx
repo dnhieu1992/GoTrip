@@ -31,11 +31,11 @@ const PropertyForm = ({
     }
 
     const disableButton = () => {
-        setIsValid(fasle);
+        setIsValid(false);
     }
 
     return (
-        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInValid={disableButton}>
+        <Formsy id="addNew" onSubmit={submit} onValid={enableButton} onInvalid={disableButton}>
             <div className="card-body">
                 <div className="form-group">
                     <FormsyInput

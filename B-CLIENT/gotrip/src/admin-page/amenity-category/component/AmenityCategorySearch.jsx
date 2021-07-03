@@ -1,23 +1,25 @@
+import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup, Input, Label, Row, Select } from '../../../shared/components';
+import { useRef } from 'react';
+import { Button, FormGroup, FormsyElement, Input, Label, Row, Select } from '../../../shared/components';
 import { STATUSES } from '../constants/amenityCategory';
 import { AMENITY_CATEGORY_TEXT_CONFIG } from '../constants/resources';
 
-const AmenityCategorySearch = ({
-    searchParam,
-    onHandleSearchChange,
-    onHandleSearch,
-    onHandleResetForm
-}) => {
-    const { name, status } = searchParam;
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement
 
-    const onHandleFieldChange = (e) => {
-        if (e?.target) {
-            onHandleSearchChange({
-                ...searchParam,
-                [e.target.name]: e.target.value
-            });
-        }
+const AmenityCategorySearch = ({
+    onHandleSearch,
+    options
+}) => {
+    const formRef = useRef();
+
+    const onReset = () => {
+        const resetParamsValue = { name: '', status: '' }
+        formRef.current.updateInputsWithValue(resetParamsValue);
+        onHandleSearch(resetParamsValue, { ...options, pageNumber: 1 });
     }
 
     return (
@@ -25,7 +27,7 @@ const AmenityCategorySearch = ({
             <div className="card-header">
                 <h3 className="card-title">{AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_SEARCH_HEADER_LBL}</h3>
             </div>
-            <form className="form-horizontal" autoComplete="off">
+            <Formsy className="form-horizontal" autoComplete="off" onSubmit={onHandleSearch} ref={formRef}>
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
@@ -34,14 +36,15 @@ const AmenityCategorySearch = ({
                                     {AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Input
-                                        type="text"
-                                        id="name"
+                                    <FormsyInput
+                                        inputProps={{
+                                            type: "text",
+                                            id: "name",
+                                            placeholder: AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_NAME_FIELD_LBL
+                                        }}
                                         name="name"
-                                        placeholder={AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_NAME_FIELD_LBL}
-                                        value={name}
-                                        onChange={onHandleFieldChange}
                                     />
+
                                 </div>
                             </FormGroup>
                         </div>
@@ -51,10 +54,8 @@ const AmenityCategorySearch = ({
                                     {AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'status' }}
-                                        value={status}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='status'
                                         dataSource={STATUSES}
                                     />
                                 </div>
@@ -64,22 +65,22 @@ const AmenityCategorySearch = ({
                     <div className="row">
                         <div className="col-sm-12 d-flex justify-content-end">
                             <Button
+                                type="submit"
                                 variant="info"
                                 className="mr-3"
-                                onClick={() => onHandleSearch(searchParam)}
                             >
                                 {AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_SEARCH_BTN}
                             </Button>
                             <Button
                                 variant="info"
-                                onClick={onHandleResetForm}
+                                onClick={onReset}
                             >
                                 {AMENITY_CATEGORY_TEXT_CONFIG.AMENITY_CATEGORY_RESET_BTN}
                             </Button>
                         </div>
                     </div>
                 </div>
-            </form>
+            </Formsy>
         </div>
     )
 }
@@ -87,12 +88,10 @@ const AmenityCategorySearch = ({
 export default AmenityCategorySearch;
 
 AmenityCategorySearch.PropTypes = {
-    searchParam: PropTypes.object,
-    onHandleSearchChange: PropTypes.func.isRequired,
     onHandleSearch: PropTypes.func.isRequired,
-    onHandleResetForm: PropTypes.func.isRequired,
+    options: PropTypes.object
 }
 
 AmenityCategorySearch.defaultProps = {
-    searchParam: {},
+    options: {},
 }

@@ -4,6 +4,7 @@ import { ROOM_NAME_TEXT_CONFIG } from '../constants/resources';
 
 const RoomNameGrid = ({
     data,
+    roomTypes,
     options,
     totalItems,
     onHandlePageChange,
@@ -13,6 +14,7 @@ const RoomNameGrid = ({
     dataReady,
     onHandleSortChange
 }) => {
+
     const columns = [
         {
             fieldName: 'Id',
@@ -92,11 +94,13 @@ RoomNameGrid.propTypes = {
     onDelete: PropTypes.func,
     onHandlePageChange: PropTypes.func,
     onHandlePageSizeChange: PropTypes.func,
-    onHandelSortChange: PropTypes.func
+    onHandelSortChange: PropTypes.func,
+    roomTypes:PropTypes.array
 }
 
 RoomNameGrid.defaultProps = {
     data: [],
     totalItems: 0,
-    options: {}
+    options: {},
+    roomTypes:[]
 }

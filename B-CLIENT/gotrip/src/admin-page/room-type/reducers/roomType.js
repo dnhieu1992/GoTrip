@@ -1,8 +1,8 @@
-import types from '../constants/types';
+import types from "../constants/types";
 
 const initialState = {
     total: 0,
-    properties: [],
+    roomTypes: [],
     searchParams: {},
     options: {
         pageNumber: 1,
@@ -12,57 +12,56 @@ const initialState = {
     modal: null
 };
 
-function propertyReducer(state = initialState, action) {
+function roomTypeReducer(state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
-        case types.PROPERTY_FETCHING:
+        case types.ROOM_TYPE_FETCHING:
             return {
                 ...state,
                 dataReady: false
             };
-        case types.PROPERTY_FETCH_SUCCESS:
-            debugger
+        case types.ROOM_TYPE_FETCH_SUCCESS:
             return {
                 ...state,
                 total: payload.total,
-                properties: payload.properties,
+                roomTypes: payload.roomTypes,
                 dataReady: true,
                 isFetch:false
             };
-            case types.PROPERTY_SAVING:
+            case types.ROOM_TYPE_SAVING:
                 return {
                     ...state,
                     modal: { ...state.modal, isLoading: true },
                 };
-            case types.PROPERTY_SAVE_SUCCESS:
+            case types.ROOM_TYPE_SAVE_SUCCESS:
                 return {
                     ...state,
                     modal: null,
                     isFetch: true
                 };
-            case types.PROPERTY_SAVE_FAILED:
+            case types.ROOM_TYPE_SAVE_FAILED:
                 return {
                     ...state,
                     modal: { ...state.modal, isLoading: false },
                 };
-            case types.PROPERTY_DELETED_SUCCESS:
+            case types.ROOM_TYPE_DELETED_SUCCESS:
                 return {
                     ...state,
                     modal:null,
                     isFetch: true
                 };
-            case types.PROPERTY_MODAL_SHOW:
+            case types.ROOM_TYPE_MODAL_SHOW:
                 return {
                     ...state,
-                    modal: { property: payload.property }
+                    modal: { roomType: payload.roomType }
                 };
-            case types.PROPERTY_MODAL_CLOSE:
+            case types.ROOM_TYPE_MODAL_CLOSE:
                 return {
                     ...state,
                     modal: null
                 };
-        case types.PROPERTY_FETCH_ERROR:
+        case types.ROOM_TYPE_FETCH_ERROR:
             return {
                 ...state,
                 dataReady: true
@@ -72,4 +71,4 @@ function propertyReducer(state = initialState, action) {
     }
 }
 
-export default propertyReducer;
+export default roomTypeReducer;

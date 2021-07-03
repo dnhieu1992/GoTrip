@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { FormsyElement, LoaderButton } from '../../../shared/components';
 import { STATUSES } from '../constants/propertyType';
 import { PROPERTY_TYPE_TEXT_CONFIG } from '../constants/resources';
+import PropTypes from 'prop-types';
 
 const {
     FormsyInput,
@@ -130,3 +131,11 @@ const PropertyTypeForm = ({
 }
 
 export default PropertyTypeForm
+
+PropertyTypeForm.propTypes={
+    properties:PropTypes.array
+}
+
+PropertyTypeForm.defaultProps = {
+    properties:[]
+}

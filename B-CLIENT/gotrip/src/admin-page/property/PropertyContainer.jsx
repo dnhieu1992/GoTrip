@@ -1,31 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../shared/components/forms/Modal';
 import PropertyGrid from './component/PropertyGrid';
 import PropertySearch from './component/PropertySearch';
 import PropertyForm from './component/PropertyForm';
-import {
-    // getProperties,
-    updateProperty,
-    createNewProperty,
-    deleteProperty
-} from './api/apiHandle.js';
-import { getProperties } from './actions/property';
+import { closeModal, createNewProperty, deleteProperty, getProperties, showModal, updateProperty } from './actions/property';
 import { PROPERTY_TEXT_CONFIG } from './constants/resources';
 
 const PropertyContainer = () => {
     const { propertyPageData } = useSelector(state => ({ propertyPageData: state.property }));
     const dispatch = useDispatch();
-
-    const [state, setState] = useState({});
-    const fetchPropertiesRef = useRef(false);
-
-    const {
-        isShow,
-        isLoading,
-        property,
-        isValid
-    } = state;
 
     const {
         total,
@@ -33,98 +17,74 @@ const PropertyContainer = () => {
         options,
         dataReady,
         properties,
+        modal,
+        isFetch
     } = propertyPageData;
 
     useEffect(() => {
         dispatch(getProperties());
     }, []);
 
+    useEffect(() => {
+        if (isFetch) {
+            dispatch(getProperties({}));
+        }
+    }, [isFetch])
+
     const onHandleSearch = (searchParams, options) => {
         dispatch(getProperties(searchParams, options));
     };
 
     const onHandlePageChange = (pageNumber) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageNumber
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     }
 
     const onHandlePageSizeChange = (pageSize) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageSize,
             pageNumber: 1
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     }
 
     const onHandleSortChange = (sortField, sortDirection) => {
-        const { searchParam, options } = state;
         const optionsUpdate = {
             ...options,
             sortField,
             sortDirection
         }
 
-        onHandleSearch(searchParam, optionsUpdate);
+        onHandleSearch(searchParams, optionsUpdate);
     }
 
-    const showModal = (property = {}) => {
-        setState({
-            ...state,
-            isShow: true,
-            property: property
-        });
+    const onShow = (property = {}) => {
+        dispatch(showModal(property));
     }
 
-    const onClose = (isSearch) => {
-        fetchPropertiesRef.current = !!isSearch;
-
-        setState({
-            ...state,
-            isShow: false,
-            isValid: false,
-            errorMessage: {},
-            property: null,
-            dataReady: !isSearch,
-            isLoading: false
-        });
+    const onClose = () => {
+        dispatch(closeModal());
     }
 
-    const onSaveProperty = (property) => {
-        setState({ ...state, isLoading: true })
-        if (state.property._id) {
-            updateProperty({ ...property, id: state.property._id },
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+    const onSaveProperty = async (property) => {
+        if (modal.property._id) {
+            dispatch(updateProperty({ ...property, id: modal.property._id }));
         } else {
-            createNewProperty(property,
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+            dispatch(createNewProperty(property));
         }
     }
 
     const onDelete = ({ _id }) => {
-        const { searchParam, options } = state;
-
-        deleteProperty(_id, () => {
-            onHandleSearch(searchParam, options);
-        });
+        dispatch(deleteProperty(_id));
     }
 
-    const modalRender = () => {
+    const modalRender = ({ isLoading, property, isValid }) => {
         return (
             <Modal classNames={'modal-lg'}
                 title={property?.id ? 'Edit Property' : 'Add New Property'}
@@ -143,7 +103,7 @@ const PropertyContainer = () => {
     }
     return (
         <>
-            {isShow && modalRender()}
+            {modal && modalRender(modal)}
             <div className="card">
                 <div className="card-header text-uppercase">
                     <h3>{PROPERTY_TEXT_CONFIG.PROPERTY_PAGE_HEADER}</h3>
@@ -158,7 +118,7 @@ const PropertyContainer = () => {
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
-                        showModal={showModal}
+                        showModal={onShow}
                         onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
