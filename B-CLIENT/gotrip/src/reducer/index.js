@@ -5,6 +5,7 @@ import roomType from '../admin-page/room-type/reducers/roomType';
 import amenityCategory from '../admin-page/amenity-category/reducers/amenityCategory';
 import propertyType from '../admin-page/property-type/reducers/propertyType';
 import roomName from '../admin-page/room-name/reducers/roomName';
+import propertyManagement from '../property-management/reducers/propertyManagement';
 
 export default combineReducers({
     country,
@@ -12,5 +13,6 @@ export default combineReducers({
     roomType,
     amenityCategory,
     propertyType,
-    roomName
+    roomName,
+    propertyManagement
 });

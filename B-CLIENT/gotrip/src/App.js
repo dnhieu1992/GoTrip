@@ -6,6 +6,7 @@ import Register from './auth/registration/Register'
 import Login from './auth/login/Login';
 import Reset from './auth/reset/Reset';
 import UploadImage from './shared/components/forms/upload-image/UploadImage';
+import PropertyManagementContainer from './property-management/PropertyManagementContainer';
 function App() {
   return (
     <BrowserRouter>
@@ -17,6 +18,7 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/reset" component={Reset} />
         <Route path="/upload-image" component={UploadImage}/>
+        <Route path="/property-management" component={PropertyManagementContainer}/>
       </div>
     </BrowserRouter>
   );

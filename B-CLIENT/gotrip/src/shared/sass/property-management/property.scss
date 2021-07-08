@@ -1,0 +1,52 @@
+.property-mng{
+    display: inline-block;
+    width: 100%;
+    background-color: #eee;
+    height: 100vh;
+
+    &__header{
+        color:#fff;
+        background-color: rgb(3, 13, 158);
+        height: 100px;
+        h3{
+            display: block;
+            position: relative;
+        
+        }
+        i{
+            position: relative;
+            display: block;
+        }
+    }
+    &__body{
+        width: 80%;
+        position: relative;
+        left:10%;
+        margin-top:50px;
+    }
+}
+
+.property-list {
+    background-color: #fff;
+    margin-bottom: 20px;
+    margin-left:4% ;
+    width: 20%;
+    text-align: center;
+    &__image{
+        font-size: 60px;
+        color: rgb(74, 100, 250);
+    }
+    &__name{
+        font-size: 20px;
+        font-weight: 600;
+    }
+    &__button{
+        width: 100%;
+        padding-top: 25px;
+        padding-bottom: 15px;
+    }
+    &__description{
+        font-size: 13px;
+        padding: 5px 25px;
+    }
+}
