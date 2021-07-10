@@ -1,52 +1,101 @@
 .property-mng{
     display: inline-block;
     width: 100%;
-    background-color: #eee;
-    height: 100vh;
-
+    background-color: #f9f9fa;
+    min-height: 100vh;
+    font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    position: relative;
     &__header{
         color:#fff;
-        background-color: rgb(3, 13, 158);
-        height: 100px;
-        h3{
-            display: block;
-            position: relative;
+        background-color: rgb(26, 53,128);
+        height: 60px;
+        position: relative;
         
-        }
-        i{
-            position: relative;
+        .img1{
             display: block;
+            position: absolute;
+            left:10%;
+            height: 21px;
+            width: 130px;
+            top:30%;
+            
+            
+        }
+        .img2{
+            position: absolute;
+            display: block;
+            top:30%;
+            right:12%;
+            width: 30px;
+            height: 25px;
+
         }
     }
+
     &__body{
-        width: 80%;
-        position: relative;
-        left:10%;
-        margin-top:50px;
+        margin: 30px 0 0 136px;
+        &__title{
+            width: 80%;
+            
+            &.-welcoming{
+                margin-bottom: 31px;
+                font-size: 20px;
+    
+            }
+            &.-start{
+                margin-bottom: 30px;
+                font-size: 16px;
+            }
+        }
+        &__list{
+            width: 90%;
+            left:10%;
+            margin-top:50px;
+        }
+        
     }
 }
 
 .property-list {
     background-color: #fff;
-    margin-bottom: 20px;
-    margin-left:4% ;
-    width: 20%;
+    padding-top:20px ;
+    padding-bottom:20px ;
+    margin-bottom: 10px;
+    padding: 20px 16px 10px 16px;
+    margin-left:0.8% ;
+    width: 24%;
     text-align: center;
+    border: 1px solid #e7e7e7;
+    box-sizing: border-box;
+    font-family: BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
     &__image{
-        font-size: 60px;
-        color: rgb(74, 100, 250);
+        img{
+            width: 50px;
+            height: 50px;
+
+        }
     }
     &__name{
-        font-size: 20px;
-        font-weight: 600;
+        font-size: 16px;
+        font-weight: 700;
+        margin-top:16px ;
+        margin-bottom: 8px;
     }
     &__button{
         width: 100%;
-        padding-top: 25px;
-        padding-bottom: 15px;
+        margin: 0 auto;
+        padding-top:15px ;
+
+        button{
+            background-color: rgb(57, 113, 194);
+            width: 100%;
+            height: 36px;
+            font-weight: 500;
+
+        }
     }
     &__description{
-        font-size: 13px;
-        padding: 5px 25px;
+        font-size: 12px;
+        margin: 12px 0;
     }
 }
