@@ -1,0 +1,25 @@
+.formsy-upload-icons {
+    .form-file{
+        margin-left: 5px;
+    }
+    .element-horizontal {
+        display: inherit;
+        label {
+            width: 30%;
+        }
+        input {
+            width: 70%;
+        }
+    }
+    .image-preview{
+        margin-top: 10px;
+        width: 100%;
+        border: none;
+        background-color: transparent;
+        img{
+            width: 100px;
+            height: 100px;
+            margin-left: 118px;
+        }
+    }
+}

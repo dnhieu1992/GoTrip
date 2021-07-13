@@ -6,7 +6,6 @@ import types from '../constants/types';
 import httpClient from '../../../shared/ultils/Request/ApiRequest.js';
 
 export const getProperties = (searchParams = {}, options = {}) => async dispatch => {
-    debugger
     try {
         const params = cleanObject({ ...searchParams, ...options });
 
@@ -36,9 +35,22 @@ export const getProperties = (searchParams = {}, options = {}) => async dispatch
 
 export const createNewProperty = (property = {}) => async dispatch => {
     try {
+        debugger;
         dispatch({ type: types.PROPERTY_SAVING, payload: null });
+        const {
+            name,
+            description,
+            status,
+            file
+        }= property;
 
-        await httpClient.post(API.CREATE_PROPERTY, property);
+        const formData = new FormData()
+        formData.append('file', property.file);
+        formData.append("name", name);
+        formData.append("description", description);
+        formData.append("status", status);
+
+        await httpClient.post(API.CREATE_PROPERTY, formData);
 
         alertNotify.success(PROPERTY_TEXT_CONFIG.CREATE_PROPERTY_SUCCESS_MSG);
         dispatch({ type: types.PROPERTY_SAVE_SUCCESS, payload: null });
@@ -94,5 +106,14 @@ export const closeModal = () => async dispatch => {
     dispatch({
         type: types.PROPERTY_MODAL_CLOSE,
         payload: null
+    });
+}
+
+export const changeFile = (file) => async dispatch => {
+    dispatch({
+        type: types.PROPERTY_FILE_CHANGE,
+        payload: {
+            file: file
+        }
     });
 }
