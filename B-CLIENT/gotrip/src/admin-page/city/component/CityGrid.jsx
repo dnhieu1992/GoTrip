@@ -12,8 +12,8 @@ const CityGrid = ({
   onHandlePageChange,
   onHandlePageSizeChange,
   onHandleSortChange
-  
 }) => {
+  console.log(data);
   const columns = [
     {
       fieldName: 'Id',

@@ -1,210 +1,103 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../shared/components/forms/Modal';
 import AmenityGrid from './component/AmenityGrid';
 import AmenitySearch from './component/AmenitySearch';
 import AmenityForm from './component/AmenityForm';
-import {
+
+import{
     getAmenities,
     updateAmenity,
     createNewAmenity,
     deleteAmenity,
-    getAmenityCategories
-} from './api/apiHandle.js';
+    getAmenityCategories,
+    showModal,
+    closeModal
+} from './actions/amenity';
+
 import { AMENITY_TEXT_CONFIG } from './constants/resources';
 
 const AmenityContainer = () => {
-    const [state, setState] = useState({});
-    const didMountRef = useRef(false);
-    const fetchAmenitiesRef = useRef(false);
+    const { amenityPageData } = useSelector(state => ({ amenityPageData: state.amenity }));
+    const dispatch = useDispatch();
 
     const {
         total,
-        data,
+        amenities,
+        amenityCategories,
         options,
-        isValid,
-        amenity,
-        amenityCategories = [],
-        isShow,
         dataReady,
-        isLoading,
-        searchParam,
-    } = state;
+        searchParams,
+        modal,
+        isFetch
+    } = amenityPageData;
 
-    useEffect(async() => {
-        if (!didMountRef.current) {
-            await getAllAmenityCategories();
-            onHandleSearch({});
-            didMountRef.current = true;
+    useEffect(async () => {
+        dispatch(getAmenities());
+        dispatch(getAmenityCategories());
+    }, []);
+
+    useEffect(() => {
+        if (isFetch) {
+            dispatch(getAmenities({}));
         }
+    }, [isFetch])
 
-        if (didMountRef.current && fetchAmenitiesRef.current) {
-            fetchAmenities();
-        }
-    });
-
-    const getAllAmenityCategories = async() => {
-        await getAmenityCategories().then((amenityCategories) => {
-            setState({
-                ...state,
-                amenityCategories: amenityCategories
-            });
-        }).catch(error => {
-            console.log(error);
-        });
+    const onHandleSearch = (searchParams, options) => {
+        dispatch(getAmenities(searchParams, options));
     }
 
-    const fetchAmenities = () => {
-        fetchAmenitiesRef.current = false;
-
-        const {
-            searchParam = {},
-            options = {}
-        } = state;
-
-        getAmenities({ ...searchParam, ...options }, ({ total, amenities }) => {
-            const data = amenities.map(amenity => {
-                return {
-                    ...amenity,
-                    amenityCategoryName: amenity?.amenityCategory?.name
-                }
-            });
-            
-            setTimeout(() => {
-                setState({
-                    ...state,
-                    total,
-                    data,
-                    dataReady: true
-                });
-            }, 500);
-        }, () => {
-            setTimeout(() => {
-                setState({ ...state, dataReady: true })
-            }, 500);
-        });
-    };
-
-    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
-        const options = {
-            pageNumber: optionParams.pageNumber || 1,
-            pageSize: optionParams.pageSize || 50,
-            sortField: optionParams.sortField || null,
-            sortDirection: optionParams.sortDirection || null
-        };
-
-        fetchAmenitiesRef.current = true;
-        setState({
-            ...state,
-            searchParam: searchParam,
-            options: options,
-            dataReady: false
-        });
-    };
-
-    const onHandleSearchChange = (param) => {
-        setState({
-            ...state,
-            searchParam: param
-        });
-    };
-
     const onHandlePageChange = (pageNumber) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageNumber
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionsUpdate);
+    }
 
     const onHandlePageSizeChange = (pageSize) => {
-        const { searchParam, options } = state;
-
-        const optionsUpdate = {
+        const optionUpdate = {
             ...options,
             pageSize,
             pageNumber: 1
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionUpdate);
+    }
 
     const onHandleSortChange = (sortField, sortDirection) => {
-        const { searchParam, options } = state;
 
         const optionsUpdate = {
             ...options,
             sortField,
             sortDirection
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionsUpdate);
+    }
 
-    const onHandleResetForm = () => {
-        const searchParam = {
-            name: '',
-            amenityCategoryId: '',
-            status: ''
-        };
+    const onShow = (amenity = {}) => {
+        dispatch(showModal(amenity));
+    }
 
-        const options = {
-            ...state.options,
-            pageNumber: 1
-        };
-
-        onHandleSearch(searchParam, options);
-    };
-
-    const showModal = (amenity = {}) => {
-        setState({
-            ...state,
-            isShow: true,
-            amenity: amenity
-        });
-    };
-
-    const onClose = (isSearch) => {
-        fetchAmenitiesRef.current = !!isSearch;
-        setState({
-            ...state,
-            isShow: false,
-            isValid: false,
-            errorMessage: {},
-            amenity: null,
-            dataReady: !isSearch,
-            isLoading: false
-        });
-    };
+    const onClose = () => {
+        dispatch(closeModal());
+    }
 
     const onSaveAmenity = (amenity) => {
-        setState({ ...state, isLoading: true })
-        if (state.amenity._id) {
-            updateAmenity({ ...amenity, id: state.amenity._id },
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+        if (modal.amenity._id) {
+            dispatch(updateAmenity({ ...amenity, id: modal.amenity._id }));
         } else {
-            createNewAmenity(amenity,
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+            dispatch(createNewAmenity(amenity));
         }
-    };
+    }
 
     const onDelete = ({ _id }) => {
-        const { searchParam, options } = state;
+        dispatch(deleteAmenity(_id));
+    }
 
-        deleteAmenity(_id, () => {
-            onHandleSearch(searchParam, options);
-        });
-    };
-
-    const modalRender = () => {
+    const modalRender = ({ isLoading, amenity, isValid }) => {
         return (
             <Modal 
                 classNames={'modal-lg'}
@@ -225,25 +118,23 @@ const AmenityContainer = () => {
 
     return (
         <>
-            {isShow && modalRender()}
+            {modal && modalRender(modal)}
             <div className="card">
                 <div className="card-header text-uppercase">
                     <h3>{AMENITY_TEXT_CONFIG.AMENITY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <AmenitySearch
-                        searchParam={searchParam}
+                        options={options}
                         amenityCategories={amenityCategories}
-                        onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
-                        onHandleResetForm={onHandleResetForm}
                     />
                     <AmenityGrid
-                        data={data}
+                        data={amenities}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
-                        showModal={showModal}
+                        showModal={onShow}
                         onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
