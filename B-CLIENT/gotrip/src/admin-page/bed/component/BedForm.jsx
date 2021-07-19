@@ -3,9 +3,11 @@ import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
 import { STATUSES } from '../constants/bed';
 import { BED_TEXT_CONFIG } from '../constants/resources';
+
 const {
     FormsyInput,
-    FormsySelect
+    FormsySelect,
+    FormsyTextarea
 } = FormsyElement
 
 const BedForm = ({
@@ -52,7 +54,7 @@ const BedForm = ({
                     />
                 </div>
                 <div className="form-group">
-                    <FormsyElement.FormsyTextarea
+                    <FormsyTextarea
                         textareaProps={{
                             id: 'description',
                             type: 'text',
@@ -64,7 +66,7 @@ const BedForm = ({
                         required
                         validationError={BED_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     >
-                    </FormsyElement.FormsyTextarea>
+                    </FormsyTextarea>
                 </div>
                 <div className="form-group">
                     <FormsySelect

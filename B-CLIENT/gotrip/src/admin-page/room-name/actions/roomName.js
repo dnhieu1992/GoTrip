@@ -16,7 +16,6 @@ export const getRoomNames = (searchParams = {}, options = {}) => async dispatch 
                 options: options
             }
         });
-        debugger
         const { data } = await httpClient.get(API.SEARCH_ROOM_NAME, { params });
 
         const roomNames= data.roomNames.map( roomName=>{

@@ -2,7 +2,8 @@ import types from '../constants/types';
 
 const initialState = {
     total: 0,
-    properties: [],
+    cities: [],
+    countries: [],
     searchParams: {},
     options: {
         pageNumber: 1,
@@ -12,69 +13,76 @@ const initialState = {
     modal: null
 };
 
-function propertyReducer(state = initialState, action) {
+function cityReducer(state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
-        case types.PROPERTY_FETCHING:
+        case types.CITY_FETCHING:
             return {
                 ...state,
                 dataReady: false
             };
-        case types.PROPERTY_FETCH_SUCCESS:
+        case types.CITY_FETCH_SUCCESS:
             return {
                 ...state,
                 total: payload.total,
-                properties: payload.properties,
+                cities: payload.cities,
                 dataReady: true,
                 isFetch: false
             };
-        case types.PROPERTY_SAVING:
-            return {
-                ...state,
-                modal: { ...state.modal, isLoading: true },
-            };
-        case types.PROPERTY_SAVE_SUCCESS:
-            return {
-                ...state,
-                modal: null,
-                isFetch: true
-            };
-        case types.PROPERTY_SAVE_FAILED:
-            return {
-                ...state,
-                modal: { ...state.modal, isLoading: false },
-            };
-        case types.PROPERTY_DELETED_SUCCESS:
-            return {
-                ...state,
-                modal: null,
-                isFetch: true
-            };
-        case types.PROPERTY_MODAL_SHOW:
-            return {
-                ...state,
-                modal: { property: payload.property }
-            };
-        case types.PROPERTY_MODAL_CLOSE:
-            return {
-                ...state,
-                modal: null
-            };
-        case types.PROPERTY_FETCH_ERROR:
+        case types.CITY_FETCH_ERROR:
             return {
                 ...state,
                 dataReady: true
             };
-        case types.PROPERTY_FILE_CHANGE:
-            debugger
+        case types.CITY_SAVING:
             return {
                 ...state,
-                file: payload.file
+                modal: { ...state.modal, isLoading: true },
+            };
+        case types.CITY_SAVE_SUCCESS:
+            return {
+                ...state,
+                modal: null,
+                isFetch: true
+            };
+        case types.CITY_SAVE_FAILED:
+            return {
+                ...state,
+                modal: { ...state.modal, isLoading: false },
+            };
+        case types.CITY_DELETED_SUCCESS:
+            return {
+                ...state,
+                isFetch: true
+            };
+        case types.CITY_MODAL_SHOW:
+            return {
+                ...state,
+                modal: { city: payload.city }
+            };
+        case types.CITY_MODAL_CLOSE:
+            return {
+                ...state,
+                modal: null
+            };
+        case types.CITY_FETCH_ERROR:
+            return {
+                ...state,
+                dataReady: true
+            }
+        case types.GET_COUNTRY_SUCCESS:
+            return {
+                ...state,
+                countries: payload.countries
+            };
+        case types.GET_COUNTRY_ERROR:
+            return {
+                ...state
             };
         default:
             return state;
     }
 }
 
-export default propertyReducer;
+export default cityReducer;

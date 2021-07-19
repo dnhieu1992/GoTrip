@@ -40,8 +40,10 @@ app.use(express.static(__dirname + '/assets/uploads/'));
 //const swaggerDocument = YAML.load('./swagger.yaml');
 app.use(cors())
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
 app.use(logger('dev'));
 
 // set up mongoose
@@ -113,4 +115,4 @@ app.use('/api/roomName/', verifyToken, roomNameRoutes);
 app.use('/api/amenityCategory/', verifyToken, amenityCategoryRoutes);
 app.use('/api/amenity/', verifyToken, amenityRoutes);
 app.use('/api/attachment/', verifyToken, attachmentRoutes);
-app.use('/api/property/', propertyRoutes);
+app.use('/api/property/',verifyToken, propertyRoutes);

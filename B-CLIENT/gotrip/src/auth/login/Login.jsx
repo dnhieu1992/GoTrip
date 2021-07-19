@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Redirect, Route } from 'react-router-dom';
 import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../shared/components/index.js';
@@ -18,6 +18,18 @@ const Login = () => {
     const [error, setError] = useState(null);
     const history = useHistory();
 
+    useEffect(() => {
+        getTokenUser();
+    }, []);
+
+    function getTokenUser() {
+        const tokenUser = localStorage.getItem('User');
+        if (tokenUser) {
+            history.push("/admin");
+        }
+        else history.push("/login");
+    }
+
     const onLogin = (account) => {
         loginUser(account,
             () => {
@@ -25,7 +37,8 @@ const Login = () => {
             },
             (error) => {
                 setError(error);
-            });
+            }
+        );
     };
 
     const onSubmit = (modal) => {

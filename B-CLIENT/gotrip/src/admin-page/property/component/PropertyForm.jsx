@@ -1,25 +1,29 @@
 import { useState } from 'react';
 import Formsy from 'formsy-react';
-import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
+import { FormsyElement, LoaderButton, Input, Label } from '../../../shared/components/index.js';
 import { PROPERTY_TEXT_CONFIG } from '../constants/resources.js';
 import { STATUSES } from '../../country/constants/country.js';
 
 const {
     FormsyInput,
-    FormsySelect
+    FormsySelect,
+    FormsyUploadIcons
 } = FormsyElement
 
 const PropertyForm = ({
     property,
+    isLoading,
     onClose,
     onSaveProperty,
-    isLoading
+    onFileChange
 }) => {
     const [isValid, setIsValid] = useState(true);
     const {
         name,
         description,
-        status
+        status,
+        icon,
+        imageUrl
     } = property;
 
     const submit = (modal) => {
@@ -74,6 +78,22 @@ const PropertyForm = ({
                         required
                         validationError={PROPERTY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
                     />
+                </div>
+                <div className="form-group" >
+                    {/* <div className="col-sm-2">
+                        <Label>Upload Icon</Label>
+                    </div>
+                    <div className="col-sm-10">
+                        <Input type="file" />
+                    </div> */}
+                    <FormsyUploadIcons name="icon"
+                        layout="horizontal"
+                        required
+                        label="Upload Icon"
+                        validationError={PROPERTY_TEXT_CONFIG.REQUIRED_FIELD_MSG}
+                        imageUrl={imageUrl}
+                        onFileChange={onFileChange} 
+                        />
                 </div>
                 <div className="form-group">
                     <div className="col-sm-12 d-flex justify-content-end">

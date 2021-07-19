@@ -11,7 +11,12 @@ import {
 import { cleanObject, searchQuery } from '../../shared/ultils.js';
 import { SORT_DIRECTION } from '../../constants/constants.js';
 
-function create(req, res) {
+async function create(req, res) {
+    await uploadFile(req, res);
+
+    if (req.file == undefined) {
+        return res.status(400).send({ message: "Please upload a file!" });
+    }
     const {
         name,
         description,
@@ -29,7 +34,8 @@ function create(req, res) {
             _id: mongoose.Types.ObjectId(),
             name,
             description,
-            status: status
+            status: status,
+            icon: req.file.originalname
         });
 
         newPropertyCategory.save().then((result) => {
@@ -63,6 +69,7 @@ function search(req, res) {
 
     const sortObject = {};
     sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
+    var url = req.protocol + '://' + req.get('host')
 
     db.PropertyCategory.find(query)
         .sort(sortObject)
@@ -76,6 +83,14 @@ function search(req, res) {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
+
+                const result = properties.map((property) => {
+                    if (property.icon) {
+                        return { name: property.name, description: property.description, status: property.status , imageUrl: `${url}/${property.icon}` }
+                    }
+                    return property;
+                });
+
                 return successResponse(res, {
                     total: count,
                     pageNumber: pageNumber,

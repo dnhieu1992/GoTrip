@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../shared/components/forms/Modal';
 import CityGrid from './component/CityGrid';
 import CitySearch from './component/CitySearch';
@@ -8,203 +9,93 @@ import {
     updateCity,
     createNewCity,
     deleteCity,
-    getCountries
-} from './api/apiHandle.js';
+    getCountries,
+    showModal,
+    closeModal
+} from './actions/city';
 import { CITY_TEXT_CONFIG } from './constants/resources';
 
 const CityContainer = () => {
-    const [state, setState] = useState({});
-    const didMountRef = useRef(false);
-    const fetchCitiesRef = useRef(false);
+    const { cityPageData } = useSelector(state => ({ cityPageData: state.city }));
+    const dispatch = useDispatch();
 
     const {
         total,
-        data,
+        cities,
+        countries,
         options,
-        isValid,
-        city,
-        countries = [],
-        isShow,
         dataReady,
-        isLoading,
-        searchParam,
-    } = state;
+        searchParams,
+        modal,
+        isFetch
+    } = cityPageData;
 
     useEffect(async () => {
-        if (!didMountRef.current) {
-            await getAllCountries();
-            onHandleSearch({});
-            didMountRef.current = true;
-        }
+        dispatch(getCities());
+        dispatch(getCountries());
+    }, []);
 
-        if (didMountRef.current && fetchCitiesRef.current) {
-            fetchCities();
+    useEffect(() => {
+        if (isFetch) {
+            dispatch(getCities({}));
         }
-    });
+    }, [isFetch])
 
-    const getAllCountries = async () => {
-        await getCountries().then((countries) => {
-            setState({
-                ...state,
-                countries: countries
-            });
-        }).catch(error => {
-            console.log(error);
-        });
+    const onHandleSearch = (searchParams, options) => {
+        dispatch(getCities(searchParams, options));
     }
 
-    const fetchCities = () => {
-        fetchCitiesRef.current = false;
-
-        const {
-            searchParam = {},
-            options = {}
-        } = state;
-
-        getCities({ ...searchParam, ...options }, ({ total, cities }) => {
-            const data = cities.map(city => {
-                return {
-                    ...city,
-                    countryName: city.country.name
-                }
-            });
-            setTimeout(() => {
-                setState({
-                    ...state,
-                    total,
-                    data,
-                    dataReady: true
-                });
-            }, 500);
-        }, () => {
-            setTimeout(() => {
-                setState({ ...state, dataReady: true })
-            }, 500);
-        });
-    };
-
-    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
-        const options = {
-            pageNumber: optionParams.pageNumber || 1,
-            pageSize: optionParams.pageSize || 50,
-            sortField: optionParams.sortField || null,
-            sortDirection: optionParams.sortDirection || null
-        };
-
-        fetchCitiesRef.current = true;
-        setState({
-            ...state,
-            searchParam: searchParam,
-            options: options,
-            dataReady: false
-        });
-    };
-
-    const onHandleSearchChange = (param) => {
-        setState({
-            ...state,
-            searchParam: param
-        });
-    };
-
     const onHandlePageChange = (pageNumber) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageNumber
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionsUpdate);
+    }
 
     const onHandlePageSizeChange = (pageSize) => {
-        const { searchParam, options } = state;
-
-        const optionsUpdate = {
+        const optionUpdate = {
             ...options,
             pageSize,
             pageNumber: 1
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionUpdate);
+    }
 
     const onHandleSortChange = (sortField, sortDirection) => {
-        const { searchParam, options } = state;
 
         const optionsUpdate = {
             ...options,
             sortField,
             sortDirection
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionsUpdate);
+    }
 
-    const onHandleResetForm = () => {
-        const searchParam = {
-            name: '',
-            countryId: '',
-            status: ''
-        };
+    const onShow = (city = {}) => {
+        dispatch(showModal(city));
+    }
 
-        const options = {
-            ...state.options,
-            pageNumber: 1
-        };
-
-        onHandleSearch(searchParam, options);
-    };
-
-    const showModal = (city = {}) => {
-        setState({
-            ...state,
-            isShow: true,
-            city: city
-        });
-    };
-
-    const onClose = (isSearch) => {
-        fetchCitiesRef.current = !!isSearch;
-
-        setState({
-            ...state,
-            isShow: false,
-            isValid: false,
-            errorMessage: {},
-            city: null,
-            dataReady: !isSearch,
-            isLoading: false
-        });
-    };
+    const onClose = () => {
+        dispatch(closeModal());
+    }
 
     const onSaveCity = (city) => {
-        setState({ ...state, isLoading: true })
-        if (state.city._id) {
-            updateCity({ ...city, id: state.city._id },
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+        if (modal.city._id) {
+            dispatch(updateCity({ ...city, id: modal.city._id }));
         } else {
-            createNewCity(city,
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+            dispatch(createNewCity(city));
         }
-    };
+    }
 
     const onDelete = ({ _id }) => {
-        const { searchParam, options } = state;
+        dispatch(deleteCity(_id));
+    }
 
-        deleteCity(_id, () => {
-            onHandleSearch(searchParam, options);
-        });
-    };
-
-    const modalRender = () => {
+    const modalRender = ({ isLoading, city, isValid }) => {
         return (
             <Modal classNames={'modal-lg'}
                 title={city?._id ? CITY_TEXT_CONFIG.CITY_UPDATE_HEADER_LBL : CITY_TEXT_CONFIG.CITY_CREATE_HEADER_LBL}
@@ -224,25 +115,23 @@ const CityContainer = () => {
 
     return (
         <>
-            {isShow && modalRender()}
+            {modal && modalRender(modal)}
             <div className="card">
                 <div className="card-header text-uppercase">
                     <h3>{CITY_TEXT_CONFIG.CITY_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <CitySearch
-                        searchParam={searchParam}
+                        options={options}
                         countries={countries}
-                        onHandleSearchChange={onHandleSearchChange}
                         onHandleSearch={onHandleSearch}
-                        onHandleResetForm={onHandleResetForm}
                     />
                     <CityGrid
-                        data={data}
+                        data={cities}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
-                        showModal={showModal}
+                        showModal={onShow}
                         onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}

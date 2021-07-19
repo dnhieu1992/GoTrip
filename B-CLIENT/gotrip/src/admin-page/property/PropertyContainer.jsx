@@ -4,7 +4,7 @@ import Modal from '../../shared/components/forms/Modal';
 import PropertyGrid from './component/PropertyGrid';
 import PropertySearch from './component/PropertySearch';
 import PropertyForm from './component/PropertyForm';
-import { closeModal, createNewProperty, deleteProperty, getProperties, showModal, updateProperty } from './actions/property';
+import { closeModal, createNewProperty, deleteProperty, getProperties, showModal, updateProperty, changeFile } from './actions/property';
 import { PROPERTY_TEXT_CONFIG } from './constants/resources';
 
 const PropertyContainer = () => {
@@ -18,7 +18,8 @@ const PropertyContainer = () => {
         dataReady,
         properties,
         modal,
-        isFetch
+        isFetch,
+        file
     } = propertyPageData;
 
     useEffect(() => {
@@ -74,14 +75,18 @@ const PropertyContainer = () => {
 
     const onSaveProperty = async (property) => {
         if (modal.property._id) {
-            dispatch(updateProperty({ ...property, id: modal.property._id }));
+            dispatch(updateProperty({ ...property, id: modal.property._id, file: file }));
         } else {
-            dispatch(createNewProperty(property));
+            dispatch(createNewProperty({...property, file}));
         }
     }
 
     const onDelete = ({ _id }) => {
         dispatch(deleteProperty(_id));
+    }
+
+    const onFileChange = (file) => {
+        dispatch(changeFile(file))
     }
 
     const modalRender = ({ isLoading, property, isValid }) => {
@@ -96,6 +101,7 @@ const PropertyContainer = () => {
                     isValid={isValid}
                     onClose={onClose}
                     onSaveProperty={onSaveProperty}
+                    onFileChange={onFileChange}
                 />
 
             </Modal>

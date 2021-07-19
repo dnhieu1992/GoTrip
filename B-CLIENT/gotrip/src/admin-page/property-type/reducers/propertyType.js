@@ -69,7 +69,6 @@ function propertyTypeReducer(state = initialState, action) {
                 dataReady: true
             }
         case types.GET_PROPERTY_SUCCESS:
-            debugger
             return {
                 ...state,
                 properties: payload.properties

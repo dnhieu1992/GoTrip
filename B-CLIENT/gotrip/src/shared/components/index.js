@@ -10,6 +10,7 @@ import Select from './forms/Select';
 import FormsyInput from './forms/formsy-elements/FormsyInput';
 import FormsySelect from './forms/formsy-elements/FormsySelect';
 import FormsyTextarea from './forms/formsy-elements/FormsyTextarea';
+import FormsyUploadIcons from './forms/formsy-elements/FormsyUploadIcons';
 import UploadImage from './forms/upload-image/UploadImage';
 
 const {
@@ -22,7 +23,12 @@ const {
     Col
 } = Form;
 
-const FormsyElement = { FormsyInput, FormsySelect, FormsyTextarea }
+const FormsyElement = {
+    FormsyInput,
+    FormsySelect,
+    FormsyTextarea,
+    FormsyUploadIcons
+}
 
 export {
     Group as FormGroup,

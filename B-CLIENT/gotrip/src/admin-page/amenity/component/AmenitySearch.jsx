@@ -1,21 +1,37 @@
+import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
 import { STATUSES } from '../constants/amenity';
-import { Input, Label, FormGroup, Button, Select, Row } from '../../../shared/components/index';
+import { Input, Label, FormGroup, FormsyElement, Button, Select, Row } from '../../../shared/components/index';
 import { AMENITY_TEXT_CONFIG } from '../constants/resources';
 
-const AmenitySearch = ({
-    searchParam,
-    amenityCategories,
-    onHandleSearchChange,
-    onHandleSearch,
-    onHandleResetForm
-}) => {
-    const {
-        name = '',
-        amenityCategoryId = '',
-        status = ''
-    } = searchParam;
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement;
 
+const AmenitySearch = ({
+    options,
+    amenityCategories,
+    onHandleSearch
+}) => {
+    const formRef = useRef();
+
+    const onReset = () => {
+        formRef.current.updateInputsWithValue({
+            name: '',
+            amenityCategoryId: '',
+            status: ''
+        });
+        onHandleSearch({
+            name: '',
+            amenityCategoryId: '',
+            status: ''
+        }, { ...options, pageNumber: 1 })
+    }
+
+
+    debugger
     const data = amenityCategories.map(amenityCategory => {
         return {
             value: amenityCategory._id,
@@ -28,21 +44,12 @@ const AmenitySearch = ({
         label: 'Choose the amenity category...'
     })
 
-    const onHandleFieldChange = (e) => {
-        if (e?.target) {
-            onHandleSearchChange({
-                ...searchParam,
-                [e.target.name]: e.target.value
-            });
-        }
-    };
-
     return (
         <div className="card card-info">
             <div className="card-header">
                 <h3 className="card-title">{AMENITY_TEXT_CONFIG.AMENITY_SEARCH_HEADER_LBL}</h3>
             </div>
-            <form className="form-horizontal" autoComplete="off">
+            <Formsy className="form-horizontal" autoComplete="off" onSubmit={onHandleSearch} ref={formRef}>
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
@@ -51,13 +58,13 @@ const AmenitySearch = ({
                                     {AMENITY_TEXT_CONFIG.AMENITY_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Input
-                                        type="text"
-                                        id="name"
+                                    <FormsyInput
+                                        inputProps={{
+                                            type: 'text',
+                                            id: 'name',
+                                            placeholder: AMENITY_TEXT_CONFIG.AMENITY_NAME_FIELD_LBL
+                                        }}
                                         name="name"
-                                        placeholder={AMENITY_TEXT_CONFIG.AMENITY_NAME_FIELD_LBL}
-                                        value={name}
-                                        onChange={onHandleFieldChange}
                                     />
                                 </div>
                             </FormGroup>
@@ -68,10 +75,8 @@ const AmenitySearch = ({
                                     {AMENITY_TEXT_CONFIG.AMENITY_AMENITYCATEGORYID_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'amenityCategoryId' }}
-                                        value={amenityCategoryId}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='amenityCategoryId'
                                         dataSource={data}
                                     />
                                 </div>
@@ -85,10 +90,8 @@ const AmenitySearch = ({
                                     {AMENITY_TEXT_CONFIG.AMENITY_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'status' }}
-                                        value={status}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='status'
                                         dataSource={STATUSES}
                                     />
                                 </div>
@@ -100,33 +103,32 @@ const AmenitySearch = ({
                         <div className="col-sm-12 d-flex justify-content-end">
                             <Button
                                 variant="info"
-                                className='mr-3'
-                                onClick={() => onHandleSearch(searchParam)}
+                                className="mr-3"
+                                type="submit"
                             >
                                 {AMENITY_TEXT_CONFIG.AMENITY_SEARCH_BTN}
                             </Button>
                             <Button
                                 variant="info"
-                                onClick={onHandleResetForm}
+                                onClick={onReset}
                             >
                                 {AMENITY_TEXT_CONFIG.AMENITY_RESET_BTN}
                             </Button>
                         </div>
                     </div>
                 </div>
-            </form>
+            </Formsy>
         </div>
     )
 }
 export default AmenitySearch;
 
 AmenitySearch.propTypes = {
-    searchParam: PropTypes.object,
-    onHandleSearchChange: PropTypes.func.isRequired,
-    onHandleSearch: PropTypes.func.isRequired,
-    onHandleResetForm: PropTypes.func.isRequired,
+    options: PropTypes.object,
+    onHandleSearch: PropTypes.func.isRequired
 };
 
 AmenitySearch.defaultProps = {
-    searchParam: {},
+    options: {},
+    amenities: {},
 };
