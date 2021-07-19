@@ -6,7 +6,7 @@ import {
     createAmenityCategory,
     updateAmenityCategory,
     deleteAmenityCategory
-} from '../controllers/amenityCategory.controller.js';
+} from '../controllers/master-datas/amenityCategory.controller.js';
 
 const router = express.Router();
 /**

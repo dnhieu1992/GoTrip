@@ -1,123 +1,138 @@
 import express from 'express';
 import {
+    getAll,
     search,
     getById,
-    createPropertyType,
-    updatePropertyType,
-    deletePropertyType
-} from '../controllers/master-datas/propertyType.controller.js';
+    create,
+    update,
+    remove
+} from '../controllers/master-datas/propertyCategory.controller.js';
 
 const router = express.Router();
-
 /**
  * @swagger
  * components:
  *   schemas:
- *     PropertyType:
+ *     PropertyCategory:
  *       type: object
  *       required:
  *         - name
- *         - propertyId
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the PropertyType
+ *           description: The auto-generated id of the property category
  *         name:
  *           type: string
- *           description: The PropertyType name
+ *           description: The property category name
  *         description:
  *           type: string
- *           description: The PropertyType description
- *         propertyId:
- *           type: string
- *           description: The PropertyType code
+ *           description: The property category code
  *         status: 
  *           type: string
- *           description: The PropertyType status
+ *           description: The property category status,
  */
 
 /**
  * @swagger
  * tags:
- *   name: PropertyTypes
- *   description: The Property Types managing API
+ *   name: PropertyCategories
+ *   description: The Property Categories managing API
  */
 
 /**
  * @swagger
- * /api/propertyType/create:
+ * /api/propertyCategory/create:
  *   post:
- *     summary: Create a new Property Type
- *     tags: [PropertyTypes]
+ *     summary: Create a new property category
+ *     tags: [PropertyCategories]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/PropertyType'
+ *             $ref: '#/components/schemas/PropertyCategory'
  *     responses:
  *       200:
- *         description: The Property Type was successfully created
+ *         description: The property categorywas successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/PropertyType'
+ *               $ref: '#/components/schemas/PropertyCategory'
  *       500:
  *         description: Some server error
  */
-router.post('/create', createPropertyType);
+router.post('/create', create);
 
 /**
  * @swagger
- * /api/propertyType/update:
+ * /api/propertyCategory/update:
  *  put:
- *    summary: Update the Property Type by the id
- *    tags: [PropertyTypes]
+ *    summary: Update the property categoryby the id
+ *    tags: [PropertyCategories]
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/PropertyType'
+ *            $ref: '#/components/schemas/PropertyCategory'
  *    responses:
  *      200:
- *        description: The Property Type was updated
+ *        description: The property category was updated
  *        content:
  *          application/json:
  *            schema:
  *              type: object
  *              items: {}
  *      404:
- *        description: The Property Type was not found
+ *        description: The property category was not found
  *      500:
  *        description: Some error happened
  */
-router.put('/update', updatePropertyType);
+router.put('/update', update);
+
 /**
  * @swagger
- * /api/propertyType/search:
+ * /api/propertyCategory/getAll:
  *   get:
- *     summary: Returns the list of all the Property Types
- *     tags: [PropertyTypes]
+ *     summary: Returns the list of all the Properties
+ *     tags: [PropertyCategories]
+ *     responses:
+ *       200:
+ *         description: The list of the property categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/PropertyCategory'
+ */
+ router.get('/getAll', getAll);
+
+/**
+ * @swagger
+ * /api/propertyCategory/search:
+ *   get:
+ *     summary: Returns the list of all the property category
+ *     tags: [PropertyCategories]
  *     parameters:
  *       - in: query
  *         name: name
  *         schema:
  *           type: string
  *         required: false
- *         description: The Property Type name.
+ *         description: The property category name.
  *       - in: query
- *         name: propertyId
+ *         name: description
  *         schema:
  *           type: String
  *         required: false
- *         description: The Property Type id.
+ *         description: The property category description.
  *       - in: query
  *         name: status
  *         schema:
  *           type: String
  *         required: false
- *         description: The status of Property Type
+ *         description: The property category status
  *       - in: query
  *         name: pageNumber
  *         schema:
@@ -148,61 +163,61 @@ router.put('/update', updatePropertyType);
  *         description: The Sort Field
  *     responses:
  *       200:
- *         description: The list of the Property Types
+ *         description: The list of the property
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/PropertyType'
+ *                 $ref: '#/components/schemas/Property'
  */
 router.get('/search', search);
 
 /**
  * @swagger
- * /api/propertyType/{id}:
+ * /api/property/{id}:
  *   get:
- *     summary: Get the Property Type by id
- *     tags: [PropertyTypes]
+ *     summary: Get the property category by id
+ *     tags: [PropertyCategories]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The Property Type id
+ *         description: The property category id
  *     responses:
  *       200:
- *         description: The Property Type description by id
+ *         description: The property category description by id
  *         contens:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/PropertyType'
+ *               $ref: '#/components/schemas/PropertyCategory'
  *       404:
- *         description: The Property Type was not found
+ *         description: The property category was not found
  */
 router.get('/:id', getById);
 
 /**
  * @swagger
- * /api/propertyType/delete/{id}:
+ * /api/property/delete/{id}:
  *   delete:
- *     summary: Remove the Property Type by id
- *     tags: [PropertyTypes]
+ *     summary: Remove the property category by id
+ *     tags: [PropertyCategories]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The Property Type id
+ *         description: The property category id
  * 
  *     responses:
  *       200:
- *         description: The Property Type was deleted
+ *         description: The property category was deleted
  *       404:
- *         description: The Property Type was not found
+ *         description: The property category was not found
  */
-router.delete('/delete/:id', deletePropertyType);
+router.delete('/delete/:id', remove);
 
 export default router;

@@ -3,7 +3,7 @@ import {
     uploadImage,
     getImage,
     removeFile,
-} from '../controllers/attachment.controller.js';
+} from '../controllers/master-datas/attachment.controller.js';
 
 const router = express.Router();
 

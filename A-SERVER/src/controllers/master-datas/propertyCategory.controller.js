@@ -1,19 +1,17 @@
 import mongoose from 'mongoose';
-import db from '../models/index.js';
-import path from 'path';
-import { ERROR_MSG } from '../constants/messages.js';
+import db from '../../models/index.js';
+import { ERROR_MSG } from '../../constants/messages.js';
 import {
     duplicatedResponse,
     errorResponse,
     successResponse,
     badRequestResponse,
     notFoundResponse
-} from '../shared/response.js';
-import { cleanObject, searchQuery } from '../shared/ultils.js';
-import { SORT_DIRECTION } from '../constants/constants.js';
-import uploadFile from "../shared/middleware/Upload.js";
+} from '../../shared/response.js';
+import { cleanObject, searchQuery } from '../../shared/ultils.js';
+import { SORT_DIRECTION } from '../../constants/constants.js';
 
-async function createProperty(req, res) {
+async function create(req, res) {
     await uploadFile(req, res);
 
     if (req.file == undefined) {
@@ -29,10 +27,10 @@ async function createProperty(req, res) {
         return badRequestResponse(res, '');
     }
 
-    db.Property.findOne({ name: name }).then((property) => {
+    db.PropertyCategory.findOne({ name: name }).then((property) => {
         if (property) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
 
-        const newProperty = new db.Property({
+        const newPropertyCategory = new db.PropertyCategory({
             _id: mongoose.Types.ObjectId(),
             name,
             description,
@@ -40,7 +38,7 @@ async function createProperty(req, res) {
             icon: req.file.originalname
         });
 
-        newProperty.save().then((result) => {
+        newPropertyCategory.save().then((result) => {
             return successResponse(res, result);
         }).catch((error) => {
             return errorResponse(res, error);
@@ -49,12 +47,12 @@ async function createProperty(req, res) {
 }
 
 function getAll(req, res) {
-    db.Property.find({ status: "Actived" })
-        .exec((err, properties) => {
+    db.PropertyCategory.find({ status: "Actived" })
+        .exec((err, propertyCategories) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            return successResponse(res, properties);
+            return successResponse(res, propertyCategories);
         });
 }
 
@@ -73,15 +71,15 @@ function search(req, res) {
     sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
     var url = req.protocol + '://' + req.get('host')
 
-    db.Property.find(query)
+    db.PropertyCategory.find(query)
         .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
-        .exec((err, properties) => {
+        .exec((err, propertyCategories) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            db.Property.countDocuments(query).exec((count_error, count) => {
+            db.PropertyCategory.countDocuments(query).exec((count_error, count) => {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
@@ -97,7 +95,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    properties: result
+                    propertyCategories: propertyCategories
                 });
             });
         });
@@ -109,17 +107,17 @@ function getById(req, res) {
     }
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The Property not found");
+        return notFoundResponse(res, "The Property Category not found");
     }
 
-    db.Property.findOne({ _id: req.params.id }).then(property => {
-        return successResponse(res, property);
+    db.PropertyCategory.findOne({ _id: req.params.id }).then(property => {
+        return successResponse(res, propertyCategory);
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
 
-function updateProperty(req, res) {
+function update(req, res) {
     const {
         id,
         name,
@@ -131,19 +129,19 @@ function updateProperty(req, res) {
         return badRequestResponse(res, '');
     }
 
-    const propertyUpdate = {
+    const propertyCategoryUpdate = {
         name,
         status,
         description
     };
 
-    db.Property.findOneAndUpdate({ _id: id }, propertyUpdate).then((result) => {
+    db.PropertyCategory.findOneAndUpdate({ _id: id }, propertyCategoryUpdate).then((result) => {
         return successResponse(res, "Update success");
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
-function deleteProperty(req, res) {
+function remove(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
     }
@@ -152,7 +150,7 @@ function deleteProperty(req, res) {
         return notFoundResponse(res, "The Property not found");
     }
 
-    db.Property.findByIdAndRemove({ _id: req.params.id }).then((result) => {
+    db.PropertyCategory.findByIdAndRemove({ _id: req.params.id }).then((result) => {
         return successResponse(res, "Delete success");
     }).catch((error) => {
         return errorResponse(res, error);
@@ -163,7 +161,7 @@ export {
     getAll,
     search,
     getById,
-    createProperty,
-    updateProperty,
-    deleteProperty
+    create,
+    update,
+    remove
 }

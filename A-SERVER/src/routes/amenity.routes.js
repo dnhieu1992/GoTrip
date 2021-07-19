@@ -5,7 +5,7 @@ import {
     search,
     getById,
     deleteAmenity
-} from '../controllers/amenity.controller.js';
+} from '../controllers/master-datas/amenity.controller.js';
 
 const router = express.Router();
 

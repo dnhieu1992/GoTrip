@@ -1,40 +1,38 @@
 import mongoose from 'mongoose';
-import db from '../models/index.js';
-import { ERROR_MSG } from '../constants/messages.js';
+import db from '../../models/index.js';
+import { ERROR_MSG } from '../../constants/messages.js';
 import {
     duplicatedResponse,
     errorResponse,
     successResponse,
     badRequestResponse,
     notFoundResponse
-} from '../shared/response.js';
-import { cleanObject, searchQuery } from '../shared/ultils.js';
-import { SORT_DIRECTION } from '../constants/constants.js';
+} from '../../shared/response.js';
+import { cleanObject, searchQuery } from '../../shared/ultils.js';
+import { SORT_DIRECTION } from '../../constants/constants.js';
 
-function createPropertyType(req, res) {
+function createRoomType(req, res) {
     const {
         name,
         description,
-        propertyId,
         status = "Disabled"
     } = req.body;
 
-    if (!name || !propertyId) {
+    if (!name) {
         return badRequestResponse(res, '');
     }
 
-    db.PropertyType.findOne({ name: name }).then((propertyType) => {
-        if (propertyType) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
+    db.RoomType.findOne({ name: name }).then((roomType) => {
+        if (roomType) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
 
-        const newPropertyType = new db.PropertyType({
+        const newRoomType = new db.RoomType({
             _id: mongoose.Types.ObjectId(),
             name,
             description,
-            property: propertyId,
             status: status
         });
 
-        newPropertyType.save().then((result) => {
+        newRoomType.save().then((result) => {
             return successResponse(res, result);
         }).catch((error) => {
             return errorResponse(res, error);
@@ -42,16 +40,19 @@ function createPropertyType(req, res) {
     })
 }
 
+function getAll(req, res) {
+    db.RoomType.find({ status: "Actived" })
+        .exec((err, roomTypes) => {
+            if (err) {
+                return errorResponse(res, err);
+            }
+            return successResponse(res, roomTypes);
+        });
+}
+
 function search(req, res) {
     const queryObject = cleanObject(req.query);
-
-    const query = searchQuery(queryObject);
-
-    if (queryObject.propertyId) {
-        query["property"] = mongoose.Types.ObjectId(queryObject.propertyId);
-    }
-
-    delete query['propertyId'];
+    const query = searchQuery(queryObject)
 
     const {
         pageNumber,
@@ -63,16 +64,15 @@ function search(req, res) {
     const sortObject = {};
     sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
 
-    db.PropertyType.find(query)
+    db.RoomType.find(query)
         .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
-        .populate('property')
-        .exec((err, propertyTypes) => {
+        .exec((err, roomTypes) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            db.PropertyType.countDocuments(query).exec((count_error, count) => {
+            db.RoomType.countDocuments(query).exec((count_error, count) => {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
@@ -80,7 +80,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    propertyTypes: propertyTypes
+                    roomTypes: roomTypes
                 });
             });
         });
@@ -92,62 +92,61 @@ function getById(req, res) {
     }
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The Property type not found");
+        return notFoundResponse(res, "The RoomType not found");
     }
 
-    db.PropertyType.findOne({ _id: req.params.id }).then(propertyType => {
-        return successResponse(res, propertyType);
+    db.RoomType.findOne({ _id: req.params.id }).then(roomType => {
+        return successResponse(res, roomType);
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
 
-function updatePropertyType(req, res) {
+function updateRoomType(req, res) {
     const {
         id,
         name,
         description,
-        propertyId,
         status
     } = req.body;
 
     if (!id) {
-        return badRequestResponse(res, '');
+        return badRequestResponse(res, 'The id not found.');
     }
 
-    const propertyTypeUpdate = {
+    const roomTypeUpdate = {
         name,
         status,
-        property:propertyId,
         description
     };
 
-    db.PropertyType.findOneAndUpdate({ _id: id }, propertyTypeUpdate).then((result) => {
-        return successResponse(res, "Update success.");
+    db.RoomType.findOneAndUpdate({ _id: id }, roomTypeUpdate).then((result) => {
+        return successResponse(res, "Update success");
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
-function deletePropertyType(req, res) {
+function deleteRoomType(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
     }
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The Property type not found");
+        return notFoundResponse(res, "The RoomType not found");
     }
 
-    db.PropertyType.findByIdAndRemove({ _id: req.params.id }).then((result) => {
-        return successResponse(res, result);
+    db.RoomType.findByIdAndRemove({ _id: req.params.id }).then((result) => {
+        return successResponse(res, "Delete success");
     }).catch((error) => {
         return errorResponse(res, error);
     });
 }
 
 export {
+    getAll,
     search,
     getById,
-    createPropertyType,
-    updatePropertyType,
-    deletePropertyType
+    createRoomType,
+    updateRoomType,
+    deleteRoomType
 }
