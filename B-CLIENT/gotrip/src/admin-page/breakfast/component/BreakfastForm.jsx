@@ -3,9 +3,11 @@ import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
 import { STATUSES } from '../constants/breakfast';
 import { BREAKFAST_TEXT_CONFIG } from '../constants/resources';
+
 const {
     FormsyInput,
-    FormsySelect
+    FormsySelect,
+    FormsyTextarea
 } = FormsyElement
 
 const BreakfastForm = ({
@@ -52,8 +54,8 @@ const BreakfastForm = ({
                     />
                 </div>
                 <div className="form-group">
-                    <FormsyInput
-                        inputProps={{
+                    <FormsyTextarea
+                        textareaProps={{
                             id: 'description',
                             type: 'text',
                             placeholder: BREAKFAST_TEXT_CONFIG.BREAKFAST_DESCRIPTION_FIELD_LBL,
@@ -63,16 +65,8 @@ const BreakfastForm = ({
                         value={description}
                         required
                         validationError={BREAKFAST_TEXT_CONFIG.REQUIRED_FIELD_MSG}
-                    />
-                    {/* <label>Description</label>
-                    <textarea
-                        className="form-control"
-                        name="description"
-                        value={description}
-                        label={BED_TEXT_CONFIG.BED_DESCRIPTION_FIELD_LBL}
-                        required
                     >
-                    </textarea> */}
+                    </FormsyTextarea>
                 </div>
                 <div className="form-group">
                     <FormsySelect

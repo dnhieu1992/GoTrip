@@ -3,6 +3,8 @@ import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
 import { STATUSES } from '../constants/city';
 import { CITY_TEXT_CONFIG } from '../constants/resources';
+import PropTypes from 'prop-types';
+
 const {
     FormsyInput,
     FormsySelect

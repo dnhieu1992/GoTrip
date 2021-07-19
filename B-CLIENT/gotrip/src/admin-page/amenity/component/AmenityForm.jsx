@@ -3,6 +3,7 @@ import Formsy from 'formsy-react';
 import { FormsyElement, LoaderButton } from '../../../shared/components/index.js';
 import { STATUSES } from '../constants/amenity';
 import { AMENITY_TEXT_CONFIG } from '../constants/resources';
+
 const {
     FormsyInput,
     FormsySelect

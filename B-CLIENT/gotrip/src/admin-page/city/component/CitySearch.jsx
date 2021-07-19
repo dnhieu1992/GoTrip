@@ -1,20 +1,34 @@
+import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
 import { STATUSES } from '../constants/city';
-import { Input, Label, FormGroup, Button, Select, Row } from '../../../shared/components/index';
+import { Input, Label, FormGroup, Button, FormsyElement, Select, Row } from '../../../shared/components/index';
 import { CITY_TEXT_CONFIG } from '../constants/resources';
 
+const {
+    FormsyInput,
+    FormsySelect
+} = FormsyElement;
+
 const CitySearch = ({
-    searchParam,
+    options,
     countries,
-    onHandleSearchChange,
-    onHandleSearch,
-    onHandleResetForm
+    onHandleSearch
 }) => {
-    const {
-        name = '',
-        countryId = '',
-        status = ''
-    } = searchParam;
+    const formRef = useRef();
+
+    const onReset = () => {
+        formRef.current.updateInputsWithValue({
+            name: '',
+            status: '',
+            contryId: ''
+        });
+        onHandleSearch({
+            name: '',
+            status: '',
+            countryId: ''
+        }, { ...options, pageNumber: 1 })
+    }
 
     const data = countries.map(country => {
         return {
@@ -28,21 +42,12 @@ const CitySearch = ({
         label: 'Choose the country...'
     })
 
-    const onHandleFieldChange = (e) => {
-        if (e?.target) {
-            onHandleSearchChange({
-                ...searchParam,
-                [e.target.name]: e.target.value
-            });
-        }
-    };
-
     return (
         <div className="card card-info">
             <div className="card-header">
                 <h3 className="card-title">{CITY_TEXT_CONFIG.CITY_SEARCH_HEADER_LBL}</h3>
             </div>
-            <form className="form-horizontal" autoComplete="off">
+            <Formsy className="form-horizontal" autoComplete="off" onSubmit={onHandleSearch} ref={formRef}>
                 <div className="card-body">
                     <div className="row">
                         <div className="col-sm-6">
@@ -51,13 +56,13 @@ const CitySearch = ({
                                     {CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Input
-                                        type="text"
-                                        id="name"
+                                    <FormsyInput
+                                        inputProps={{
+                                            type: 'text',
+                                            id: 'name',
+                                            placeholder: CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL
+                                        }}
                                         name="name"
-                                        placeholder={CITY_TEXT_CONFIG.CITY_NAME_FIELD_LBL}
-                                        value={name}
-                                        onChange={onHandleFieldChange}
                                     />
                                 </div>
                             </FormGroup>
@@ -68,10 +73,8 @@ const CitySearch = ({
                                     {CITY_TEXT_CONFIG.CITY_COUNTRYID_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'countryId' }}
-                                        value={countryId}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='countryId'
                                         dataSource={data}
                                     />
                                 </div>
@@ -85,10 +88,8 @@ const CitySearch = ({
                                     {CITY_TEXT_CONFIG.CITY_STATUS_FIELD_LBL}
                                 </Label>
                                 <div className="col-sm-10">
-                                    <Select
-                                        inputProps={{ name: 'status' }}
-                                        value={status}
-                                        onChange={onHandleFieldChange}
+                                    <FormsySelect
+                                        name='status'
                                         dataSource={STATUSES}
                                     />
                                 </div>
@@ -100,33 +101,32 @@ const CitySearch = ({
                         <div className="col-sm-12 d-flex justify-content-end">
                             <Button
                                 variant="info"
-                                className='mr-3'
-                                onClick={() => onHandleSearch(searchParam)}
+                                className="mr-3"
+                                type="submit"
                             >
                                 {CITY_TEXT_CONFIG.CITY_SEARCH_BTN}
                             </Button>
                             <Button
                                 variant="info"
-                                onClick={onHandleResetForm}
+                                onClick={onReset}
                             >
                                 {CITY_TEXT_CONFIG.CITY_RESET_BTN}
                             </Button>
                         </div>
                     </div>
                 </div>
-            </form>
+            </Formsy>
         </div>
     )
 }
 export default CitySearch;
 
 CitySearch.propTypes = {
-    searchParam: PropTypes.object,
-    onHandleSearchChange: PropTypes.func.isRequired,
-    onHandleSearch: PropTypes.func.isRequired,
-    onHandleResetForm: PropTypes.func.isRequired,
+    options: PropTypes.object,
+    onHandleSearch: PropTypes.func.isRequired
 };
 
 CitySearch.defaultProps = {
-    searchParam: {},
+    options: {},
+    countries: {},
 };

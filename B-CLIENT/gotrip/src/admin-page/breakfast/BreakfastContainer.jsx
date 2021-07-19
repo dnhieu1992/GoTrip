@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../shared/components/forms/Modal';
 import BreakfastGrid from './component/BreakfastGrid';
 import BreakfastSearch from './component/BreakfastSearch';
@@ -8,185 +9,91 @@ import {
     getBreakfasts,
     updateBreakfast,
     createNewBreakfast,
-    deleteBreakfast
-} from './api/apiHandle.js';
+    deleteBreakfast,
+    showModal,
+    closeModal
+} from './actions/breakfast';
 import { BREAKFAST_TEXT_CONFIG } from './constants/resources';
 
 const BreakfastContainer = () => {
-    const [state, setState] = useState({});
-    const didMountRef = useRef(false);
-    const fetchBreakfastsRef = useRef(false);
+    const { breakfastPageData } = useSelector(state => ({ breakfastPageData: state.breakfast }));
+    const dispatch = useDispatch();
 
     const {
         total,
         breakfasts,
         options,
-        isValid,
-        breakfast,
-        isShow,
         dataReady,
-        isLoading,
-        searchParam,
-    } = state;
+        searchParams,
+        modal,
+        isFetch
+    } = breakfastPageData;
+
+    useEffect(async () => {
+        dispatch(getBreakfasts());
+    }, []);
 
     useEffect(() => {
-        if (!didMountRef.current) {
-            onHandleSearch({});
-            didMountRef.current = true;
+        if (isFetch) {
+            dispatch(getBreakfasts({}));
         }
+    }, [isFetch])
 
-        if (didMountRef.current && fetchBreakfastsRef.current) {
-            fetchBreakfasts();
-        }
-    });
-
-    const fetchBreakfasts = () => {
-        fetchBreakfastsRef.current = false;
-
-        const {
-            searchParam = {},
-            options = {}
-        } = state;
-
-        getBreakfasts({ ...searchParam, ...options }, ({ total, breakfasts }) => {
-            setTimeout(() => {
-                setState({
-                    ...state,
-                    total,
-                    breakfasts,
-                    dataReady: true
-                });
-            }, 500);
-        }, () => {
-            setTimeout(() => {
-                setState({ ...state, dataReady: true })
-            }, 500);
-        });
-    };
-
-    const onHandleSearch = (searchParam = {}, optionParams = {}) => {
-        const options = {
-            pageNumber: optionParams.pageNumber || 1,
-            pageSize: optionParams.pageSize || 50,
-            sortField: optionParams.sortField || null,
-            sortDirection: optionParams.sortDirection || null
-        };
-
-        fetchBreakfastsRef.current = true;
-
-        setState({
-            ...state,
-            searchParam: searchParam,
-            options: options,
-            dataReady: false
-        });
-    };
-
-    const onHandleSearchChange = (param) => {
-        setState({
-            ...state,
-            searchParam: param
-        });
-    };
+    const onHandleSearch = (searchParams, options) => {
+        dispatch(getBreakfasts(searchParams, options));
+    }
 
     const onHandlePageChange = (pageNumber) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageNumber
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionsUpdate);
+    }
 
     const onHandlePageSizeChange = (pageSize) => {
-        const { searchParam, options } = state;
-
         const optionsUpdate = {
             ...options,
             pageSize,
             pageNumber: 1
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionsUpdate);
+    }
 
     const onHandleSortChange = (sortField, sortDirection) => {
-        const { searchParam, options } = state;
 
         const optionsUpdate = {
             ...options,
             sortField,
             sortDirection
-        };
+        }
 
-        onHandleSearch(searchParam, optionsUpdate);
-    };
+        onHandleSearch(searchParams, optionsUpdate);
+    }
 
-    const onHandleResetForm = () => {
-        const searchParam = {
-            name: '',
-            description: '',
-            status: ''
-        };
+    const onShow = (breakfast = {}) => {
+        dispatch(showModal(breakfast));
+    }
 
-        const options = {
-            ...state.options,
-            pageNumber: 1
-        };
-
-        onHandleSearch(searchParam, options);
-    };
-
-    const showModal = (breakfast = {}) => {
-        setState({
-            ...state,
-            isShow: true,
-            breakfast: breakfast
-        });
-    };
-
-    const onClose = (isSearch) => {
-        fetchBreakfastsRef.current = !!isSearch;
-
-        setState({
-            ...state,
-            isShow: false,
-            isValid: false,
-            errorMessage: {},
-            bed: null,
-            dataReady: !isSearch,
-            isLoading: false
-        });
-    };
+    const onClose = () => {
+        dispatch(closeModal());
+    }
 
     const onSaveBreakfast = (breakfast) => {
-        setState({ ...state, isLoading: true })
-        if (state.breakfast._id) {
-            updateBreakfast({ ...breakfast, id: state.breakfast._id },
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+        if (modal.breakfast._id) {
+            dispatch(updateBreakfast({ ...breakfast, id: modal.breakfast._id }));
         } else {
-            createNewBreakfast(breakfast,
-                () => {
-                    onClose(true);
-                },
-                () => setState({ ...state, isLoading: false }));
+            dispatch(createNewBreakfast(breakfast));
         }
-    };
+    }
 
     const onDelete = ({ _id }) => {
-        const { searchParam, options } = state;
+        dispatch(deleteBreakfast(_id));
+    }
 
-        deleteBreakfast(_id, () => {
-            onHandleSearch(searchParam, options);
-        });
-    };
-
-    const modalRender = () => {
+    const modalRender = ({ isLoading, breakfast, isValid }) => {
         return (
             <Modal
                 classNames={'modal-lg'}
@@ -206,24 +113,22 @@ const BreakfastContainer = () => {
 
     return (
         <>
-            {isShow && modalRender()}
+            {modal && modalRender(modal)}
             <div className="card">
                 <div className="card-header text-uppercase">
                     <h3>{BREAKFAST_TEXT_CONFIG.BREAKFAST_PAGE_HEADER}</h3>
                 </div>
                 <div className="card-body">
                     <BreakfastSearch
-                        searchParam={searchParam}
-                        onHandleSearchChange={onHandleSearchChange}
+                        options={options}
                         onHandleSearch={onHandleSearch}
-                        onHandleResetForm={onHandleResetForm}
                     />
                     <BreakfastGrid
                         data={breakfasts}
                         options={options}
                         totalItems={total}
                         dataReady={dataReady}
-                        showModal={showModal}
+                        showModal={onShow}
                         onDelete={onDelete}
                         onHandlePageChange={onHandlePageChange}
                         onHandlePageSizeChange={onHandlePageSizeChange}
