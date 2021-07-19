@@ -6,7 +6,7 @@ import {
     createBreakfast,
     updateBreakfast,
     deleteBreakfast
-} from '../controllers/breakfast.controller.js';
+} from '../controllers/master-datas/breakfast.controller.js';
 
 const router = express.Router();
 /**

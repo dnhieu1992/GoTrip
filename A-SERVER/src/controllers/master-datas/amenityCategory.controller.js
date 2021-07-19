@@ -1,59 +1,58 @@
 import mongoose from 'mongoose';
-import db from '../models/index.js';
-import { searchQuery, cleanObject } from '../shared/ultils.js';
+import db from '../../models/index.js';
+import { ERROR_MSG } from '../../constants/messages.js';
 import {
     duplicatedResponse,
     errorResponse,
     successResponse,
     badRequestResponse,
     notFoundResponse
-} from '../shared/response.js';
-import { ERROR_MSG } from '../constants/messages.js';
-import { SORT_DIRECTION } from '../constants/constants.js';
+} from '../../shared/response.js';
+import { cleanObject, searchQuery } from '../../shared/ultils.js';
+import { SORT_DIRECTION } from '../../constants/constants.js';
 
-function createCountry(req, res) {
+function createAmenityCategory(req, res) {
     const {
-        code,
         name,
+        description,
         status = "Disabled"
     } = req.body;
-    if (!code || !name) {
+
+    if (!name) {
         return badRequestResponse(res, '');
     }
 
-    db.Country.findOne({ name: name }).then((country) => {
-        if (country) return duplicatedResponse(res, ERROR_MSG.COUNTRY_EXISTS);
+    db.AmenityCategory.findOne({ name: name }).then((amenityCategory) => {
+        if (amenityCategory) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
 
-        const newCountry = new db.Country({
+        const newAmenityCategory = new db.AmenityCategory({
             _id: mongoose.Types.ObjectId(),
-            code,
             name,
+            description,
             status: status
         });
 
-        newCountry.save().then((result) => {
+        newAmenityCategory.save().then((result) => {
             return successResponse(res, result);
         }).catch((error) => {
             return errorResponse(res, error);
         })
-
     })
 }
 
 function getAll(req, res) {
-    db.Country.find({ status: "Actived" })
-        .exec((err, countries) => {
+    db.AmenityCategory.find({ status: "Actived" })
+        .exec((err, amenityCategories) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            return successResponse(res, countries);
+            return successResponse(res, amenityCategories);
         });
 }
 
 function search(req, res) {
     const queryObject = cleanObject(req.query);
-
-    const query = searchQuery(queryObject);
+    const query = searchQuery(queryObject)
 
     const {
         pageNumber,
@@ -65,15 +64,15 @@ function search(req, res) {
     const sortObject = {};
     sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
 
-    db.Country.find(query)
+    db.AmenityCategory.find(query)
         .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
-        .exec((err, countries) => {
+        .exec((err, amenityCategories) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            db.Country.countDocuments(query).exec((count_error, count) => {
+            db.AmenityCategory.countDocuments(query).exec((count_error, count) => {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
@@ -81,7 +80,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    countries: countries
+                    amenityCategories: amenityCategories
                 });
             });
         });
@@ -91,21 +90,23 @@ function getById(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
     }
+
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The country not found");
+        return notFoundResponse(res, "The Amenity Category not found");
     }
-    db.Country.findOne({ _id: req.params.id }).then(country => {
-        return successResponse(res, country);
+
+    db.AmenityCategory.findOne({ _id: req.params.id }).then(amenityCategory => {
+        return successResponse(res, amenityCategory);
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
 
-function updateCountry(req, res) {
+function updateAmenityCategory(req, res) {
     const {
         id,
-        code,
         name,
+        description,
         status
     } = req.body;
 
@@ -113,26 +114,29 @@ function updateCountry(req, res) {
         return badRequestResponse(res, '');
     }
 
-    const countryUpdate = { code, name, status };
+    const amenityCategoryUpdate = {
+        name,
+        status,
+        description
+    };
 
-    db.Country.findOneAndUpdate({ _id: id }, countryUpdate).then((result) => {
-        return successResponse(res, result);
+    db.AmenityCategory.findOneAndUpdate({ _id: id }, amenityCategoryUpdate).then((result) => {
+        return successResponse(res, "Update success");
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
-
-function deleteCountry(req, res) {
+function deleteAmenityCategory(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
     }
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The country not found");
+        return notFoundResponse(res, "The Amenity Category not found");
     }
 
-    db.Country.findByIdAndRemove({ _id: req.params.id }).then((result) => {
-        return successResponse(res, result);
+    db.AmenityCategory.findByIdAndRemove({ _id: req.params.id }).then((result) => {
+        return successResponse(res, "Delete success");
     }).catch((error) => {
         return errorResponse(res, error);
     });
@@ -142,8 +146,7 @@ export {
     getAll,
     search,
     getById,
-    createCountry,
-    updateCountry,
-    deleteCountry,
-
+    createAmenityCategory,
+    updateAmenityCategory,
+    deleteAmenityCategory 
 }

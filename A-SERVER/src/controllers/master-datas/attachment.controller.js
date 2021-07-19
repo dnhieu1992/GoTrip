@@ -1,4 +1,4 @@
-import uploadFile from "../shared/middleware/Upload.js";
+import uploadFile from "../../shared/middleware/Upload.js";
 import path from 'path';
 import fs from 'fs';
 

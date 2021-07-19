@@ -1,37 +1,37 @@
 import mongoose from 'mongoose';
-import db from '../models/index.js';
+import db from '../../models/index.js';
 import {
     duplicatedResponse,
     errorResponse,
     successResponse,
     badRequestResponse
-} from '../shared/response.js';
-import { ERROR_MSG } from '../constants/messages.js';
-import { cleanObject, searchQuery } from '../shared/ultils.js';
-import { SORT_DIRECTION } from '../constants/constants.js';
+} from '../../shared/response.js';
+import { ERROR_MSG } from '../../constants/messages.js';
+import { cleanObject, searchQuery } from '../../shared/ultils.js';
+import { SORT_DIRECTION } from '../../constants/constants.js';
 
-function createCity(req, res) {
+function createRoomName(req, res) {
     const {
         name,
-        countryId,
+        roomTypeId,
         status = "Disabled"
     } = req.body;
 
-    if (!name || !countryId) {
+    if (!name || !roomTypeId) {
         return badRequestResponse(res, '');
     }
 
-    db.City.findOne({ name: name, country_id: countryId }).then((city) => {
-        if (city) return duplicatedResponse(res, ERROR_MSG.COUNTRY_EXISTS);
+    db.RoomName.findOne({ name: name, roomType_id: roomTypeId }).then((roomName) => {
+        if (roomName) return duplicatedResponse(res, ERROR_MSG.COUNTRY_EXISTS);
 
-        const newCity = new db.City({
+        const newRoomName = new db.RoomName({
             _id: mongoose.Types.ObjectId(),
             name: name,
-            country: countryId,
+            roomType: roomTypeId,
             status: status,
         });
 
-        newCity.save().then((result) => {
+        newRoomName.save().then((result) => {
             return successResponse(res, result);
         }).catch((error) => {
             return errorResponse(res, error);
@@ -45,11 +45,11 @@ function search(req, res) {
 
     const query = searchQuery(queryObject);
 
-    if (queryObject.countryId) {
-        query["country"] = mongoose.Types.ObjectId(queryObject.countryId);
+    if (queryObject.roomTypeId) {
+        query["roomType"] = mongoose.Types.ObjectId(queryObject.roomTypeId);
     }
 
-    delete query['countryId'];
+    delete query['roomTypeId'];
 
     const {
         pageNumber,
@@ -61,16 +61,16 @@ function search(req, res) {
     const sortObject = {};
     sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
 
-    db.City.find(query)
+    db.RoomName.find(query)
         .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
-        .populate('country')
-        .exec((err, cities) => {
+        .populate('roomType')
+        .exec((err, roomNames) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            db.City.countDocuments(query).exec((count_error, count) => {
+            db.RoomName.countDocuments(query).exec((count_error, count) => {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
@@ -78,7 +78,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    cities: cities
+                    roomNames: roomNames
                 });
             });
         });
@@ -89,34 +89,34 @@ function getById(req, res) {
         return badRequestResponse(res, '');
     }
 
-    db.City.findOne({ _id: req.params.id })
-        .populate('country')
-        .then(city => {
-            return successResponse(res, city);
+    db.RoomName.findOne({ _id: req.params.id })
+        .populate('roomType')
+        .then(roomName => {
+            return successResponse(res, roomName);
         }).catch((error) => {
             return errorResponse(res, error);
         })
 }
 
-function updateCity(req, res) {
+function updateRoomName(req, res) {
     const {
         id,
         name,
-        countryId,
+        roomTypeId,
         status = "Disabled"
     } = req.body;
 
-    if (!id) {
+    if (!id || !roomTypeId) {
         return badRequestResponse(res, '');
     }
 
-    const cityUpdate = {
+    const roomNameUpdate = {
         name: name,
-        country: countryId,
+        roomType: roomTypeId,
         status: status
     };
 
-    db.City.findOneAndUpdate({ _id: id }, { $set: cityUpdate }, {}, function (err, city) {
+    db.RoomName.findOneAndUpdate({ _id: id }, { $set: roomNameUpdate }, {}, function (err, roomName) {
         // now you can send the error or updated file to client
         if (err)
             return errorResponse(res, error);
@@ -124,12 +124,12 @@ function updateCity(req, res) {
         return successResponse(res, "Update success");
     });
 }
-function deleteCity(req, res) {
+function deleteRoomName(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
     }
 
-    db.City.findByIdAndRemove({ _id: req.params.id }).then(() => {
+    db.RoomName.findByIdAndRemove({ _id: req.params.id }).then(() => {
         return successResponse(res, "Delete success");
     }).catch(err => {
         return errorResponse(res, err);;
@@ -137,9 +137,9 @@ function deleteCity(req, res) {
 }
 
 export {
-    createCity,
     search,
     getById,
-    updateCity,
-    deleteCity
+    createRoomName,
+    updateRoomName,
+    deleteRoomName
 }

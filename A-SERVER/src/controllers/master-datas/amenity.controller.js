@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
-import db from '../models/index.js';
+import db from '../../models/index.js';
 import {
     duplicatedResponse,
     errorResponse,
     successResponse,
     badRequestResponse
-} from '../shared/response.js';
-import { ERROR_MSG } from '../constants/messages.js';
-import { cleanObject, searchQuery } from '../shared/ultils.js';
-import { SORT_DIRECTION } from '../constants/constants.js';
+} from '../../shared/response.js';
+import { ERROR_MSG } from '../../constants/messages.js';
+import { cleanObject, searchQuery } from '../../shared/ultils.js';
+import { SORT_DIRECTION } from '../../constants/constants.js';
 
 function createAmenity(req, res) {
     const {

@@ -1,38 +1,40 @@
 import mongoose from 'mongoose';
-import db from '../models/index.js';
-import { ERROR_MSG } from '../constants/messages.js';
+import db from '../../models/index.js';
+import { ERROR_MSG } from '../../constants/messages.js';
 import {
     duplicatedResponse,
     errorResponse,
     successResponse,
     badRequestResponse,
     notFoundResponse
-} from '../shared/response.js';
-import { cleanObject, searchQuery } from '../shared/ultils.js';
-import { SORT_DIRECTION } from '../constants/constants.js';
+} from '../../shared/response.js';
+import { cleanObject, searchQuery } from '../../shared/ultils.js';
+import { SORT_DIRECTION } from '../../constants/constants.js';
 
-function createAmenityCategory(req, res) {
+function createPropertyType(req, res) {
     const {
         name,
         description,
+        propertyId,
         status = "Disabled"
     } = req.body;
 
-    if (!name) {
+    if (!name || !propertyId) {
         return badRequestResponse(res, '');
     }
 
-    db.AmenityCategory.findOne({ name: name }).then((amenityCategory) => {
-        if (amenityCategory) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
+    db.PropertyType.findOne({ name: name }).then((propertyType) => {
+        if (propertyType) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
 
-        const newAmenityCategory = new db.AmenityCategory({
+        const newPropertyType = new db.PropertyType({
             _id: mongoose.Types.ObjectId(),
             name,
             description,
+            property: propertyId,
             status: status
         });
 
-        newAmenityCategory.save().then((result) => {
+        newPropertyType.save().then((result) => {
             return successResponse(res, result);
         }).catch((error) => {
             return errorResponse(res, error);
@@ -40,19 +42,16 @@ function createAmenityCategory(req, res) {
     })
 }
 
-function getAll(req, res) {
-    db.AmenityCategory.find({ status: "Actived" })
-        .exec((err, amenityCategories) => {
-            if (err) {
-                return errorResponse(res, err);
-            }
-            return successResponse(res, amenityCategories);
-        });
-}
-
 function search(req, res) {
     const queryObject = cleanObject(req.query);
-    const query = searchQuery(queryObject)
+
+    const query = searchQuery(queryObject);
+
+    if (queryObject.propertyId) {
+        query["property"] = mongoose.Types.ObjectId(queryObject.propertyId);
+    }
+
+    delete query['propertyId'];
 
     const {
         pageNumber,
@@ -64,15 +63,16 @@ function search(req, res) {
     const sortObject = {};
     sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
 
-    db.AmenityCategory.find(query)
+    db.PropertyType.find(query)
         .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
-        .exec((err, amenityCategories) => {
+        .populate('property')
+        .exec((err, propertyTypes) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            db.AmenityCategory.countDocuments(query).exec((count_error, count) => {
+            db.PropertyType.countDocuments(query).exec((count_error, count) => {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
@@ -80,7 +80,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    amenityCategories: amenityCategories
+                    propertyTypes: propertyTypes
                 });
             });
         });
@@ -92,21 +92,22 @@ function getById(req, res) {
     }
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The Amenity Category not found");
+        return notFoundResponse(res, "The Property type not found");
     }
 
-    db.AmenityCategory.findOne({ _id: req.params.id }).then(amenityCategory => {
-        return successResponse(res, amenityCategory);
+    db.PropertyType.findOne({ _id: req.params.id }).then(propertyType => {
+        return successResponse(res, propertyType);
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
 
-function updateAmenityCategory(req, res) {
+function updatePropertyType(req, res) {
     const {
         id,
         name,
         description,
+        propertyId,
         status
     } = req.body;
 
@@ -114,39 +115,39 @@ function updateAmenityCategory(req, res) {
         return badRequestResponse(res, '');
     }
 
-    const amenityCategoryUpdate = {
+    const propertyTypeUpdate = {
         name,
         status,
+        property:propertyId,
         description
     };
 
-    db.AmenityCategory.findOneAndUpdate({ _id: id }, amenityCategoryUpdate).then((result) => {
-        return successResponse(res, "Update success");
+    db.PropertyType.findOneAndUpdate({ _id: id }, propertyTypeUpdate).then((result) => {
+        return successResponse(res, "Update success.");
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
-function deleteAmenityCategory(req, res) {
+function deletePropertyType(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
     }
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The Amenity Category not found");
+        return notFoundResponse(res, "The Property type not found");
     }
 
-    db.AmenityCategory.findByIdAndRemove({ _id: req.params.id }).then((result) => {
-        return successResponse(res, "Delete success");
+    db.PropertyType.findByIdAndRemove({ _id: req.params.id }).then((result) => {
+        return successResponse(res, result);
     }).catch((error) => {
         return errorResponse(res, error);
     });
 }
 
 export {
-    getAll,
     search,
     getById,
-    createAmenityCategory,
-    updateAmenityCategory,
-    deleteAmenityCategory 
+    createPropertyType,
+    updatePropertyType,
+    deletePropertyType
 }

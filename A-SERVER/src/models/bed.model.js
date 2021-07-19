@@ -6,6 +6,8 @@ const bedSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    kind: String,
+    wide: String,
     description: String,
     status: String
 });

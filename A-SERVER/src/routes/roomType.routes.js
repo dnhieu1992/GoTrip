@@ -6,7 +6,7 @@ import {
     createRoomType,
     updateRoomType,
     deleteRoomType
-} from '../controllers/roomType.controller.js';
+} from '../controllers/master-datas/roomType.controller.js';
 
 const router = express.Router();
 /**

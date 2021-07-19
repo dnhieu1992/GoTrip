@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const propertySchema = new mongoose.Schema({
+const propertyCategorySchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
@@ -11,4 +11,4 @@ const propertySchema = new mongoose.Schema({
     status: String
 });
 
-export default mongoose.model('Property', propertySchema);
+export default mongoose.model('PropertyCategory', propertyCategorySchema);

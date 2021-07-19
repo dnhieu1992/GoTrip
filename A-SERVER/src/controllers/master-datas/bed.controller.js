@@ -1,17 +1,17 @@
 import mongoose from 'mongoose';
-import db from '../models/index.js';
-import { ERROR_MSG } from '../constants/messages.js';
+import db from '../../models/index.js';
+import { ERROR_MSG } from '../../constants/messages.js';
 import {
     duplicatedResponse,
     errorResponse,
     successResponse,
     badRequestResponse,
     notFoundResponse
-} from '../shared/response.js';
-import { cleanObject, searchQuery } from '../shared/ultils.js';
-import { SORT_DIRECTION } from '../constants/constants.js';
+} from '../../shared/response.js';
+import { cleanObject, searchQuery } from '../../shared/ultils.js';
+import { SORT_DIRECTION } from '../../constants/constants.js';
 
-function createProperty(req, res) {
+function createBed(req, res) {
     const {
         name,
         description,
@@ -22,17 +22,17 @@ function createProperty(req, res) {
         return badRequestResponse(res, '');
     }
 
-    db.Property.findOne({ name: name }).then((property) => {
-        if (property) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
+    db.Bed.findOne({ name: name }).then((bed) => {
+        if (bed) return duplicatedResponse(res, ERROR_MSG.ITEM_EXISTS);
 
-        const newProperty = new db.Property({
+        const newBed = new db.Bed({
             _id: mongoose.Types.ObjectId(),
             name,
             description,
             status: status
         });
 
-        newProperty.save().then((result) => {
+        newBed.save().then((result) => {
             return successResponse(res, result);
         }).catch((error) => {
             return errorResponse(res, error);
@@ -41,12 +41,12 @@ function createProperty(req, res) {
 }
 
 function getAll(req, res) {
-    db.Property.find({ status: "Actived" })
-        .exec((err, properties) => {
+    db.Bed.find({ status: "Actived" })
+        .exec((err, beds) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            return successResponse(res, properties);
+            return successResponse(res, beds);
         });
 }
 
@@ -64,15 +64,15 @@ function search(req, res) {
     const sortObject = {};
     sortObject[sortField] = sortDirection === SORT_DIRECTION.ASC ? 1 : -1;
 
-    db.Property.find(query)
+    db.Bed.find(query)
         .sort(sortObject)
         .skip((parseInt(pageNumber) - 1) * parseInt(pageSize))
         .limit(parseInt(pageSize))
-        .exec((err, properties) => {
+        .exec((err, beds) => {
             if (err) {
                 return errorResponse(res, err);
             }
-            db.Property.countDocuments(query).exec((count_error, count) => {
+            db.Bed.countDocuments(query).exec((count_error, count) => {
                 if (err) {
                     return errorResponse(res, count_error);
                 }
@@ -80,7 +80,7 @@ function search(req, res) {
                     total: count,
                     pageNumber: pageNumber,
                     pageSize: pageSize,
-                    properties: properties
+                    beds: beds
                 });
             });
         });
@@ -92,17 +92,17 @@ function getById(req, res) {
     }
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The Property not found");
+        return notFoundResponse(res, "The Bed not found");
     }
 
-    db.Property.findOne({ _id: req.params.id }).then(property => {
-        return successResponse(res, property);
+    db.Bed.findOne({ _id: req.params.id }).then(bed => {
+        return successResponse(res, bed);
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
 
-function updateProperty(req, res) {
+function updateBed(req, res) {
     const {
         id,
         name,
@@ -114,28 +114,28 @@ function updateProperty(req, res) {
         return badRequestResponse(res, '');
     }
 
-    const propertyUpdate = {
+    const bedUpdate = {
         name,
         status,
         description
     };
 
-    db.Property.findOneAndUpdate({ _id: id }, propertyUpdate).then((result) => {
+    db.Bed.findOneAndUpdate({ _id: id }, bedUpdate).then((result) => {
         return successResponse(res, "Update success");
     }).catch((error) => {
         return errorResponse(res, error);
     })
 }
-function deleteProperty(req, res) {
+function deleteBed(req, res) {
     if (!req.params.id) {
         return badRequestResponse(res, '');
     }
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return notFoundResponse(res, "The Property not found");
+        return notFoundResponse(res, "The Bed not found");
     }
 
-    db.Property.findByIdAndRemove({ _id: req.params.id }).then((result) => {
+    db.Bed.findByIdAndRemove({ _id: req.params.id }).then((result) => {
         return successResponse(res, "Delete success");
     }).catch((error) => {
         return errorResponse(res, error);
@@ -146,7 +146,7 @@ export {
     getAll,
     search,
     getById,
-    createProperty,
-    updateProperty,
-    deleteProperty
+    createBed,
+    updateBed,
+    deleteBed
 }

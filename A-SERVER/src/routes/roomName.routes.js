@@ -5,7 +5,7 @@ import {
     search,
     getById,
     deleteRoomName
-} from '../controllers/RoomName.controller.js';
+} from '../controllers/master-datas/RoomName.controller.js';
 
 const router = express.Router();
 

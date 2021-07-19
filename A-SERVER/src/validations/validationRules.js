@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import { registerUserValidationRules } from './registerValidation.js';
 import { loginUserValidationRules } from './loginValidation.js';
+import { propertyValidationRules } from './propertyValidation.js';
 
 const validate = (req, res, next) => {
     const errors = validationResult(req)
@@ -18,5 +19,6 @@ const validate = (req, res, next) => {
 export {
     loginUserValidationRules,
     registerUserValidationRules,
+    propertyValidationRules,
     validate,
 }

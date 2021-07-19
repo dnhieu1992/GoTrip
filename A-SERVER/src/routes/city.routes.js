@@ -5,7 +5,7 @@ import {
     search,
     getById,
     deleteCity
-} from '../controllers/city.controller.js';
+} from '../controllers/master-datas/city.controller.js';
 
 const router = express.Router();
 

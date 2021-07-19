@@ -6,7 +6,7 @@ import {
     createBed,
     updateBed,
     deleteBed
-} from '../controllers/Bed.controller.js';
+} from '../controllers/master-datas/Bed.controller.js';
 
 const router = express.Router();
 /**

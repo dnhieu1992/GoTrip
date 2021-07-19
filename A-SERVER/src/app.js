@@ -15,7 +15,7 @@ import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import countryRoutes from './routes/country.routes.js';
 import cityRoutes from './routes/city.routes.js';
-import propertyRoutes from './routes/property.routes.js';
+import propertyCategoryRoutes from './routes/propertyCategory.routes.js';
 import propertyTypeRoutes from './routes/propertyType.routes.js';
 import roomTypeRoutes from './routes/roomType.routes.js';
 import bedRoutes from './routes/bed.routes.js';
@@ -24,6 +24,7 @@ import roomNameRoutes from './routes/roomName.routes.js';
 import amenityCategoryRoutes from './routes/amenityCategory.routes.js';
 import amenityRoutes from './routes/amenity.routes.js';
 import attachmentRoutes from './routes/attachment.routes.js';
+import propertyRoutes from './routes/property.routes.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -44,10 +45,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
 
 // set up mongoose
+
 mongoose.Promise = global.Promise;
-//const uri = `${DB_CONFIG.HOST}:${DB_CONFIG.PORT}/${DB_CONFIG.DB}`;
-const uri = DB_CONFIG.MONGO_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(DB_CONFIG.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('Database connected');
     })
@@ -104,7 +104,7 @@ app.use('/api/', authRoutes);
 app.use('/api/user/', verifyToken, userRoutes);
 app.use('/api/country/', verifyToken, countryRoutes);
 app.use('/api/city/', verifyToken, cityRoutes);
-app.use('/api/property/', verifyToken, propertyRoutes);
+app.use('/api/propertyCategory/', verifyToken, propertyCategoryRoutes);
 app.use('/api/propertyType/', verifyToken, propertyTypeRoutes);
 app.use('/api/roomType/', verifyToken, roomTypeRoutes);
 app.use('/api/bed/', verifyToken, bedRoutes);
@@ -113,3 +113,4 @@ app.use('/api/roomName/', verifyToken, roomNameRoutes);
 app.use('/api/amenityCategory/', verifyToken, amenityCategoryRoutes);
 app.use('/api/amenity/', verifyToken, amenityRoutes);
 app.use('/api/attachment/', verifyToken, attachmentRoutes);
+app.use('/api/property/', propertyRoutes);
